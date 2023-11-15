@@ -100,6 +100,11 @@ google_analytics_key <- "Z967JJVQQX"
 
 source("R/read_data.R")
 
+#read in the definitions data
+definitions <- read_definitions()
+colnames(definitions) <- c("Outcome/Enabler", "Domain", "Indicator", "Rationale/Description")
+definitions <- definitions[,1:4]
+
 # Read in the data
 dfRevBal <- read_revenue_data()
 # Get geographical levels from data

@@ -338,3 +338,48 @@ template. 80% works well here to reduce white space on the right hand side.*/
   font-weight: bold;
   font-size: 28px;
 }
+
+
+@media (min-width: 40.0625em){
+  .govuk-footer{
+    font-family: GDS Transport, arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.14286;
+    padding-top: 25px;
+    padding-bottom: 15px;
+    border-top: 1px solid #b1b4b6;
+    color: #0b0c0c;
+    background: #f3f2f1;
+    display: inline-block;
+    width: 100%;
+    bottom: 0;
+  }
+}
+
+.govuk-footer__meta {
+    margin-right: 200px !important;
+    margin-left: 200px !important;
+}
+/*
+btn is the user guide button
+*/
+.btn {
+    font-size:19px !important;
+    font-family: GDS Transport, arial, sans-serif !important;
+    }
+    
+.btn-default {
+  border-color: #1d70b8 !important;
+  border-width: medium !important;
+}
+
+/* Hide the last page on the navlist bar (user guide page)*/
+#navlistPanel > li:nth-child(7) {
+  display: none;
+}
+
+/*#navlistPanel > li:last-child(){
+  display: none;
+}*/

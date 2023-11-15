@@ -9,7 +9,7 @@
 # https://shiny.rstudio.com/images/shiny-cheatsheet.pdf
 #
 #
-# This is the server logic of a Shiny web application. You can run th
+# This is the server logic of a Shiny web application. You can run the
 # application by clicking 'Run App' above.
 #
 # Find out more about building applications with Shiny here:
@@ -40,7 +40,8 @@ server <- function(input, output, session) {
     "tabBenchmark_state",
     "plotly_relayout-A",
     "plotly_click-A", "plotly_hover-A", "plotly_afterplot-A",
-    ".clientValue-default-plotlyCrosstalkOpts"
+    ".clientValue-default-plotlyCrosstalkOpts",
+    "bookmark1","bookmark2"
   ))
 
   observe({
@@ -206,6 +207,14 @@ server <- function(input, output, session) {
     )
   })
 
+  output$enabler1_d1_tab <- renderDataTable({
+    datatable(
+      definitions %>% filter(Domain == "Workforce Stability") %>% select("Indicator", "Rationale/Description"), rownames = FALSE,
+      #shinyGovstyle::govTable("enabler1_d1_tab", definitions, "testtable", "s")
+    )
+  })
+  
+  
   # Define server logic to create a box
 
   output$boxavgRevBal <- renderValueBox({
@@ -287,7 +296,7 @@ server <- function(input, output, session) {
       paste0("£", format(latest - penult,
         big.mark = ","
       )),
-      # add subtitle to explain what it's hsowing
+      # add subtitle to explain what it's showing
       paste0("This is the change on previous year"),
       color = "orange",
       fontsize = "small"
@@ -331,7 +340,7 @@ server <- function(input, output, session) {
       paste0("£", format(latest - penult,
         big.mark = ","
       )),
-      # add subtitle to explain what it's hsowing
+      # add subtitle to explain what it's showing
       paste0("This is the change on previous year"),
       color = "green",
       fontsize = "large"
@@ -360,6 +369,21 @@ server <- function(input, output, session) {
     paste0("Current selections: ", input$selectPhase, ", ", input$selectArea)
   })
 
+  # # Reactive value for last selected tab that isn't user guide  
+  # backTo <- reactive({
+  #   if (input$navlistPanel != "user_guide") {
+  #     return(input$navlistPanel)
+  #   } 
+  # })  
+  # 
+  # # Observe return button click
+  # observeEvent(input$go_back, {
+  #   updateTabsetPanel(session, "navlistPanel", selected = "backTo")
+  # })
+  
+  observeEvent(input$tutorial, {
+    updateTabsetPanel(session, "navlistPanel", selected = "user_guide")
+  })
 
   # Stop app ---------------------------------------------------------------------------------
 

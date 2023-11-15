@@ -27,3 +27,11 @@ read_revenue_data <- function(file = "data/la_maintained_schools_revenue_reserve
   )
   return(dfRevenue)
 }
+
+read_definitions <- function(file = "data/definitions.csv"){
+  definitions <- read.csv(file)
+ # colnames(definitions) <- c("Outcome/Enabler", "Domain", "Indicator", "Rationale/Description")
+#  definitions <- definitions[,1:4]
+  return(definitions)
+}
+#read_definitions()
