@@ -11,6 +11,9 @@
 # to either add the file to .gitignore or add an entry for the file into
 # datafiles_log.csv.
 
+#Function to clean column names
+colClean <- function(x){ colnames(x) <- gsub("\\.", "perc", colnames(x)); x}  
+
 read_revenue_data <- function(file = "data/la_maintained_schools_revenue_reserve_final.csv") {
   # This reads in an example file. For the purposes of this demo, we're using the
   # latest LA expenditure data downloaded from the EES release.
@@ -34,4 +37,13 @@ read_definitions <- function(file = "data/definitions.csv"){
 #  definitions <- definitions[,1:4]
   return(definitions)
 }
-#read_definitions()
+
+read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+  workforce_data <- read.csv(file)
+  # Select only the columns we want
+  workforce_data <- colClean(workforce_data) %>% select("time_period", "geographic_level", "region_name", "la_name", "turnover_rate_fte_perc", "absence_rate_fte_perc",
+                                               "agency_worker_rate_fte_perc","agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
+                                               "turnover_rate_headcount_perc","agency_worker_rate_headcount_perc")
+  return(workforce_data)
+}
+

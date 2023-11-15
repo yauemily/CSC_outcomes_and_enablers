@@ -24,7 +24,7 @@ enabler1_tab <- function(){
                          h2("Social Worker Turnover"),
                          insert_text(inputId = "social_work_turnover_rationale", text = paste(
                            "Prioritising a stable workforce allows children, young people and families to maintain consistent relationships with practitioners.")),
-                        p("The turnover rate is calculated as the number of FTE (full-time equivalent) children and family social worker leavers in the year divided by the number of FTE children and family social workers in post at the 30 September.")
+                        p("The turnover rate is calculated as the number of FTE (full-time equivalent) children and family social worker leavers in the year divided by the number of FTE children and family social workers in post at the 30 September."),
                          
                         
                         
@@ -33,15 +33,15 @@ enabler1_tab <- function(){
                            insert_text(inputId = "agency_rates_rationale", text = paste(
                              "Prioritising a stable and permanent workforce allows children, young people and families to maintain consistent relationships with practitioners. 
                            Agency workers should only be used as per the national agency rules from Autumn 2024.")),
-                        p("The FTE agency worker rate is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers.")
+                        p("The FTE agency worker rate is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."),
                          
                          
                         #Vacancy Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                          h2("Vacancy Rates"),
                            insert_text(inputId = "vacancy_rates_rationale", text = paste(
                              "A workforce strategy should develop and maintain an effective workforce.
-                           With a well-supported workforce vacancy rates should remain low."))
-                         p("The vacancy rate is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of FTE vacancies at 30 September and the number of FTE social workers at 30 September.")
+                           With a well-supported workforce vacancy rates should remain low.")),
+                         p("The vacancy rate is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
                          
                          
                            ),
@@ -69,6 +69,8 @@ enabler1_tab <- function(){
                     )
                   )
                 ),
+              
+              # Third tab panel
                 tabPanel(
                   "Societal and cultural awareness and diversity",
                   fluidRow(

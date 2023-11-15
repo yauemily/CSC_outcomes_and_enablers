@@ -4,5 +4,4 @@
 .RData*
 .Ruserdata
 *unpublished*
-#definitions
 data/definitions.csv

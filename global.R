@@ -105,6 +105,10 @@ definitions <- read_definitions()
 colnames(definitions) <- c("Outcome/Enabler", "Domain", "Indicator", "Rationale/Description")
 definitions <- definitions[,1:4]
 
+#Read in the workforce data
+workforce_data <- read_workforce_data()
+
+
 # Read in the data
 dfRevBal <- read_revenue_data()
 # Get geographical levels from data
