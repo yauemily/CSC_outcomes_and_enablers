@@ -53,8 +53,8 @@ outcome1_tab <- function(){
           column(
             width = 12,
             tabsetPanel(
-              id = "outcome1_panels",
-              #id = "tabsetpanels",
+              #id = "outcome1_panels",
+              id = "tabsetpanels",
               tabPanel(
                 "Indicator 1",
                 fluidRow(

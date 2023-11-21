@@ -138,6 +138,25 @@ template. 80% works well here to reduce white space on the right hand side.*/
     border: 1px solid #e3e3e3;
     border-radius: 4px;
 }
+#tbl_vacancy_rate{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
+#tbl_vacancy_rate .govuk-details__summary{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
+
+#tbl_vacancy_rate .govuk-details__summary-text:hover{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
 
 .govuk-details__summary {
     display: inline-block;

@@ -206,15 +206,34 @@ server <- function(input, output, session) {
       )
     )
   })
-
-  output$enabler1_d1_tab <- renderDataTable({
-    datatable(
-      definitions %>% filter(Domain == "Workforce Stability") %>% select("Indicator", "Rationale/Description"), rownames = FALSE,
-      #shinyGovstyle::govTable("enabler1_d1_tab", definitions, "testtable", "s")
+# CSC server logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  output$plot_vacancy_rate <- plotly::renderPlotly({
+    ggplotly(
+      plot_vacancy_rate() %>%
+        config(displayModeBar = F),
+      height = 420
     )
   })
   
+  output$table_vacancy_rate <- renderDataTable({
+    datatable(
+      workforce_data %>% filter(geographic_level == "Regional") %>% select(time_period, region_name,
+                                                                           vacancy_rate_fte_perc),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
   
+  # output$enabler1_d1_tab <- renderDataTable({
+  #   datatable(
+  #     definitions %>% filter(Domain == "Workforce Stability") %>% select("Indicator", "Rationale/Description"), rownames = FALSE,
+  #     #shinyGovstyle::govTable("enabler1_d1_tab", definitions, "testtable", "s")
+  #   )
+  # })
+  
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   # Define server logic to create a box
 
   output$boxavgRevBal <- renderValueBox({
@@ -368,6 +387,7 @@ server <- function(input, output, session) {
   output$dropdown_label <- renderText({
     paste0("Current selections: ", input$selectPhase, ", ", input$selectArea)
   })
+  
 
   # # Reactive value for last selected tab that isn't user guide  
   # backTo <- reactive({
