@@ -12,7 +12,14 @@
 # datafiles_log.csv.
 
 #Function to clean column names
-colClean <- function(x){ colnames(x) <- gsub("\\.", "perc", colnames(x)); x}  
+colClean <- function(x){ colnames(x) <- gsub("\\.", "perc", colnames(x)); x} 
+
+#function to convert str columns into numerical columns
+convert_perc_cols_to_numeric <- function(x) {
+  perc_cols <- grep("perc", colnames(x))
+  x[, perc_cols] <- apply(x[, perc_cols], 2, function(x) as.numeric(as.character(x)))
+  return(x)
+}
 
 read_revenue_data <- function(file = "data/la_maintained_schools_revenue_reserve_final.csv") {
   # This reads in an example file. For the purposes of this demo, we're using the
@@ -44,6 +51,7 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
   workforce_data <- colClean(workforce_data) %>% select("time_period", "geographic_level", "region_name", "la_name", "turnover_rate_fte_perc", "absence_rate_fte_perc",
                                                "agency_worker_rate_fte_perc","agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
                                                "turnover_rate_headcount_perc","agency_worker_rate_headcount_perc")
+  workforce_data <- convert_perc_cols_to_numeric(workforce_data)
   return(workforce_data)
 }
 
