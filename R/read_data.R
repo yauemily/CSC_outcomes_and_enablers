@@ -11,13 +11,16 @@
 # to either add the file to .gitignore or add an entry for the file into
 # datafiles_log.csv.
 
-#Function to clean column names
-colClean <- function(x){ colnames(x) <- gsub("\\.", "perc", colnames(x)); x} 
+# Function to clean column names
+colClean <- function(x) {
+  colnames(x) <- gsub("\\.", "perc", colnames(x))
+  x
+}
 
-#function to convert str columns into numerical columns
+# function to convert str columns into numerical columns
 convert_perc_cols_to_numeric <- function(x) {
-  perc_cols <- grep("perc", colnames(x))
-  x[, perc_cols] <- apply(x[, perc_cols], 2, function(x) as.numeric(as.character(x)))
+  suppressWarnings({perc_cols <- grep("perc", colnames(x))
+  x[, perc_cols] <- apply(x[, perc_cols], 2, function(x) as.numeric(as.character(x)))})
   return(x)
 }
 
@@ -38,20 +41,21 @@ read_revenue_data <- function(file = "data/la_maintained_schools_revenue_reserve
   return(dfRevenue)
 }
 
-read_definitions <- function(file = "data/definitions.csv"){
+read_definitions <- function(file = "data/definitions.csv") {
   definitions <- read.csv(file)
- # colnames(definitions) <- c("Outcome/Enabler", "Domain", "Indicator", "Rationale/Description")
-#  definitions <- definitions[,1:4]
+  # colnames(definitions) <- c("Outcome/Enabler", "Domain", "Indicator", "Rationale/Description")
+  #  definitions <- definitions[,1:4]
   return(definitions)
 }
 
-read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv") {
   workforce_data <- read.csv(file)
   # Select only the columns we want
-  workforce_data <- colClean(workforce_data) %>% select("time_period", "geographic_level", "region_name", "la_name", "turnover_rate_fte_perc", "absence_rate_fte_perc",
-                                               "agency_worker_rate_fte_perc","agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
-                                               "turnover_rate_headcount_perc","agency_worker_rate_headcount_perc")
+  workforce_data <- colClean(workforce_data) %>% select(
+    "time_period", "geographic_level", "region_name", "la_name", "turnover_rate_fte_perc", "absence_rate_fte_perc",
+    "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
+    "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc"
+  )
   workforce_data <- convert_perc_cols_to_numeric(workforce_data)
   return(workforce_data)
 }
-

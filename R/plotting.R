@@ -61,20 +61,24 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 
 
 
-#Vacancy Rate over time
-plot_vacancy_rate <- function(){
-  vacancy_data <- workforce_data %>% filter(geographic_level == "Regional") %>% select(time_period, region_name,
-                                    vacancy_rate_fte_perc)
-  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = region_name, line_type = region_name))+
-    geom_line()+
-    ylab("Vacancy rate (FTE) (%)")+
-    xlab("Time Period")+
+# Vacancy Rate over time
+plot_vacancy_rate <- function() {
+  vacancy_data <- workforce_data %>%
+    filter(geographic_level == "Regional") %>%
+    select(
+      time_period, region_name,
+      vacancy_rate_fte_perc
+    )
+  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = region_name, line_type = region_name)) +
+    geom_line() +
+    ylab("Vacancy rate (FTE) (%)") +
+    xlab("Time Period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
       axis.title.x = element_text(margin = margin(t = 12)),
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
-    )+
+    ) +
     scale_y_continuous(limits = c(0, 100))
-  }
+}
