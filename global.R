@@ -108,6 +108,9 @@ definitions <- definitions[,1:4]
 #Read in the workforce data
 workforce_data <- read_workforce_data()
 
+#Dropdowns
+choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% distinct()
+choices_LA <- workforce_data %>% filter(geographic_level == "Local authority") %>% select()
 
 # Read in the data
 dfRevBal <- read_revenue_data()
