@@ -24,6 +24,7 @@ convert_perc_cols_to_numeric <- function(x) {
   return(x)
 }
 
+# sample data functions we dont need this~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 read_revenue_data <- function(file = "data/la_maintained_schools_revenue_reserve_final.csv") {
   # This reads in an example file. For the purposes of this demo, we're using the
   # latest LA expenditure data downloaded from the EES release.
@@ -41,6 +42,8 @@ read_revenue_data <- function(file = "data/la_maintained_schools_revenue_reserve
   return(dfRevenue)
 }
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Test not important
 read_definitions <- function(file = "data/definitions.csv") {
   definitions <- read.csv(file)
   # colnames(definitions) <- c("Outcome/Enabler", "Domain", "Indicator", "Rationale/Description")
@@ -48,6 +51,8 @@ read_definitions <- function(file = "data/definitions.csv") {
   return(definitions)
 }
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv") {
   workforce_data <- read.csv(file)
   # Select only the columns we want

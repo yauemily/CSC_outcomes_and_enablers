@@ -101,10 +101,11 @@ google_analytics_key <- "Z967JJVQQX"
 source("R/read_data.R")
 
 #read in the definitions data
+# NOT important
 definitions <- read_definitions()
 colnames(definitions) <- c("Outcome/Enabler", "Domain", "Indicator", "Rationale/Description")
 definitions <- definitions[,1:4]
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Read in the workforce data
 workforce_data <- read_workforce_data()
 
@@ -112,6 +113,7 @@ workforce_data <- read_workforce_data()
 choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% distinct()
 choices_LA <- workforce_data %>% filter(geographic_level == "Local authority") %>% select()
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEMPLATE code
 # Read in the data
 dfRevBal <- read_revenue_data()
 # Get geographical levels from data

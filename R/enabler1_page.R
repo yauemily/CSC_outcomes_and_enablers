@@ -9,6 +9,13 @@ enabler1_tab <- function() {
           h1("Enabler 1: The workforce is equipped and effective."),
           br(),
           br(),
+          div(
+            class = "input_box",
+            style = "min-height:100%; height = 100%; overflow-y: visible",
+            fluidRow(
+              p("Testing inputs as not a expandable.")
+            )
+          ),
           expandable(
             inputId = "enabler1_dropdowns", label = "Breakdowns", contents =
               div(
@@ -64,6 +71,7 @@ enabler1_tab <- function() {
                     p("The turnover rate is calculated as the number of FTE (full-time equivalent) children and family social worker leavers in the year divided by the number of FTE children and family social workers in post at the 30 September."),
                     p("plots go here"),
                     br(),
+                    
                     # Agency Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     h2("Agency Rates"),
                     insert_text(inputId = "agency_rates_rationale", text = paste(
@@ -74,6 +82,7 @@ enabler1_tab <- function() {
                     br(),
                     p("plots go here"),
                     br(),
+                    
                     # Vacancy Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     h2("Vacancy Rates"),
                     insert_text(inputId = "vacancy_rates_rationale", text = paste(
