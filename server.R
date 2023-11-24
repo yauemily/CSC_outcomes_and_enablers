@@ -238,135 +238,135 @@ server <- function(input, output, session) {
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Define server logic to create a box
 
-  output$boxavgRevBal <- renderValueBox({
-    # Put value into box to plug into app
-    valueBox(
-      # take input number
-      paste0("£", format(
-        (reactiveRevBal() %>% filter(
-          year == max(year),
-          area_name == input$selectArea,
-          school_phase == input$selectPhase
-        ))$average_revenue_balance,
-        big.mark = ","
-      )),
-      # add subtitle to explain what it's hsowing
-      paste0("This is the latest value for the selected inputs"),
-      color = "blue"
-    )
-  })
-
-  output$boxpcRevBal <- renderValueBox({
-    latest <- (reactiveRevBal() %>% filter(
-      year == max(year),
-      area_name == input$selectArea,
-      school_phase == input$selectPhase
-    ))$average_revenue_balance
-    penult <- (reactiveRevBal() %>% filter(
-      year == max(year) - 1,
-      area_name == input$selectArea,
-      school_phase == input$selectPhase
-    ))$average_revenue_balance
-
-    # Put value into box to plug into app
-    valueBox(
-      # take input number
-      paste0("£", format(latest - penult,
-        big.mark = ","
-      )),
-      # add subtitle to explain what it's hsowing
-      paste0("This is the change on previous year"),
-      color = "blue"
-    )
-  })
-
-  output$boxavgRevBal_small <- renderValueBox({
-    # Put value into box to plug into app
-    valueBox(
-      # take input number
-      paste0("£", format(
-        (reactiveRevBal() %>% filter(
-          year == max(year),
-          area_name == input$selectArea,
-          school_phase == input$selectPhase
-        ))$average_revenue_balance,
-        big.mark = ","
-      )),
-      # add subtitle to explain what it's hsowing
-      paste0("This is the latest value for the selected inputs"),
-      color = "orange",
-      fontsize = "small"
-    )
-  })
-
-  output$boxpcRevBal_small <- renderValueBox({
-    latest <- (reactiveRevBal() %>% filter(
-      year == max(year),
-      area_name == input$selectArea,
-      school_phase == input$selectPhase
-    ))$average_revenue_balance
-    penult <- (reactiveRevBal() %>% filter(
-      year == max(year) - 1,
-      area_name == input$selectArea,
-      school_phase == input$selectPhase
-    ))$average_revenue_balance
-
-    # Put value into box to plug into app
-    valueBox(
-      # take input number
-      paste0("£", format(latest - penult,
-        big.mark = ","
-      )),
-      # add subtitle to explain what it's showing
-      paste0("This is the change on previous year"),
-      color = "orange",
-      fontsize = "small"
-    )
-  })
-
-  output$boxavgRevBal_large <- renderValueBox({
-    # Put value into box to plug into app
-    valueBox(
-      # take input number
-      paste0("£", format(
-        (reactiveRevBal() %>% filter(
-          year == max(year),
-          area_name == input$selectArea,
-          school_phase == input$selectPhase
-        ))$average_revenue_balance,
-        big.mark = ","
-      )),
-      # add subtitle to explain what it's hsowing
-      paste0("This is the latest value for the selected inputs"),
-      color = "green",
-      fontsize = "large"
-    )
-  })
-
-  output$boxpcRevBal_large <- renderValueBox({
-    latest <- (reactiveRevBal() %>% filter(
-      year == max(year),
-      area_name == input$selectArea,
-      school_phase == input$selectPhase
-    ))$average_revenue_balance
-    penult <- (reactiveRevBal() %>% filter(
-      year == max(year) - 1,
-      area_name == input$selectArea,
-      school_phase == input$selectPhase
-    ))$average_revenue_balance
-
-    # Put value into box to plug into app
-    valueBox(
-      # take input number
-      paste0("£", format(latest - penult,
-        big.mark = ","
-      )),
-      # add subtitle to explain what it's showing
-      paste0("This is the change on previous year"),
-      color = "green",
-      fontsize = "large"
-    )
-  })
+  # output$boxavgRevBal <- renderValueBox({
+  #   # Put value into box to plug into app
+  #   valueBox(
+  #     # take input number
+  #     paste0("£", format(
+  #       (reactiveRevBal() %>% filter(
+  #         year == max(year),
+  #         area_name == input$selectArea,
+  #         school_phase == input$selectPhase
+  #       ))$average_revenue_balance,
+  #       big.mark = ","
+  #     )),
+  #     # add subtitle to explain what it's hsowing
+  #     paste0("This is the latest value for the selected inputs"),
+  #     color = "blue"
+  #   )
+  # })
+  # 
+  # output$boxpcRevBal <- renderValueBox({
+  #   latest <- (reactiveRevBal() %>% filter(
+  #     year == max(year),
+  #     area_name == input$selectArea,
+  #     school_phase == input$selectPhase
+  #   ))$average_revenue_balance
+  #   penult <- (reactiveRevBal() %>% filter(
+  #     year == max(year) - 1,
+  #     area_name == input$selectArea,
+  #     school_phase == input$selectPhase
+  #   ))$average_revenue_balance
+  # 
+  #   # Put value into box to plug into app
+  #   valueBox(
+  #     # take input number
+  #     paste0("£", format(latest - penult,
+  #       big.mark = ","
+  #     )),
+  #     # add subtitle to explain what it's hsowing
+  #     paste0("This is the change on previous year"),
+  #     color = "blue"
+  #   )
+  # })
+  # 
+  # output$boxavgRevBal_small <- renderValueBox({
+  #   # Put value into box to plug into app
+  #   valueBox(
+  #     # take input number
+  #     paste0("£", format(
+  #       (reactiveRevBal() %>% filter(
+  #         year == max(year),
+  #         area_name == input$selectArea,
+  #         school_phase == input$selectPhase
+  #       ))$average_revenue_balance,
+  #       big.mark = ","
+  #     )),
+  #     # add subtitle to explain what it's hsowing
+  #     paste0("This is the latest value for the selected inputs"),
+  #     color = "orange",
+  #     fontsize = "small"
+  #   )
+  # })
+  # 
+  # output$boxpcRevBal_small <- renderValueBox({
+  #   latest <- (reactiveRevBal() %>% filter(
+  #     year == max(year),
+  #     area_name == input$selectArea,
+  #     school_phase == input$selectPhase
+  #   ))$average_revenue_balance
+  #   penult <- (reactiveRevBal() %>% filter(
+  #     year == max(year) - 1,
+  #     area_name == input$selectArea,
+  #     school_phase == input$selectPhase
+  #   ))$average_revenue_balance
+  # 
+  #   # Put value into box to plug into app
+  #   valueBox(
+  #     # take input number
+  #     paste0("£", format(latest - penult,
+  #       big.mark = ","
+  #     )),
+  #     # add subtitle to explain what it's showing
+  #     paste0("This is the change on previous year"),
+  #     color = "orange",
+  #     fontsize = "small"
+  #   )
+  # })
+  # 
+  # output$boxavgRevBal_large <- renderValueBox({
+  #   # Put value into box to plug into app
+  #   valueBox(
+  #     # take input number
+  #     paste0("£", format(
+  #       (reactiveRevBal() %>% filter(
+  #         year == max(year),
+  #         area_name == input$selectArea,
+  #         school_phase == input$selectPhase
+  #       ))$average_revenue_balance,
+  #       big.mark = ","
+  #     )),
+  #     # add subtitle to explain what it's hsowing
+  #     paste0("This is the latest value for the selected inputs"),
+  #     color = "green",
+  #     fontsize = "large"
+  #   )
+  # })
+  # 
+  # output$boxpcRevBal_large <- renderValueBox({
+  #   latest <- (reactiveRevBal() %>% filter(
+  #     year == max(year),
+  #     area_name == input$selectArea,
+  #     school_phase == input$selectPhase
+  #   ))$average_revenue_balance
+  #   penult <- (reactiveRevBal() %>% filter(
+  #     year == max(year) - 1,
+  #     area_name == input$selectArea,
+  #     school_phase == input$selectPhase
+  #   ))$average_revenue_balance
+  # 
+  #   # Put value into box to plug into app
+  #   valueBox(
+  #     # take input number
+  #     paste0("£", format(latest - penult,
+  #       big.mark = ","
+  #     )),
+  #     # add subtitle to explain what it's showing
+  #     paste0("This is the change on previous year"),
+  #     color = "green",
+  #     fontsize = "large"
+  #   )
+  # })
 
   observeEvent(input$go, {
     toggle(id = "div_a", anim = T)

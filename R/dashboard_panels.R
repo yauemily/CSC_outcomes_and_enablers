@@ -130,16 +130,16 @@ dashboard_panel <- function() {
                   width = 12,
                   h2("Outputs 1 (h2)"),
                   fluidRow(
-                    valueBoxOutput("boxavgRevBal_small", width = 6),
-                    valueBoxOutput("boxpcRevBal_small", width = 6)
+                   # valueBoxOutput("boxavgRevBal_small", width = 6),
+                  #  valueBoxOutput("boxpcRevBal_small", width = 6)
                   ),
                   fluidRow(
-                    valueBoxOutput("boxavgRevBal", width = 6),
-                    valueBoxOutput("boxpcRevBal", width = 6)
+                   # valueBoxOutput("boxavgRevBal", width = 6),
+                    #valueBoxOutput("boxpcRevBal", width = 6)
                   ),
                   fluidRow(
-                    valueBoxOutput("boxavgRevBal_large", width = 6),
-                    valueBoxOutput("boxpcRevBal_large", width = 6)
+                    #valueBoxOutput("boxavgRevBal_large", width = 6),
+                    #valueBoxOutput("boxpcRevBal_large", width = 6)
                   ),
                   box(
                     width = 12,
