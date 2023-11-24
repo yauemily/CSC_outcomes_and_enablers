@@ -158,6 +158,19 @@ template. 80% works well here to reduce white space on the right hand side.*/
     color: black !important;
 }
 
+.input_box{
+  background-color: #1d70b8;
+  padding: 19px;
+  height: 100%;
+  min-height: 100%;
+  color: #fff;
+  font-size: 22px;
+  font-family: GDS Transport, arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+}
+
 .govuk-details__summary {
     display: inline-block;
     position: relative;
