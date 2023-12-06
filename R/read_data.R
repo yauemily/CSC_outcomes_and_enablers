@@ -66,6 +66,22 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
   return(workforce_data)
 }
 
+read_workforce_data2 <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+  workforce2 <- read.csv(file)
+  workforce2 <- colClean(workforce2)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+    select(geographic_level, geo_breakdown,turnover_rate_fte_perc,time_period,"time_period","turnover_rate_fte_perc", "absence_rate_fte_perc",
+           "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
+           "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte") %>% distinct()
+  
+  workforce2 <- convert_perc_cols_to_numeric(workforce2)
+  return(workforce2)
+}
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce characteristics data
 read_workforce_char_data <- function(file = "data/csww_workforce_characteristics_2017_to_2022.csv") {

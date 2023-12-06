@@ -109,7 +109,7 @@ definitions <- definitions[,1:4]
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Read in the workforce data
 workforce_data <- read_workforce_data()
-
+workforce2 <- read_workforce_data2()
 #Read in the workforce characteristics data
 #workforce_char <- read_workforce_char_data()
 
@@ -119,6 +119,15 @@ choices_LA <- workforce_data %>% filter(geographic_level == "Local authority") %
 
 #choices_geographic_level <- dropdown_choices %>% select(geographic_level) %>% distinct()
 
+dropdown_choices <- workforce_data %>%
+  mutate(geo_breakdown = case_when(
+    geographic_level == "National" ~ "National",#NA_character_,
+    geographic_level == "Regional" ~ region_name,
+    geographic_level == "Local authority" ~ la_name
+  )) %>%
+  select(geographic_level, geo_breakdown,turnover_rate_fte_perc,time_period,"time_period","turnover_rate_fte_perc", "absence_rate_fte_perc",
+         "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
+         "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte") %>% distinct()
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEMPLATE code
 # Read in the data

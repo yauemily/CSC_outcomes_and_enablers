@@ -29,14 +29,14 @@ enabler1_tab <- function() {
               width = 6,
               selectizeInput(
                 inputId = "geographic_breakdown",
-                label = "Select a geographic breakdown: ",
+                label = "Select a breakdown: ",
                 choices = NULL,
                 selected = NULL,
                 multiple = FALSE,
                 options = NULL
               )
             ),
-            textOutput("choice_text_test")
+            #textOutput("choice_text_test")
           )
         )
       ),
@@ -60,7 +60,7 @@ enabler1_tab <- function() {
                   width = 4,
                   value_box(
                     title = "Turnover rate (FTE) in 2022",
-                    value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(turnover_rate_fte_perc), "%")
+                    value = textOutput("s_w_headline_txt")
                   ),
                 ),
                 column(
@@ -77,7 +77,6 @@ enabler1_tab <- function() {
                     value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(vacancy_rate_fte_perc),"%")
                   )
                 ),
-                
                 br(),
               ),
               fluidRow(

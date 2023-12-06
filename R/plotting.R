@@ -58,14 +58,14 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 
 # Enabler 1 - Workforce charts
 # Social Worker Turnover
-plot_social_worker_turnover <- function(){
-  social_worker_data <- workforce_data %>%
-    filter(geographic_level == "Regional") %>%
+plot_social_worker_turnover <- function(geo_lvl, geo_break){
+  social_worker_data <- workforce2 %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
-      time_period, region_name,
+      time_period, geo_breakdown,
       turnover_rate_fte_perc
     )
-  ggplot(social_worker_data, aes(`time_period`, `turnover_rate_fte_perc`, color = region_name))+
+  ggplot(social_worker_data, aes(`time_period`, `turnover_rate_fte_perc`, color = geo_breakdown))+
     geom_line() +
     ylab("Social worker Turnover rate (FTE) (%)")+
     xlab("Time Period") +
