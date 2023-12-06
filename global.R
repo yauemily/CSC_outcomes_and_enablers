@@ -27,6 +27,7 @@ shhh(library(metathis))
 shhh(library(shinyalert))
 shhh(library(shinytest2))
 shhh(library(rstudioapi))
+shhh(library(bslib))
 # shhh(library(shinya11y))
 
 # Functions ---------------------------------------------------------------------------------
@@ -109,9 +110,15 @@ definitions <- definitions[,1:4]
 #Read in the workforce data
 workforce_data <- read_workforce_data()
 
+#Read in the workforce characteristics data
+#workforce_char <- read_workforce_char_data()
+
 #Dropdowns
-choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% distinct()
+choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National" )%>% distinct()
 choices_LA <- workforce_data %>% filter(geographic_level == "Local authority") %>% select()
+
+#choices_geographic_level <- dropdown_choices %>% select(geographic_level) %>% distinct()
+
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEMPLATE code
 # Read in the data

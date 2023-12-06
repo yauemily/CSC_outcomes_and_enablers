@@ -19,7 +19,7 @@ colClean <- function(x) {
 
 # function to convert str columns into numerical columns
 convert_perc_cols_to_numeric <- function(x) {
-  suppressWarnings({perc_cols <- grep("perc", colnames(x))
+  suppressWarnings({perc_cols <- grep("fte", colnames(x))
   x[, perc_cols] <- apply(x[, perc_cols], 2, function(x) as.numeric(as.character(x)))})
   return(x)
 }
@@ -53,14 +53,27 @@ read_definitions <- function(file = "data/definitions.csv") {
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Workforce data
 read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv") {
   workforce_data <- read.csv(file)
   # Select only the columns we want
   workforce_data <- colClean(workforce_data) %>% select(
     "time_period", "geographic_level", "region_name", "la_name", "turnover_rate_fte_perc", "absence_rate_fte_perc",
     "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
-    "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc"
+    "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte"
   )
   workforce_data <- convert_perc_cols_to_numeric(workforce_data)
   return(workforce_data)
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Workforce characteristics data
+read_workforce_char_data <- function(file = "data/csww_workforce_characteristics_2017_to_2022.csv") {
+  workforce_char_data <- read.csv(file)
+  # Select only the columns we want
+  workforce_char_data <- colClean(workforce_char_data) %>% select(
+    "time_period", "geographic_level", "region_name", "characteristic", "characteristic_type", "percentage"
+  )
+  workforce_char_data <- convert_perc_cols_to_numeric(workforce_char_data)
+  return(workforce_char_data)
 }

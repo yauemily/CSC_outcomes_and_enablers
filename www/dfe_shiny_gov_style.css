@@ -125,6 +125,7 @@ template. 80% works well here to reduce white space on the right hand side.*/
     color: #fff;
 }
 
+/*CSS for extra dropdown details */
 .govuk-details {
     padding: 19px;
     font-family: GDS Transport, arial, sans-serif;
@@ -158,6 +159,60 @@ template. 80% works well here to reduce white space on the right hand side.*/
     color: black !important;
 }
 
+#table_agency_worker{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
+#table_agency_worker .govuk-details__summary{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
+
+#table_agency_worker .govuk-details__summary-text:hover{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
+
+#table_s_w_turnover{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
+#table_s_w_turnover .govuk-details__summary{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
+
+#table_s_w_turnover .govuk-details__summary-text:hover{
+    background-color: #fff;
+    font-size: 16px !important;
+    border: 1px solid #e3e3e3;
+    color: black !important;
+}
+
+.card_nat_stats_test{
+  background-color: #1d70b8!important;
+}
+
+.bg-dark-blue{
+  background-color: #1d70b8!important;
+  color: #fff;
+  font-size: 22px;
+  font-family: GDS Transport, arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  border: 4px solid #1d70b8;
+}
+
+
 .input_box{
   background-color: #1d70b8;
   padding: 19px;
@@ -169,6 +224,25 @@ template. 80% works well here to reduce white space on the right hand side.*/
   -webkit-font-smoothing: antialiased;
   border: 1px solid #e3e3e3;
   border-radius: 4px;
+}
+
+.bslib-value-box .value-box-area>:nth-child(2){
+  /*background-color: #1d70b8!important;*/
+  color: #fff;
+  font-size: 30px !important;
+  font-family: GDS Transport, arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 550;
+  text-align: center;
+}
+
+.bslib-value-box .value-box-area>:first-child{
+  /*background-color: #1d70b8!important;*/
+  color: #fff;
+  font-size: 22px !important;
+  font-family: GDS Transport, arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
 }
 
 .govuk-details__summary {

@@ -159,6 +159,28 @@ server <- function(input, output, session) {
 
 
   #  output$cookie_status <- renderText(as.character(input$cookies))
+  
+  # ---- User input logic --------------------------------------------------------------------
+  # Geographic level does not need to be here as it does not need to change depending on other dropdowns
+  
+  # Geographic breakdown (list of either LA names or Region names)
+  observeEvent(eventExpr={input$select_geography},{
+      updateSelectizeInput(
+        session = session,
+        inputId = "geographic_breakdown",
+        selected = sort(unique(dropdown_choices[dropdown_choices$geographic_level == input$select_geography, "geo_breakdown"]),decreasing = FALSE)[1],
+        choices = sort(unique(dropdown_choices[dropdown_choices$geographic_level == input$select_geography, "geo_breakdown"]),decreasing = FALSE),
+        server = TRUE
+
+      )
+    }
+  )
+  
+  output$choice_text_test <- renderText({
+    c(paste0("you have selected",input$select_geography))
+  })
+  
+  # Time period dropdown also does not need to appear here - does not need to be reactive
 
   # Simple server stuff goes here ------------------------------------------------------------
   reactiveRevBal <- reactive({
@@ -207,6 +229,51 @@ server <- function(input, output, session) {
     )
   })
   # CSC server logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #social worker rate plot and table
+  output$plot_s_w_turnover <- plotly::renderPlotly({
+    ggplotly(
+      plot_social_worker_turnover() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$table_s_w_turnover <- renderDataTable({
+    datatable(
+      workforce_data %>% filter(geographic_level == "Regional") %>% select(
+        time_period, region_name,
+        turnover_rate_fte_perc
+      ),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  #agency worker rate plot
+  output$plot_agency_worker <- plotly::renderPlotly({
+    ggplotly(
+      plt_agency_rates() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$table_agency_worker <- renderDataTable({
+    datatable(
+      workforce_data %>% filter(geographic_level == "Regional") %>% select(
+        time_period, region_name,
+        agency_worker_rate_fte_perc
+      ),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  # Vacancy Rate plot and table
   output$plot_vacancy_rate <- plotly::renderPlotly({
     ggplotly(
       plot_vacancy_rate() %>%
@@ -220,6 +287,39 @@ server <- function(input, output, session) {
       workforce_data %>% filter(geographic_level == "Regional") %>% select(
         time_period, region_name,
         vacancy_rate_fte_perc
+      ),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  
+  #Caseload
+  output$plot_caseload <- plotly::renderPlotly({
+      ggplotly(
+        plot_caseloads() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+      
+    }
+  )
+  
+  output$plot_caseload_test1 <- plotly::renderPlotly({
+    ggplotly(
+      plot_caseloads_test1() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$table_caseload <- renderDataTable({
+    datatable(
+      workforce_data %>% filter(geographic_level == "Regional") %>% select(
+        time_period, region_name,
+        caseload_fte
       ),
       options = list(
         scrollx = FALSE,
