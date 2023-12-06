@@ -212,7 +212,6 @@ template. 80% works well here to reduce white space on the right hand side.*/
   border: 4px solid #1d70b8;
 }
 
-
 .input_box{
   background-color: #1d70b8;
   padding: 19px;
@@ -226,8 +225,12 @@ template. 80% works well here to reduce white space on the right hand side.*/
   border-radius: 4px;
 }
 
+.bslib-value-box.default {
+    --bslib-value-box-bg-default: var(--bs-card-bg, #1d70b8);
+}
+
 .bslib-value-box .value-box-area>:nth-child(2){
-  /*background-color: #1d70b8!important;*/
+  background-color: #1d70b8!important;
   color: #fff;
   font-size: 30px !important;
   font-family: GDS Transport, arial, sans-serif;
@@ -237,7 +240,7 @@ template. 80% works well here to reduce white space on the right hand side.*/
 }
 
 .bslib-value-box .value-box-area>:first-child{
-  /*background-color: #1d70b8!important;*/
+  background-color: #1d70b8!important;
   color: #fff;
   font-size: 22px !important;
   font-family: GDS Transport, arial, sans-serif;
