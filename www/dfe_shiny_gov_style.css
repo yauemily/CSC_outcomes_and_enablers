@@ -152,9 +152,46 @@ template. 80% works well here to reduce white space on the right hand side.*/
     border-color: black;
 }
 
+.govuk-details{
+  background-color:#fff;
+  color: #000;
+  padding: 19px;
+    font-family: GDS Transport, arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 19px;
+  
+}
+
+.govuk-details__summary {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 5px;
+    padding-left: 25px;
+    color: #000;
+    cursor: pointer;
+}
+
+.govuk-details__summary-text:hover {
+    text-decoration: underline;
+    text-decoration-thickness: max(4px, .1875rem, .12em);
+}
+
+.govuk-details__summary:hover {
+    color: #000;
+}
+
+.govuk-details__summary:focus {
+    outline: 3px solid rgba(0, 0, 0, 0);
+    /* color: #0b0c0c; */
+    background-color: #fd0;
+    box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+    color: #0b0c0c;
+    text-decoration: none;
+}
+
 
 /*CSS for extra dropdown details */
-.govuk-details {
+/*.govuk-details {
     padding: 19px;
     font-family: GDS Transport, arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -166,8 +203,8 @@ template. 80% works well here to reduce white space on the right hand side.*/
     display: block;
     border: 1px solid #e3e3e3;
     border-radius: 4px;
-}
-#tbl_vacancy_rate{
+}*/
+/*#tbl_vacancy_rate{
     background-color: #fff;
     font-size: 16px !important;
     border: 1px solid #e3e3e3;
@@ -226,6 +263,7 @@ template. 80% works well here to reduce white space on the right hand side.*/
     border: 1px solid #e3e3e3;
     color: black !important;
 }
+*/
 
 .card_nat_stats_test{
   background-color: #1d70b8!important;
@@ -274,33 +312,6 @@ template. 80% works well here to reduce white space on the right hand side.*/
   font-family: GDS Transport, arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-align: center;
-}
-
-.govuk-details__summary {
-    display: inline-block;
-    position: relative;
-    margin-bottom: 5px;
-    padding-left: 25px;
-    color: #fff;
-    cursor: pointer;
-}
-
-.govuk-details__summary-text:hover {
-    text-decoration: underline;
-    text-decoration-thickness: max(4px, .1875rem, .12em);
-}
-
-.govuk-details__summary:hover {
-    color: #fff;
-}
-
-.govuk-details__summary:focus {
-    outline: 3px solid rgba(0, 0, 0, 0);
-    /* color: #0b0c0c; */
-    background-color: #fd0;
-    box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
-    color: #0b0c0c;
-    text-decoration: none;
 }
 
 

@@ -151,7 +151,7 @@ enabler1_tab <- function() {
                     
                     details(
                       inputId = "agency_worker_info",
-                      label = "Additional information",
+                      label = "Additional information:",
                       help_text = (
                         tags$ul(
                           tags$li(tags$b("Agency workers"), " are child and family social workers not directly paid by the local authority. These may be social workers who are paid by an agency rather than the local authority or who are self-employed."),
