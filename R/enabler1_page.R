@@ -6,7 +6,7 @@ enabler1_tab <- function() {
       gov_row(
         column(
           width = 12,
-          h1("Enabler 1: The workforce is equipped and effective."),
+          h1("Enabler 1: The workforce is equipped and effective.")
         )
       ),
       gov_row(
@@ -35,7 +35,7 @@ enabler1_tab <- function() {
                 multiple = FALSE,
                 options = NULL
               )
-            ),
+            )
             #textOutput("choice_text_test")
           )
         )
@@ -62,7 +62,7 @@ enabler1_tab <- function() {
                   value_box(
                     title = "Turnover rate (FTE) in 2022",
                     value = textOutput("s_w_headline_txt")
-                  ),
+                  )
                 ),
                 column(
                   width = 4,
@@ -70,7 +70,7 @@ enabler1_tab <- function() {
                     title = "Agency worker rate (FTE) in 2022",
                     value = textOutput("agency_rate_txt")
                     #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
-                  ),
+                  )
                 ),
                 column(
                   width = 4,
@@ -117,8 +117,8 @@ enabler1_tab <- function() {
                       label = "Additional information:",
                       help_text = (
                         p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                          "<br>",
-                          "For more information on the methodology, please refer to the",a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                          tags$br(),
+                          "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
                       )
                     ),
                   ),
@@ -130,13 +130,12 @@ enabler1_tab <- function() {
                     p("Prioritising a stable and permanent workforce allows children, young people and families to maintain consistent relationships with practitioners.
                            Agency workers should only be used as per the national agency rules from Autumn 2024."),
                     
-                    insert_text(inputId = "agency_rate_definition", text = paste(
-                      "<b>Agency Workers</b> are child and family social workers not directly paid by the local authority. These may be social workers who are paid by an agency rather than the local authority or who are self-employed.",
-                      "<br>",
-                      "The <b>FTE agency worker rate</b> is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."
-                    )),
+                    # insert_text(inputId = "agency_rate_definition", text = paste(
+                    #   "<b>Agency Workers</b> are child and family social workers not directly paid by the local authority. These may be social workers who are paid by an agency rather than the local authority or who are self-employed.",
+                    #   "<br>","<br>",
+                    #   "The <b>FTE agency worker rate</b> is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."
+                    # )),
                     
-                    p("The FTE agency worker rate is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."),
                     br(),
                     plotlyOutput("plot_agency_worker"),
                     br(),
@@ -149,8 +148,22 @@ enabler1_tab <- function() {
                         dataTableOutput("table_agency_worker")
                       )
                     ),
-                  ), 
-                  
+                    
+                    details(
+                      inputId = "agency_worker_info",
+                      label = "Additional information",
+                      help_text = (
+                        tags$ul(
+                          tags$li(tags$b("Agency workers"), " are child and family social workers not directly paid by the local authority. These may be social workers who are paid by an agency rather than the local authority or who are self-employed."),
+                          tags$li("The ", tags$b("FTE agency worker rate"), " is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."),
+                          tags$br(),
+                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                            tags$br(),
+                            "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                        )
+                      )
+                    ), 
+                  ),
                   
                   # Vacancy Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
