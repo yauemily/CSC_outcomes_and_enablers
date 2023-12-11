@@ -293,6 +293,17 @@ template. 80% works well here to reduce white space on the right hand side.*/
 
 .bslib-value-box.default {
     --bslib-value-box-bg-default: var(--bs-card-bg, #1d70b8);
+    border-radius: 4px;
+}
+
+.bslib-value-box .value-box-area>:first-child{
+  background-color: #1d70b8!important;
+  color: #fff;
+  font-size: 28px !important;
+  font-family: GDS Transport, arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  font-weight: 600;
 }
 
 .bslib-value-box .value-box-area>:nth-child(2){
@@ -305,14 +316,7 @@ template. 80% works well here to reduce white space on the right hand side.*/
   text-align: center;
 }
 
-.bslib-value-box .value-box-area>:first-child{
-  background-color: #1d70b8!important;
-  color: #fff;
-  font-size: 22px !important;
-  font-family: GDS Transport, arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-align: center;
-}
+
 
 
 /* Full screen plots */

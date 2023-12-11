@@ -228,10 +228,11 @@ server <- function(input, output, session) {
       )
     )
   })
+  
   # CSC server logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #social worker rate plot and table
   output$s_w_headline_txt <- renderText({
-    paste((workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc)), "%")
+    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1), "%")
   })
   
   output$plot_s_w_turnover <- plotly::renderPlotly({
@@ -257,7 +258,7 @@ server <- function(input, output, session) {
   
   #agency worker rate plot
   output$agency_rate_txt <- renderText({
-    paste((workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(agency_worker_rate_fte_perc)), "%")
+    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(agency_worker_rate_fte_perc), nsmall=1), "%")
   })
   
   output$plot_agency_worker <- plotly::renderPlotly({
@@ -283,7 +284,7 @@ server <- function(input, output, session) {
   
   # Vacancy Rate plot and table
   output$vacancy_rate_txt <- renderText({
-    paste((workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc)), "%")
+    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%")
   })
   
   output$plot_vacancy_rate <- plotly::renderPlotly({
