@@ -92,7 +92,13 @@ template. 80% works well here to reduce white space on the right hand side.*/
 }
 
 /* Tabs layout styling */
-
+.tabbable{
+  font-family: "GDS Transport", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size:18px;
+  font-weight:500;
+}
 .nav-tabs > li > a {
   text-decoration: none
 }
@@ -107,10 +113,11 @@ template. 80% works well here to reduce white space on the right hand side.*/
   padding-right: 19px;
   padding-bottom: 16px;
   padding-left: 19px;
-  border: 1px solid #b1b4b6;
+  border: 2px solid #b1b4b6;
   border-bottom: 0;
   background-color: #fff;
   text-decoration: none
+
 }
 
 .well {

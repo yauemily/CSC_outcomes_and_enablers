@@ -232,7 +232,8 @@ server <- function(input, output, session) {
   # CSC server logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #social worker rate plot and table
   output$s_w_headline_txt <- renderText({
-    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1), "%")
+    stat <- format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1)
+    paste0(stat,"%","<br>",input$geographic_breakdown,"<br>","(2022)")
   })
   
   output$plot_s_w_turnover <- plotly::renderPlotly({

@@ -76,7 +76,8 @@ plot_social_worker_turnover <- function(geo_lvl, geo_break){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 100))
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')
 }
 
 # Agency Rates

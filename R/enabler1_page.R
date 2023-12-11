@@ -60,8 +60,8 @@ enabler1_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Turnover rate (FTE) in 2022",
-                    value = textOutput("s_w_headline_txt")
+                    title = "Turnover rate (FTE)",
+                    value = htmlOutput("s_w_headline_txt")
                   )
                 ),
                 column(
