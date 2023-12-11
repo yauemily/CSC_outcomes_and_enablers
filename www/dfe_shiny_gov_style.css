@@ -125,6 +125,34 @@ template. 80% works well here to reduce white space on the right hand side.*/
     color: #fff;
 }
 
+/* header fonts */
+.h1, .h2 .h3, .h4, h1 ,h2, h3, h4{
+  font-family: GDS Transport, arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  font-weight: 700;
+}
+
+.p,p{
+  font-family: GDS Transport, arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  font-size: 19px;
+}
+
+/* Changing the inputs */
+.selectize-input {
+    border: 2px solid #ccc;
+    padding: 6px 12px;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    box-shadow: none;
+    border-radius: 0px;
+    border-color: black;
+}
+
+
 /*CSS for extra dropdown details */
 .govuk-details {
     padding: 19px;
@@ -204,24 +232,24 @@ template. 80% works well here to reduce white space on the right hand side.*/
 }
 
 .bg-dark-blue{
-  background-color: #1d70b8!important;
-  color: #fff;
+  background-color: #fff!important;
+  color: #000;
   font-size: 22px;
   font-family: GDS Transport, arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  border: 4px solid #1d70b8;
+  /*border: 4px solid #1d70b8;*/
 }
 
 .input_box{
-  background-color: #1d70b8;
+  background-color: #fff;
   padding: 19px;
   height: 100%;
   min-height: 100%;
-  color: #fff;
-  font-size: 22px;
+  color: #000;
+  font-size: 20px;
   font-family: GDS Transport, arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  border: 1px solid #e3e3e3;
+  border: 3px solid #1d70b8;
   border-radius: 4px;
 }
 
@@ -492,3 +520,98 @@ btn is the user guide button
 /*#navlistPanel > li:last-child(){
   display: none;
 }*/
+
+
+/*Domain tab styling */
+/*.tabbable > .tab-content {
+  padding: 30px 20px;*/
+  /* border: 1px solid #b1b4b6; old darker grey */
+/*  border: 1px solid #BBBEBE;
+  border-top: 0
+}
+
+.nav-tabs > li.active > a, 
+.nav-tabs > li.active > a:focus, 
+.nav-tabs > li.active > a:hover {
+  position: relative;
+  margin-top: -5px;
+  margin-bottom: -1px;
+  padding-top: 14px;
+  padding-right: 19px;
+  padding-bottom: 16px;
+  padding-left: 19px;*/
+  /* border: 1px solid #b1b4b6; old darker grey */
+/*  border: 1px solid #BBBEBE;
+  border-bottom: 0;
+  background-color: #fff;
+}
+
+.nav-tabs > li.active > a {
+  font-family: "GDS Transport", arial, sans-serif;
+  background-color: white;
+  border: none;
+  text-decoration: none;
+}
+
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  font-family: "GDS Transport", arial, sans-serif;
+  background-color: white;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-tabs > li {
+  position: relative;
+  margin-right: 5px;
+  margin-bottom: 0;
+  margin-left: 0;
+  padding: 10px 20px;
+  float: left;
+  background-color: #f3f2f1;
+  text-align: center;
+}*/
+/*
+.nav-tabs > li.active {
+  position: relative;
+  margin-bottom: -1px;
+  padding-top: 14px;
+  padding-right: 19px;
+  padding-bottom: 16px;
+  padding-left: 19px;*/
+  /* border: 1px solid #b1b4b6; old darker grey */
+/*  border: 1px solid #BBBEBE;
+  border-bottom: 0;
+  background-color: #fff;
+}*/
+/*
+.nav-tabs > li > a {
+  font-family: "GDS Transport", arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: underline;
+  text-decoration-thickness: max(1px, 0.0625rem);
+  text-underline-offset: 0.1em;
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #0b0c0c;
+  font-weight: 400;
+  font-size: 19px;
+}
+
+.nav-tabs > li > a:hover {
+  font-family: "GDS Transport", arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: underline;
+  text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
+  text-underline-offset: 0.1em;
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #0b0c0c;
+  font-weight: 400;
+  font-size: 19px;
+  border-color: transparent;
+  background-color: transparent;
+} */

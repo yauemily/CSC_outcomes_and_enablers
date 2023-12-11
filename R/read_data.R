@@ -54,21 +54,24 @@ read_definitions <- function(file = "data/definitions.csv") {
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce data
-read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv") {
-  workforce_data <- read.csv(file)
-  # Select only the columns we want
-  workforce_data <- colClean(workforce_data) %>% select(
-    "time_period", "geographic_level", "region_name", "la_name", "turnover_rate_fte_perc", "absence_rate_fte_perc",
-    "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
-    "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte"
-  )
-  workforce_data <- convert_perc_cols_to_numeric(workforce_data)
-  return(workforce_data)
-}
+# read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv") {
+#   workforce_data <- read.csv(file)
+#   # Select only the columns we want
+#   workforce_data <- colClean(workforce_data) %>% select(
+#     "time_period", "geographic_level", "region_name", "la_name", "turnover_rate_fte_perc", "absence_rate_fte_perc",
+#     "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
+#     "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte"
+#   )
+#   workforce_data <- convert_perc_cols_to_numeric(workforce_data)
+#   return(workforce_data)
+# }
 
-read_workforce_data2 <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
-  workforce2 <- read.csv(file)
-  workforce2 <- colClean(workforce2)%>%
+#For filters to work nicely, we want to have two levels of grouping: geographic level (national, regional, LA) 
+#and level breakdown (region names and la names)
+
+read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+  workforce_data <- read.csv(file)
+  workforce_data <- colClean(workforce_data)%>%
     mutate(geo_breakdown = case_when(
       geographic_level == "National" ~ "National",#NA_character_,
       geographic_level == "Regional" ~ region_name,
@@ -78,8 +81,8 @@ read_workforce_data2 <- function(file = "data/csww_headline_measures_2017_to_202
            "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
            "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte") %>% distinct()
   
-  workforce2 <- convert_perc_cols_to_numeric(workforce2)
-  return(workforce2)
+  workforce_data <- convert_perc_cols_to_numeric(workforce_data)
+  return(workforce_data)
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

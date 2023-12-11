@@ -59,7 +59,7 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 # Enabler 1 - Workforce charts
 # Social Worker Turnover
 plot_social_worker_turnover <- function(geo_lvl, geo_break){
-  social_worker_data <- workforce2 %>%
+  social_worker_data <- workforce_data %>%
     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
       time_period, geo_breakdown,
@@ -80,14 +80,14 @@ plot_social_worker_turnover <- function(geo_lvl, geo_break){
 }
 
 # Agency Rates
-plt_agency_rates <- function(){
+plt_agency_rates <- function(geo_lvl, geo_break){
   agency_rates_data <- workforce_data %>%
-    filter(geographic_level == "Regional") %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
-      time_period, region_name,
+      time_period, geo_breakdown,
       agency_worker_rate_fte_perc
     )
-  ggplot(agency_rates_data, aes(`time_period`, `agency_worker_rate_fte_perc`, color = region_name))+
+  ggplot(agency_rates_data, aes(`time_period`, `agency_worker_rate_fte_perc`, color = geo_breakdown))+
     geom_line() +
     ylab("Agency worker rate (FTE) (%)")+
     xlab("Time Period") +
@@ -103,14 +103,14 @@ plt_agency_rates <- function(){
 
 
 # Vacancy Rate over time
-plot_vacancy_rate <- function() {
+plot_vacancy_rate <- function(geo_lvl, geo_break) {
   vacancy_data <- workforce_data %>%
-    filter(geographic_level == "Regional") %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
-      time_period, region_name,
+      time_period, geo_breakdown,
       vacancy_rate_fte_perc
     )
-  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = region_name, line_type = region_name)) +
+  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
     geom_line() +
     ylab("Vacancy rate (FTE) (%)") +
     xlab("Time Period") +
@@ -124,12 +124,13 @@ plot_vacancy_rate <- function() {
     scale_y_continuous(limits = c(0, 100))
 }
 
+# Worker Caseloads
 plot_caseloads <- function(){
   caseload_data <- workforce_data %>%
     filter(geographic_level == "Regional") %>%
-    select(time_period, region_name, caseload_fte)
+    select(time_period, geo_breakdown, caseload_fte)
   
-  ggplot(caseload_data, aes(`time_period`, `caseload_fte`, fill = region_name)) +
+  ggplot(caseload_data, aes(`time_period`, `caseload_fte`, fill = geo_breakdown)) +
     geom_col(position = position_dodge()) +
     ylab("Caseload (FTE)") +
     xlab("Time Period") +
@@ -147,9 +148,9 @@ plot_caseloads <- function(){
 plot_caseloads_test1 <- function(){
   caseload_data <- workforce_data %>%
     filter(geographic_level == "Regional") %>%
-    select(time_period, region_name, caseload_fte)
+    select(time_period, geo_breakdown, caseload_fte)
   
-  ggplot(caseload_data, aes(`region_name`, `caseload_fte`, fill = factor(time_period))) +
+  ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
     ylab("Caseload (FTE)") +
     xlab("Region") +

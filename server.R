@@ -231,7 +231,7 @@ server <- function(input, output, session) {
   # CSC server logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #social worker rate plot and table
   output$s_w_headline_txt <- renderText({
-    paste((workforce2 %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc)), "%")
+    paste((workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc)), "%")
   })
   
   output$plot_s_w_turnover <- plotly::renderPlotly({
@@ -244,8 +244,8 @@ server <- function(input, output, session) {
   
   output$table_s_w_turnover <- renderDataTable({
     datatable(
-      workforce_data %>% filter(geographic_level == "Regional") %>% select(
-        time_period, region_name,
+      workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
+        time_period, geo_breakdown,
         turnover_rate_fte_perc
       ),
       options = list(
@@ -256,9 +256,13 @@ server <- function(input, output, session) {
   })
   
   #agency worker rate plot
+  output$agency_rate_txt <- renderText({
+    paste((workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(agency_worker_rate_fte_perc)), "%")
+  })
+  
   output$plot_agency_worker <- plotly::renderPlotly({
     ggplotly(
-      plt_agency_rates() %>%
+      plt_agency_rates(input$select_geography, input$geographic_breakdown) %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -267,7 +271,7 @@ server <- function(input, output, session) {
   output$table_agency_worker <- renderDataTable({
     datatable(
       workforce_data %>% filter(geographic_level == "Regional") %>% select(
-        time_period, region_name,
+        time_period, geo_breakdown,
         agency_worker_rate_fte_perc
       ),
       options = list(
@@ -278,9 +282,13 @@ server <- function(input, output, session) {
   })
   
   # Vacancy Rate plot and table
+  output$vacancy_rate_txt <- renderText({
+    paste((workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc)), "%")
+  })
+  
   output$plot_vacancy_rate <- plotly::renderPlotly({
     ggplotly(
-      plot_vacancy_rate() %>%
+      plot_vacancy_rate(input$select_geography, input$geographic_breakdown) %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -289,7 +297,7 @@ server <- function(input, output, session) {
   output$table_vacancy_rate <- renderDataTable({
     datatable(
       workforce_data %>% filter(geographic_level == "Regional") %>% select(
-        time_period, region_name,
+        time_period, geo_breakdown,
         vacancy_rate_fte_perc
       ),
       options = list(

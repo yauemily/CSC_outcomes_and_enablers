@@ -52,6 +52,7 @@ enabler1_tab <- function() {
         div(
           tabsetPanel(
             id = "enabler1_panels",
+            type = "tabs",
             tabPanel(
               "Workforce Stability",
               fluidRow(
@@ -67,14 +68,16 @@ enabler1_tab <- function() {
                   width = 4,
                   value_box(
                     title = "Agency worker rate (FTE) in 2022",
-                    value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
-                  )
+                    value = textOutput("agency_rate_txt")
+                    #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
+                  ),
                 ),
                 column(
                   width = 4,
                   value_box(
                     title = "Vacancy rate (FTE) in 2022",
-                    value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(vacancy_rate_fte_perc),"%")
+                    value = textOutput("vacancy_rate_txt")
+                    #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(vacancy_rate_fte_perc),"%")
                   )
                 ),
                 br(),
@@ -85,19 +88,37 @@ enabler1_tab <- function() {
                   # Social Worker Turnover ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
                     h2("Social Worker Turnover"),
-                    insert_text(inputId = "social_work_turnover_rationale", text = paste(
-                      "Prioritising a stable workforce allows children, young people and families to maintain consistent relationships with practitioners."
+                    
+                    p("Prioritising a stable workforce allows children, young people and families to maintain consistent relationships with practitioners.", 
+                      style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
+                    
+                    insert_text(inputId = "social_work_turnover_definition", text = paste(
+                      "<b>","Turnover rate", "</b><br>",
+                      "The turnover rate is calculated as the number of FTE (full-time equivalent) 
+                                  children and family social worker leavers in the year divided by the number of FTE children and 
+                                  family social workers in post at the 30 September."
                     )),
-                    p("The turnover rate is calculated as the number of FTE (full-time equivalent) children and family social worker leavers in the year divided by the number of FTE children and family social workers in post at the 30 September."),
                     # p("plots go here"),
                     plotlyOutput("plot_s_w_turnover"),
                     br(),
                     br(),
+                    # Expandable for the table alternative
                     details(
                       inputId = "table_s_w_turnover",
                       label = "View Chart as a table",
                       help_text = (
                         dataTableOutput("table_s_w_turnover")
+                      )
+                    ),
+                    
+                    #expandable for the additional info links
+                    details(
+                      inputId = "turnover_info",
+                      label = "Additional information:",
+                      help_text = (
+                        p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                          "<br>",
+                          "For more information on the methodology, please refer to the",a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
                       )
                     ),
                   ),
@@ -106,10 +127,15 @@ enabler1_tab <- function() {
                   # Agency Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
                     h2("Agency Rates"),
-                    insert_text(inputId = "agency_rates_rationale", text = paste(
-                      "Prioritising a stable and permanent workforce allows children, young people and families to maintain consistent relationships with practitioners.
-                           Agency workers should only be used as per the national agency rules from Autumn 2024."
+                    p("Prioritising a stable and permanent workforce allows children, young people and families to maintain consistent relationships with practitioners.
+                           Agency workers should only be used as per the national agency rules from Autumn 2024."),
+                    
+                    insert_text(inputId = "agency_rate_definition", text = paste(
+                      "<b>Agency Workers</b> are child and family social workers not directly paid by the local authority. These may be social workers who are paid by an agency rather than the local authority or who are self-employed.",
+                      "<br>",
+                      "The <b>FTE agency worker rate</b> is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."
                     )),
+                    
                     p("The FTE agency worker rate is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."),
                     br(),
                     plotlyOutput("plot_agency_worker"),
@@ -147,7 +173,6 @@ enabler1_tab <- function() {
                       )
                     )
                   ) 
-                  
                 ),
               ),
             ),
