@@ -56,10 +56,39 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 
 # CSC charts
 
+#This is test code to try and create a function for the plots instead of lots of the same bits of code
+#at least a framework for the time series plots
+
+plotly_time_series <- function(dataset, level, breakdown, yvalue){
+  filtered_data <- dataset %>%
+    filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
+    select(time_period, geo_breakdown, yvalue)
+  
+  ggplot(filtered_data, aes(`time_period`, `turnover_rate_fte_perc`, color = geo_breakdown))+
+    geom_line() +
+    #ylab("Social worker Turnover rate (FTE) (%)")+
+    xlab("Time Period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')#+
+    #scale_color_manual(
+      #"Breakdown",
+      #breaks = unique(c("England", inputArea)),
+     # values = gss_colour_pallette
+    #)
+}
+
+
 # Enabler 1 - Workforce charts
 # Social Worker Turnover
 plot_social_worker_turnover <- function(geo_lvl, geo_break){
-  social_worker_data <- workforce2 %>%
+  social_worker_data <- workforce_data %>%
     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
       time_period, geo_breakdown,
@@ -76,18 +105,24 @@ plot_social_worker_turnover <- function(geo_lvl, geo_break){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 100))
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
 }
 
 # Agency Rates
-plt_agency_rates <- function(){
+plt_agency_rates <- function(geo_lvl, geo_break){
   agency_rates_data <- workforce_data %>%
-    filter(geographic_level == "Regional") %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
-      time_period, region_name,
+      time_period, geo_breakdown,
       agency_worker_rate_fte_perc
     )
-  ggplot(agency_rates_data, aes(`time_period`, `agency_worker_rate_fte_perc`, color = region_name))+
+  ggplot(agency_rates_data, aes(`time_period`, `agency_worker_rate_fte_perc`, color = geo_breakdown))+
     geom_line() +
     ylab("Agency worker rate (FTE) (%)")+
     xlab("Time Period") +
@@ -98,19 +133,20 @@ plt_agency_rates <- function(){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 100))
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')
 }
 
 
 # Vacancy Rate over time
-plot_vacancy_rate <- function() {
+plot_vacancy_rate <- function(geo_lvl, geo_break) {
   vacancy_data <- workforce_data %>%
-    filter(geographic_level == "Regional") %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
-      time_period, region_name,
+      time_period, geo_breakdown,
       vacancy_rate_fte_perc
     )
-  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = region_name, line_type = region_name)) +
+  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
     geom_line() +
     ylab("Vacancy rate (FTE) (%)") +
     xlab("Time Period") +
@@ -121,15 +157,17 @@ plot_vacancy_rate <- function() {
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 100))
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')
 }
 
+# Worker Caseloads
 plot_caseloads <- function(){
   caseload_data <- workforce_data %>%
     filter(geographic_level == "Regional") %>%
-    select(time_period, region_name, caseload_fte)
+    select(time_period, geo_breakdown, caseload_fte)
   
-  ggplot(caseload_data, aes(`time_period`, `caseload_fte`, fill = region_name)) +
+  ggplot(caseload_data, aes(`time_period`, `caseload_fte`, fill = geo_breakdown)) +
     geom_col(position = position_dodge()) +
     ylab("Caseload (FTE)") +
     xlab("Time Period") +
@@ -141,15 +179,20 @@ plot_caseloads <- function(){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 30))
+    scale_y_continuous(limits = c(0, 30))+
+    scale_fill_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
 }
 
 plot_caseloads_test1 <- function(){
   caseload_data <- workforce_data %>%
     filter(geographic_level == "Regional") %>%
-    select(time_period, region_name, caseload_fte)
+    select(time_period, geo_breakdown, caseload_fte)
   
-  ggplot(caseload_data, aes(`region_name`, `caseload_fte`, fill = factor(time_period))) +
+  ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
     ylab("Caseload (FTE)") +
     xlab("Region") +
@@ -161,5 +204,10 @@ plot_caseloads_test1 <- function(){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 30))
+    scale_y_continuous(limits = c(0, 30))+
+    scale_fill_manual(
+      "Time Period",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
 }

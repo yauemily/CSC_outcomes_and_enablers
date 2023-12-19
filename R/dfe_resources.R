@@ -8,3 +8,5 @@
 # guidance here: https://best-practice-and-impact.github.io/afcolours/
 
 gss_colour_pallette <- afcolours::af_colours("categorical", colour_format = "hex", n = 6)
+#"#12436D" "#28A197" "#801650" "#F46A25" "#3D3D3D" "#A285D1"
+#("#12436D", "#f46a25", "#801650", "#28a197", "#3D3D3D", "#a285d1", "#FF5E59", "#540000")
