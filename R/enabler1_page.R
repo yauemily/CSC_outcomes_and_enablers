@@ -53,7 +53,7 @@ enabler1_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Turnover rate (FTE)",
+                    title = "Turnover Rate (FTE)",
                     value = htmlOutput("s_w_headline_txt"),
                     #showcase = plotlyOutput("stat_test_plot"),
                     #showcase_layout = "bottom"
@@ -62,7 +62,7 @@ enabler1_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Agency worker rate (FTE)",
+                    title = "Agency Worker Rate (FTE)",
                     value = htmlOutput("agency_rate_txt")
                     #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
                   )
@@ -70,7 +70,7 @@ enabler1_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Vacancy rate (FTE)",
+                    title = "Vacancy Rate (FTE)",
                     value = htmlOutput("vacancy_rate_txt")
                     #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(vacancy_rate_fte_perc),"%")
                   )
@@ -208,7 +208,7 @@ enabler1_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Social worker caseloads (FTE) in 2022",
+                    title = "Social Worker Caseloads (FTE)",
                     value = htmlOutput("caseload_txt")
                       #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
                   ),

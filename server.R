@@ -297,6 +297,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         turnover_rate_fte_perc
       ),
+      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -324,6 +325,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         agency_worker_rate_fte_perc
       ),
+      colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -333,7 +335,7 @@ server <- function(input, output, session) {
   
   # Vacancy Rate plot and table
   output$vacancy_rate_txt <- renderText({
-    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
+    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
   })
   
   output$plot_vacancy_rate <- plotly::renderPlotly({
@@ -350,6 +352,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         vacancy_rate_fte_perc
       ),
+      colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -360,7 +363,7 @@ server <- function(input, output, session) {
   
   #Caseload
   output$caseload_txt <- renderText({
-    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
+    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
   })
   
   output$plot_caseload <- plotly::renderPlotly({
@@ -387,6 +390,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         caseload_fte
       ),
+      colnames = c("Time Period", "Geographical Breakdown", "Caseload (FTE)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
