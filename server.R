@@ -230,10 +230,57 @@ server <- function(input, output, session) {
   })
   
   # CSC server logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  headline_plotter <- function(d,x,y){
+    info <- getCurrentOutputInfo()
+    large <- isTRUE(info$height() > 200)
+    
+    plot_ly(d, x = x, y = y) %>%
+      add_lines(
+        color = "white",
+        span = I(1),
+        #hoverinfo = if (!large) "none",
+        fill = 'white',
+        alpha = 0.2
+      ) %>%
+      layout(
+        hovermode = "x",
+        margin = list(t = 0, r = 0, l = 0, b = 0),
+        font = list(color = info$fg()),
+        paper_bgcolor = "transparent",
+        plot_bgcolor = "transparent",
+        xaxis = list(
+          title = "",
+          visible = large,
+          showgrid = FALSE
+        ),
+        yaxis = list(
+          title = "",
+          visible = large,
+          showgrid = FALSE
+        )
+      ) %>%
+      config(displayModeBar = FALSE)
+  }
+  
+  stat_test_plot <- renderPlotly({
+    headline_plotter(workforce_data, x = ~time_period, y = ~input$geographic_breakdown)
+  })
+  
+  # plotly_time_series function test: it does work, will need to implement this later
+  
+  output$plotly_test <- renderPlotly({
+    ggplotly(
+      plotly_time_series(workforce_data,input$select_geography, input$geographic_breakdown,"turnover_rate_fte_perc")+ylab("Social worker Turnover rate (FTE) (%)") %>%
+        config(displayModeBar = F),
+      height = 420
+    )#+ylab("Social worker Turnover rate (FTE) (%)")
+  })
+  
+  
   #social worker rate plot and table
   output$s_w_headline_txt <- renderText({
-    stat <- format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1)
-    paste0(stat,"%","<br>",input$geographic_breakdown,"<br>","(2022)")
+    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1)
+    paste0(stat,"%","<br>",input$geographic_breakdown,"<br>", "(",max(workforce_data$time_period),")")
   })
   
   output$plot_s_w_turnover <- plotly::renderPlotly({
@@ -259,8 +306,9 @@ server <- function(input, output, session) {
   
   #agency worker rate plot
   output$agency_rate_txt <- renderText({
-    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(agency_worker_rate_fte_perc), nsmall=1), "%")
-  })
+    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(agency_worker_rate_fte_perc), nsmall = 1)
+    paste0(stat,"%","<br>", "(",max(workforce_data$time_period),")")
+    })
   
   output$plot_agency_worker <- plotly::renderPlotly({
     ggplotly(
@@ -285,7 +333,7 @@ server <- function(input, output, session) {
   
   # Vacancy Rate plot and table
   output$vacancy_rate_txt <- renderText({
-    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%")
+    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
   })
   
   output$plot_vacancy_rate <- plotly::renderPlotly({
@@ -311,6 +359,10 @@ server <- function(input, output, session) {
   
   
   #Caseload
+  output$caseload_txt <- renderText({
+    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
+  })
+  
   output$plot_caseload <- plotly::renderPlotly({
       ggplotly(
         plot_caseloads() %>%
@@ -332,7 +384,7 @@ server <- function(input, output, session) {
   output$table_caseload <- renderDataTable({
     datatable(
       workforce_data %>% filter(geographic_level == "Regional") %>% select(
-        time_period, region_name,
+        time_period, geo_breakdown,
         caseload_fte
       ),
       options = list(

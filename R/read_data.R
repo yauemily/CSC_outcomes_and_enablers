@@ -88,11 +88,13 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce characteristics data
 read_workforce_char_data <- function(file = "data/csww_workforce_characteristics_2017_to_2022.csv") {
-  workforce_char_data <- read.csv(file)
+  workforce_characteristics <- read.csv(file)
   # Select only the columns we want
-  workforce_char_data <- colClean(workforce_char_data) %>% select(
+  workforce_char_data <- colClean(workforce_characteristics) 
+  workforce_char_data <- workforce_char_data %>% filter(characteristic_type != "Total") %>% select(
     "time_period", "geographic_level", "region_name", "characteristic", "characteristic_type", "percentage"
   )
   workforce_char_data <- convert_perc_cols_to_numeric(workforce_char_data)
   return(workforce_char_data)
 }
+

@@ -111,7 +111,7 @@ definitions <- definitions[,1:4]
 workforce_data <- read_workforce_data()
 #workforce2 <- read_workforce_data2()
 #Read in the workforce characteristics data
-#workforce_char <- read_workforce_char_data()
+workforce_char <- read_workforce_char_data()
 
 #Dropdowns
 choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National" )%>% distinct()
