@@ -260,6 +260,54 @@ enabler1_tab <- function() {
             tabPanel(
               "Societal and cultural awareness and diversity",
               fluidRow(
+                br(),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Asian Ethnicity Social Workers",
+                    value = htmlOutput("asian_ethnicity_txt")
+                    #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
+                  ),
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Black Ethnicity Social Workers",
+                    value = htmlOutput("black_ethnicity_txt")
+                    #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
+                  )
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Mixed Ethnicity Social Workers",
+                    value = htmlOutput("mixed_ethnicity_txt")
+                    #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
+                  )
+                ),
+              ),
+              
+              fluidRow(
+                br(),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Other Ethnicity Social Workers",
+                    value = htmlOutput("other_ethnicity_txt")
+                    #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
+                  ),
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "White Ethnicity Social Workers",
+                    value = htmlOutput("white_ethnicity_txt")
+                    #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
+                  )
+                ),
+              ),
+              
+              fluidRow(
                 column(
                   width = 12,
                   gov_row(

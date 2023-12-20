@@ -398,6 +398,63 @@ server <- function(input, output, session) {
     )
   })
 
+  
+  output$asian_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(asian_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$black_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(black_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$mixed_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(mixed_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$other_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(other_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$white_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(white_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$plot_ethnicity_rate <- plotly::renderPlotly({
+    ggplotly(
+      plot_ethnicity_rate(input$select_geography, input$geographic_breakdown) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$table_ethnicity_rate <- renderDataTable({
+    datatable(
+      workforce_eth %>% filter(geographic_level == "Regional") %>% select(
+        time_period, geo_breakdown
+      ),
+      colnames = c("Time Period", "Geographical Breakdown", "Ethnicity Rate %"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
   # output$enabler1_d1_tab <- renderDataTable({
   #   datatable(
   #     definitions %>% filter(Domain == "Workforce Stability") %>% select("Indicator", "Rationale/Description"), rownames = FALSE,
