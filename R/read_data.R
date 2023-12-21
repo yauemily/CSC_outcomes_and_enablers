@@ -98,3 +98,23 @@ read_workforce_char_data <- function(file = "data/csww_workforce_characteristics
   return(workforce_char_data)
 }
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Workforce ethnicity and seniority level data
+read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicity_2019_to_2022.csv") {
+  workforce_ethnicity_data <- read.csv(file)
+  # Select only columns we want
+  #workforce_eth_data <- colCleanPerc(workforce_ethnicity_data)
+  workforce_ethnicity_data <- workforce_ethnicity_data %>% 
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+  )) %>%
+  select(
+    geographic_level, geo_breakdown, time_period, "time_period", "geographic_level", "region_name", "OrgRole", "white_perc", "mixed_perc", "asian_perc", 
+    "black_perc", "other_perc"
+  )
+  workforce_ethnicity_data <- convert_perc_cols_to_numeric(workforce_ethnicity_data)
+  return(workforce_ethnicity_data)
+}
+
