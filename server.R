@@ -297,6 +297,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         turnover_rate_fte_perc
       ),
+      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -324,6 +325,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         agency_worker_rate_fte_perc
       ),
+      colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -333,7 +335,7 @@ server <- function(input, output, session) {
   
   # Vacancy Rate plot and table
   output$vacancy_rate_txt <- renderText({
-    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
+    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
   })
   
   output$plot_vacancy_rate <- plotly::renderPlotly({
@@ -350,6 +352,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         vacancy_rate_fte_perc
       ),
+      colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -360,7 +363,7 @@ server <- function(input, output, session) {
   
   #Caseload
   output$caseload_txt <- renderText({
-    paste(format(workforce_data %>% filter(time_period == "2022" & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
+    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
   })
   
   output$plot_caseload <- plotly::renderPlotly({
@@ -387,6 +390,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         caseload_fte
       ),
+      colnames = c("Time Period", "Geographical Breakdown", "Caseload (FTE)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -394,6 +398,63 @@ server <- function(input, output, session) {
     )
   })
 
+  
+  output$asian_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(asian_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$black_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(black_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$mixed_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(mixed_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$other_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(other_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$white_ethnicity_txt <- renderText({
+    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+                                           & geo_breakdown %in% input$geographic_breakdown 
+                                           & OrgRole == "All children and family social workers") %>% 
+                    select(white_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  })
+  
+  output$plot_ethnicity_rate <- plotly::renderPlotly({
+    ggplotly(
+      plot_ethnicity_rate(input$select_geography, input$geographic_breakdown) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$table_ethnicity_rate <- renderDataTable({
+    datatable(
+      workforce_eth %>% filter(geographic_level == "Regional") %>% select(
+        time_period, geo_breakdown
+      ),
+      colnames = c("Time Period", "Geographical Breakdown", "Ethnicity Rate %"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
   # output$enabler1_d1_tab <- renderDataTable({
   #   datatable(
   #     definitions %>% filter(Domain == "Workforce Stability") %>% select("Indicator", "Rationale/Description"), rownames = FALSE,
