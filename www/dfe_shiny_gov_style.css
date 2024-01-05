@@ -145,6 +145,12 @@ template. 80% works well here to reduce white space on the right hand side.*/
   font-size: 19px;
 }
 
+.shiny-html-output,shiny-bound-output{
+  font-family: GDS Transport, arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  font-size: 20px;
+}
+
 /* Changing the inputs */
 .selectize-input {
     border: 2px solid #ccc;

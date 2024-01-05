@@ -42,6 +42,8 @@ enabler1_tab <- function() {
       br(),
       gov_row(
         br(),
+        p(htmlOutput("choices_confirmation_text")),
+        br(),
         div(
           tabsetPanel(
             id = "enabler1_panels",
@@ -84,8 +86,8 @@ enabler1_tab <- function() {
                   gov_row(
                     h2("Social Worker Turnover"),
                     
-                    p("Prioritising a stable workforce allows children, young people and families to maintain consistent relationships with practitioners.", 
-                      style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
+                    p("Prioritising a stable workforce allows children, young people and families to maintain consistent relationships with practitioners."), 
+                     # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
                     
                     insert_text(inputId = "social_work_turnover_definition", text = paste(
                       "<b>","Turnover rate", "</b><br>",
