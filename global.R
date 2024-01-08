@@ -115,7 +115,7 @@ workforce_char <- read_workforce_char_data()
 workforce_eth <- read_workforce_eth_data()
 
 #Dropdowns
-choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National" )%>% distinct()
+choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National")%>% distinct()
 choices_LA <- workforce_data %>% filter(geographic_level == "Local authority") %>% select()
 
 #choices_geographic_level <- dropdown_choices %>% select(geographic_level) %>% distinct()

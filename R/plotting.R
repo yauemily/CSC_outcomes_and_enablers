@@ -57,7 +57,7 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 # CSC charts
 
 #This is test code to try and create a function for the plots instead of lots of the same bits of code
-#at least a framework for the time series plots
+#at least a framework for the time series plots ----
 
 plotly_time_series <- function(dataset, level, breakdown, yvalue){
   filtered_data <- dataset %>%
@@ -85,8 +85,8 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue){
 }
 
 
-# Enabler 1 - Workforce charts
-# Social Worker Turnover
+# Enabler 1 - Workforce charts ----
+# Social Worker Turnover -------
 plot_social_worker_turnover <- function(geo_lvl, geo_break){
   social_worker_data <- workforce_data %>%
     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
@@ -114,7 +114,7 @@ plot_social_worker_turnover <- function(geo_lvl, geo_break){
     )
 }
 
-# Agency Rates
+# Agency Rates ----
 plt_agency_rates <- function(geo_lvl, geo_break){
   agency_rates_data <- workforce_data %>%
     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
@@ -134,11 +134,16 @@ plt_agency_rates <- function(geo_lvl, geo_break){
       axis.line = element_line(size = 1.0)
     ) +
     scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
 }
 
 
-# Vacancy Rate over time
+# Vacancy Rate over time ----
 plot_vacancy_rate <- function(geo_lvl, geo_break) {
   vacancy_data <- workforce_data %>%
     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
@@ -158,10 +163,15 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
       axis.line = element_line(size = 1.0)
     ) +
     scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
 }
 
-# Worker Caseloads
+# Worker Caseloads ----
 plot_caseloads <- function(){
   caseload_data <- workforce_data %>%
     filter(geographic_level == "Regional") %>%

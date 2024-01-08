@@ -276,6 +276,11 @@ server <- function(input, output, session) {
     )#+ylab("Social worker Turnover rate (FTE) (%)")
   })
   
+  # Enabler 1 Server Logic ----
+  output$choices_confirmation_text <- renderText({
+    paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
+  })
+  
   
   #social worker rate plot and table
   output$s_w_headline_txt <- renderText({
