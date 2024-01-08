@@ -1,12 +1,12 @@
-enabler1_tab <- function() {
+enabler2_tab <- function() {
   tabPanel(
-    value = "enabler1_page",
-    "Enabler 1",
+    value = "enabler2_page",
+    "Enabler 2",
     gov_main_layout(
       gov_row(
         column(
           width = 12,
-          h1("Enabler 1: The workforce is equipped and effective.")
+          h1("Enabler 2: The workforce is equipped and effective.")
         )
       ),
       gov_row(
@@ -46,7 +46,7 @@ enabler1_tab <- function() {
         br(),
         div(
           tabsetPanel(
-            id = "enabler1_panels",
+            id = "enabler2_panels",
             type = "tabs",
             tabPanel(
               "Workforce Stability",
