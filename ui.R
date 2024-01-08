@@ -126,6 +126,8 @@ ui <- function(input, output, session) {
       dashboard_panel(),
       outcome1_tab(),
       outcome2_tab(),
+      outcome3_tab(),
+      outcome4_tab(),
       enabler1_tab(),
       # homepage_panel(),
       a11y_panel(),
