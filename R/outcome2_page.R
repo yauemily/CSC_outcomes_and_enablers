@@ -1,12 +1,12 @@
-outcome1_tab <- function(){
+outcome2_tab <- function(){
   tabPanel(
-    value = "outcome1_page",
-    "Outcome 1",
+    value = "outcome2_page",
+    "Outcome 2",
     gov_main_layout(
       gov_row(
         column(
           width = 12,
-          h1("Outcome 1: Children, young people and families stay together and get the help they need")
+          h1("Outcome 2: Children and young people are supported by their family network")
         )
       ),
       gov_row(
@@ -32,28 +32,10 @@ outcome1_tab <- function(){
         br(),
         div(
           tabsetPanel(
-            id = "outcome1_panels",
+            id = "outcome2_panels",
             type = "tabs",
             tabPanel(
-              "Family Stability",
-              fluidRow(
-                p("testing")
-              )
-            ),
-            tabPanel(
-              "Access to support and getting help",
-              fluidRow(
-                p("testing")
-              )
-            ),
-            tabPanel(
-              "Child wellbeing and development",
-              fluidRow(
-                p("testing")
-              )
-            ),
-            tabPanel(
-              "Educational attainment",
+              "Families engaging and receiving support from their family network",
               fluidRow(
                 p("testing")
               )

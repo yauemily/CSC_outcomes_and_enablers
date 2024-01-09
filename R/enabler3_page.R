@@ -1,12 +1,12 @@
-outcome1_tab <- function(){
+enabler3_tab <- function(){
   tabPanel(
-    value = "outcome1_page",
-    "Outcome 1",
+    value = "enabler3_page",
+    "Enabler 3",
     gov_main_layout(
       gov_row(
         column(
           width = 12,
-          h1("Outcome 1: Children, young people and families stay together and get the help they need")
+          h1("Enabler 3: Leaders drive conditions for effective practice")
         )
       ),
       gov_row(
@@ -32,28 +32,16 @@ outcome1_tab <- function(){
         br(),
         div(
           tabsetPanel(
-            id = "outcome1_panels",
+            id = "outcome3_panels",
             type = "tabs",
             tabPanel(
-              "Family Stability",
+              "Spending",
               fluidRow(
                 p("testing")
               )
             ),
             tabPanel(
-              "Access to support and getting help",
-              fluidRow(
-                p("testing")
-              )
-            ),
-            tabPanel(
-              "Child wellbeing and development",
-              fluidRow(
-                p("testing")
-              )
-            ),
-            tabPanel(
-              "Educational attainment",
+              "Culture focused on outcomes from children and families and continually improving services",
               fluidRow(
                 p("testing")
               )

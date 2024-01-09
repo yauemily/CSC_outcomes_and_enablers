@@ -541,7 +541,7 @@ btn is the user guide button
 }
 
 /* Hide the last page on the navlist bar (user guide page)*/
-#navlistPanel > li:nth-child(7) {
+#navlistPanel > li:nth-child(13) {
   display: none;
 }
 
