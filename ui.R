@@ -137,6 +137,14 @@ ui <- function(input, output, session) {
       header = actionButton("tutorial", " User Guide", icon = icon("info", class = NULL, lib = "font-awesome"), style = "margin-top: 10px;float:  right;"),
       tutorialPanel(),
     ),
+    # sidebarMenu(
+    #   menuItem(
+    #     tabName = "Outcomes",
+    #     menuItem(
+    #       outcome1_tab()
+    #     )
+    #   )
+    # ),
     tags$script(
       src = "script.js"
     ),
