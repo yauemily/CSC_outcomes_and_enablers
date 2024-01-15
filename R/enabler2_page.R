@@ -38,6 +38,34 @@ enabler2_tab <- function() {
                 #options = list(maxItems = 3)
               ),
             )
+          ),
+          gov_row(
+            # column(
+            #   width = 3,
+            #   checkbox_Input(
+            #     inputId = "national_comparison_checkbox",
+            #     cb_labels = "Compare with National",
+            #     checkboxIds = "Yes_national",
+            #     label = "",
+            #     hint_label = NULL,
+            #     small = TRUE
+            #   )
+            # ),
+            # column(
+            #   width = 3,
+            #   checkbox_Input(
+            #     inputId = "region_comparison_checkbox",
+            #     cb_labels = "Compare with Region",
+            #     checkboxIds = "Yes_region",
+            #     label = "",
+            #     hint_label = NULL,
+            #     small = TRUE
+            #   )
+            # ),
+            # column(
+            #   width = 3,
+            #   p(htmlOutput("testing_checkboxes"))
+            # )
           )
         )
       ),

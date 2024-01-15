@@ -277,6 +277,34 @@ server <- function(input, output, session) {
   })
   
   # Enabler 1 Server Logic ----
+  # National Checkbox
+  
+  # observeEvent(eventExpr = {
+  #   input$national_comparison_checkbox
+  #   input$region_comparison_checkbox
+  #   },
+  #   {
+  #     if(is.null(national_comparison_checkbox) && is.null(region_comparison_checkbox)){
+  #       output$testing_checkboxes <- renderText({
+  #         paste0("No checkboxes")
+  #       })
+  #     } else if(!is.null(national_comparison_checkbox) && is.null(region_comparison_checkbox)){
+  #       output$testing_checkboxes <- renderText({
+  #         paste0("National comparison")
+  #       })
+  #     } else if (is.null(national_comparison_checkbox) && !is.null(region_comparison_checkbox)){
+  #       output$testing_checkboxes <- renderText({
+  #         paste0("Regional Comparison")
+  #       })
+  #     } else{
+  #       output$testing_checkboxes <- renderText({
+  #         paste0("Both checkboxes")
+  #       })
+  #     }
+  #   }
+  #   )
+  
+  
   output$choices_confirmation_text <- renderText({
     paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
   })
