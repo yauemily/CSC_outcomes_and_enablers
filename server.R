@@ -396,7 +396,7 @@ server <- function(input, output, session) {
   
   #Caseload
   output$caseload_txt <- renderText({
-    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
+    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>", "(",max(workforce_data$time_period),")")
   })
   
   # output$plotly_caseload <- renderPlotly({
