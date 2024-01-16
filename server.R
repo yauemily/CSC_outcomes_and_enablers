@@ -399,15 +399,31 @@ server <- function(input, output, session) {
     paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
   })
   
-  output$plot_caseload <- plotly::renderPlotly({
-      ggplotly(
-        plot_caseloads() %>%
+  # output$plotly_caseload <- renderPlotly({
+  #   ggplotly(
+  #     plotly_time_series_discrete(workforce_data,input$select_geography, input$geographic_breakdown, workforce_data$caseload_fte)+ylab("Social worker Caseload (FTE)") %>%
+  #       config(displayModeBar = F),
+  #     height = 420
+  #   )#+ylab("Social worker Turnover rate (FTE) (%)")
+  # })
+  # 
+  # output$plot_caseload <- plotly::renderPlotly({
+  #     ggplotly(
+  #       plot_caseloads() %>%
+  #       config(displayModeBar = F),
+  #     height = 420
+  #   )
+  #     
+  #   }
+  # )
+  # 
+  output$caseload_plot <- plotly::renderPlotly({
+    ggplotly(
+      plot_caseload_rate(input$select_geography, input$geographic_breakdown)%>%
         config(displayModeBar = F),
       height = 420
     )
-      
-    }
-  )
+  })
   
   output$plot_caseload_test1 <- plotly::renderPlotly({
     ggplotly(

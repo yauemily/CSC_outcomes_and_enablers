@@ -249,14 +249,18 @@ enabler2_tab <- function() {
               fluidRow(
                 column(
                   width = 12,
-                  gov_row(
-                    h2("Social worker caseloads"),
-                    #br(),
-                    p("Ensuring that practitioners have an appropriate caseload supports recruitment and 
-                        retention and allows practitioners to deliver impactful services."),
-                  ),
+                  # gov_row(
+                  #   h2("Social worker caseloads"),
+                  #   #br(),
+                  #   p("Ensuring that practitioners have an appropriate caseload supports recruitment and 
+                  #       retention and allows practitioners to deliver impactful services."),
+                  # ),
+                  # gov_row(
+                  #   plotlyOutput("caseload_plot"),
+                  #   br(),
+                  # ),
                   fluidRow(
-                    plotlyOutput("plot_caseload"),
+                    plotlyOutput("caseload_plot"),
                     br(),
                     plotlyOutput("plot_caseload_test1")
                   ),

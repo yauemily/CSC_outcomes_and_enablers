@@ -64,7 +64,7 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue){
     filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
     select(time_period, geo_breakdown, yvalue)
   
-  ggplot(filtered_data, aes(`time_period`, `turnover_rate_fte_perc`, color = geo_breakdown))+
+  ggplot(filtered_data, aes(`time_period`, yvalue, color = geo_breakdown))+
     geom_line() +
     #ylab("Social worker Turnover rate (FTE) (%)")+
     xlab("Time Period") +
@@ -82,6 +82,31 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue){
       #breaks = unique(c("England", inputArea)),
      # values = gss_colour_pallette
     #)
+}
+
+plotly_time_series_discrete <- function(dataset, level, breakdown, yvalue){
+  filtered_data <- dataset %>%
+    filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
+    select(time_period, geo_breakdown, yvalue)
+  
+  ggplot(filtered_data, aes(`time_period`, yvalue, color = geo_breakdown))+
+    geom_line() +
+    #ylab("Social worker Turnover rate (FTE) (%)")+
+    xlab("Time Period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 50))+
+    labs(color='Breakdown')#+
+  #scale_color_manual(
+  #"Breakdown",
+  #breaks = unique(c("England", inputArea)),
+  # values = gss_colour_pallette
+  #)
 }
 
 
@@ -172,13 +197,39 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
 }
 
 # Worker Caseloads ----
+# plotly_caseloads <- function(level, breakdown){
+#   filtered_data <- workforce_data %>%
+#     filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
+#     select(time_period, geo_breakdown, `caseload_fte`)
+#   
+#   ggplot(filtered_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown))+
+#     geom_line() +
+#     #ylab("Social worker Turnover rate (FTE) (%)")+
+#     xlab("Time Period") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.x = element_text(margin = margin(t = 12)),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 50))+
+#     labs(color='Breakdown')#+
+#   #scale_color_manual(
+#   #"Breakdown",
+#   #breaks = unique(c("England", inputArea)),
+#   # values = gss_colour_pallette
+#   #)
+# }
+
+#
 plot_caseloads <- function(){
   caseload_data <- workforce_data %>%
     filter(geographic_level == "Regional") %>%
     select(time_period, geo_breakdown, caseload_fte)
   
   ggplot(caseload_data, aes(`time_period`, `caseload_fte`, fill = geo_breakdown)) +
-    geom_col(position = position_dodge()) +
+    geom_col() +
     ylab("Caseload (FTE)") +
     xlab("Time Period") +
     theme_classic() +
@@ -197,6 +248,35 @@ plot_caseloads <- function(){
     )
 }
 
+
+plot_caseload_rate <- function(geo_lvl, geo_break) {
+  vacancy_data <- workforce_data %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
+    select(
+      time_period, geo_breakdown,
+      caseload_fte
+    )
+  ggplot(vacancy_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown)) +
+    geom_line() +
+    ylab("Caseload (FTE)") +
+    xlab("Time Period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 35))+
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
+}
+
+#bar charts test
 plot_caseloads_test1 <- function(){
   caseload_data <- workforce_data %>%
     filter(geographic_level == "Regional") %>%
