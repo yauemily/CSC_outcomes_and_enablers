@@ -300,14 +300,14 @@ enabler2_tab <- function() {
                 column(
                   width = 6,
                   value_box(
-                    title = "White ethnic background",
+                    title = "Social Worker White Ethnic Group",
                     value = htmlOutput("white_ethnicity_txt")
                   )
                 ),
                 column(
                   width = 6,
                   value_box(
-                    title = "Ethnic minority background",
+                    title = "Social Worker Ethnic Minority Groups",
                     value = htmlOutput("non_white_txt")
                   )
                 )
