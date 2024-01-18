@@ -313,7 +313,8 @@ server <- function(input, output, session) {
   #social worker rate plot and table
   output$s_w_headline_txt <- renderText({
     stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1)
-    paste0(stat,"%","<br>",input$geographic_breakdown,"<br>", "(",max(workforce_data$time_period),")")
+    paste0(stat,"%","<br>",#input$geographic_breakdown,"<br>",
+           "(",max(workforce_data$time_period),")")
   })
   
   output$plot_s_w_turnover <- plotly::renderPlotly({
