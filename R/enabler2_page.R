@@ -27,7 +27,7 @@ enabler2_tab <- function() {
             ),
             column(
               width = 6,
-              selectizeInput(
+              conditionalPanel(condition = "input.select_geography != 'National'",selectizeInput(
                 inputId = "geographic_breakdown",
                 label = "Select a breakdown: ",
                 choices = NULL,
@@ -36,7 +36,7 @@ enabler2_tab <- function() {
                 options = NULL
                #multiple = TRUE,
                 #options = list(maxItems = 3)
-              ),
+              )),
             )
           ),
           gov_row(

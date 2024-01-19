@@ -306,7 +306,11 @@ server <- function(input, output, session) {
   
   
   output$choices_confirmation_text <- renderText({
+    if (input$select_geography == "National") {
+      paste0("You have selected a geographic level of ", tags$b(input$select_geography), ".")
+    } else if (input$select_geography != "National") {
     paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
+  }
   })
   
   
