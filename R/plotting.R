@@ -301,3 +301,46 @@ plot_caseloads_test1 <- function(){
       values = gss_colour_pallette
     )
 }
+
+plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
+  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole == 'All children and family social workers', c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc")]
+  
+  ethnicity_data_long <- reshape(ethnicity_data,
+                                 direction = "long",
+                                 varying = list(names(ethnicity_data)[3:7]),
+                                 v.names = "percentage",
+                                 timevar = "ethnicity",
+                                 times = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
+                                 new.row.names = 1:1E6)
+  
+  # Ensure 'percentage' is numeric
+  ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
+  
+  p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(time_period))) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    ylab("Percentage") +
+    xlab("Ethnicity") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "Year",  # Change legend title
+      values = gss_colour_pallette
+    ) +
+    scale_x_discrete(labels = c("white_perc" = "White %", "mixed_perc" = "Mixed %", "asian_perc" = "Asian %", "black_perc" = "Black %", "other_perc" = "Other %"))  # Rename x-axis labels
+  
+  return(p)
+}
+
+
+
+
+
+
+
