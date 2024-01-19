@@ -440,7 +440,7 @@ server <- function(input, output, session) {
         time_period, geo_breakdown,
         caseload_fte
       ),
-      colnames = c("Time Period", "Geographical Breakdown", "Caseload (FTE)"),
+      colnames = c("Time Period", "Geographical Breakdown", "Average Caseload (FTE)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -462,7 +462,7 @@ server <- function(input, output, session) {
                                           & OrgRole == "All children and family social workers") %>% 
       select(white_perc)
     non_white_stat = 100 - as.numeric(white_stat)
-    paste0(non_white_stat, "%", "<br>", "(", max(workforce_eth$time_period) ,")")
+    paste0(format(non_white_stat, nsmall = 1), "%", "<br>", "(", max(workforce_eth$time_period) ,")")
   })
   
   

@@ -240,7 +240,7 @@ enabler2_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Social Worker Caseloads (FTE)",
+                    title = "Social Worker Average Caseload (FTE)",
                     value = htmlOutput("caseload_txt")
                       #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
                   ),
