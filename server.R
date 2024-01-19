@@ -500,9 +500,10 @@ server <- function(input, output, session) {
   #                   select(white_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
   # })
   
+  
   output$plot_ethnicity_rate <- plotly::renderPlotly({
     ggplotly(
-      plot_ethnicity_rate(input$select_geography, input$geographic_breakdown) %>%
+      plot_ethnicity_rate(input$geographic_breakdown, input$geographic_level) %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -510,16 +511,17 @@ server <- function(input, output, session) {
   
   output$table_ethnicity_rate <- renderDataTable({
     datatable(
-      workforce_eth %>% filter(geographic_level == "Regional") %>% select(
-        time_period, geo_breakdown
-      ),
-      colnames = c("Time Period", "Geographical Breakdown", "Ethnicity Rate %"),
+      workforce_eth %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown, OrgRole == 'All children and family social workers') %>% 
+        select(time_period, geo_breakdown, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
+      colnames = c("Time Period", "Geographical Breakdown", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
       )
     )
   })
+
   
   # output$enabler1_d1_tab <- renderDataTable({
   #   datatable(

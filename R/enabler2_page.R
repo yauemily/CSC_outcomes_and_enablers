@@ -312,67 +312,28 @@ enabler2_tab <- function() {
                   )
                 )
               ),
-              # fluidRow(
-              #   br(),
-              #   column(
-              #     width = 4,
-              #     value_box(
-              #       title = "Asian Ethnicity Social Workers",
-              #       value = htmlOutput("asian_ethnicity_txt")
-              #       #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
-              #     ),
-              #   ),
-              #   column(
-              #     width = 4,
-              #     value_box(
-              #       title = "Black Ethnicity Social Workers",
-              #       value = htmlOutput("black_ethnicity_txt")
-              #       #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
-              #     )
-              #   ),
-              #   column(
-              #     width = 4,
-              #     value_box(
-              #       title = "Mixed Ethnicity Social Workers",
-              #       value = htmlOutput("mixed_ethnicity_txt")
-              #       #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
-              #     )
-              #   ),
-              # ),
-              
-              # fluidRow(
-              #   br(),
-              #   column(
-              #     width = 4,
-              #     value_box(
-              #       title = "Other Ethnicity Social Workers",
-              #       value = htmlOutput("other_ethnicity_txt")
-              #       #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
-              #     ),
-              #   ),
-              #   column(
-              #     width = 4,
-              #     # value_box(
-              #     #   title = "White Ethnicity Social Workers",
-              #     #   value = htmlOutput("white_ethnicity_txt")
-              #     #   #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
-              #     # )
-              #   ),
-              # ),
-              
+          
               fluidRow(
                 column(
                   width = 12,
                   gov_row(
-                    h2("Ethnic diversity of workforce, and levels of seniority"),
+                    h2("Ethnic diversity of workforce"),
                     p("A diverse workforce, across all levels, should enable practice which reflects the cultural, linguistic, and religious needs of the communities’ practitioners serve."),
                   )
                 )
               ),
-              gov_row(
-                br(),
-                p("plot goes here")
-              )
+              fluidRow(
+                plotlyOutput("plot_ethnicity_rate")
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_ethnicity",
+                  label = "View Chart as a table",
+                  help_text = (
+                    dataTableOutput("table_ethnicity_rate")
+                  )
+                )
+              ),
             )
           )
         )
