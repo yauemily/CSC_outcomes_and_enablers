@@ -240,7 +240,7 @@ enabler2_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Social Worker Average Caseload (FTE)",
+                    title = "Average Caseload (FTE)",
                     value = htmlOutput("caseload_txt")
                       #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
                   ),
@@ -261,8 +261,6 @@ enabler2_tab <- function() {
                    ),
                   fluidRow(
                     plotlyOutput("caseload_plot"),
-                    br(),
-                    plotlyOutput("plot_caseload_test1")
                   ),
                   fluidRow(
                     details(
@@ -271,16 +269,7 @@ enabler2_tab <- function() {
                       help_text = (
                         dataTableOutput("table_caseload")
                       )
-                    )
-                  ),
-                  fluidRow(
-                    # details(
-                    #   inputId = "tbl_caseload",
-                    #   label = "View Chart as a table",
-                    #   help_text = (
-                    #     dataTableOutput("table_caseload")
-                    #   )
-                    # ),
+                    ),
                     details(
                       inputId = "caseload_info",
                       label = "Additional information:",
@@ -295,7 +284,10 @@ enabler2_tab <- function() {
                         )
                       )
                     )
-                    
+                  ),
+                  fluidRow(
+                    br(),
+                    plotlyOutput("plot_caseload_test1"),
                   ),
                 )
               )
