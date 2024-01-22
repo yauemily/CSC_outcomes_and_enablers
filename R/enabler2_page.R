@@ -133,7 +133,7 @@ enabler2_tab <- function() {
                     # Expandable for the table alternative
                     details(
                       inputId = "table_s_w_turnover",
-                      label = "View Chart as a table",
+                      label = "View chart as a table",
                       help_text = (
                         dataTableOutput("table_s_w_turnover")
                       )
@@ -171,7 +171,7 @@ enabler2_tab <- function() {
                     br(),
                     details(
                       inputId = "table_agency_worker",
-                      label = "View Chart as a table",
+                      label = "View chart as a table",
                       help_text = (
                         dataTableOutput("table_agency_worker")
                       )
@@ -209,7 +209,7 @@ enabler2_tab <- function() {
                     br(),
                     details(
                       inputId = "tbl_vacancy_rate",
-                      label = "View Chart as a table",
+                      label = "View chart as a table",
                       help_text = (
                         dataTableOutput("table_vacancy_rate")
                       )
@@ -232,7 +232,7 @@ enabler2_tab <- function() {
                 ),
               ),
             ),
-            # Second Domain - "quality of support for children and families"
+            # Second Domain - "quality of support for children and families" -------------
             tabPanel(
               "Quality of support for children and families",
               fluidRow(
@@ -249,16 +249,16 @@ enabler2_tab <- function() {
               fluidRow(
                 column(
                   width = 12,
-                  # gov_row(
-                  #   h2("Social worker caseloads"),
+                   gov_row(
+                     h2("Social Worker Caseloads"),
                   #   #br(),
-                  #   p("Ensuring that practitioners have an appropriate caseload supports recruitment and 
-                  #       retention and allows practitioners to deliver impactful services."),
-                  # ),
+                    p("Ensuring that practitioners have an appropriate caseload supports recruitment and 
+                         retention and allows practitioners to deliver impactful services."),
+                   #),
                   # gov_row(
                   #   plotlyOutput("caseload_plot"),
                   #   br(),
-                  # ),
+                   ),
                   fluidRow(
                     plotlyOutput("caseload_plot"),
                     br(),
@@ -267,11 +267,20 @@ enabler2_tab <- function() {
                   fluidRow(
                     details(
                       inputId = "tbl_caseload",
-                      label = "View Chart as a table",
+                      label = "View chart as a table",
                       help_text = (
                         dataTableOutput("table_caseload")
                       )
-                    ),
+                    )
+                  ),
+                  fluidRow(
+                    # details(
+                    #   inputId = "tbl_caseload",
+                    #   label = "View Chart as a table",
+                    #   help_text = (
+                    #     dataTableOutput("table_caseload")
+                    #   )
+                    # ),
                     details(
                       inputId = "caseload_info",
                       label = "Additional information:",
