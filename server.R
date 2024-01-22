@@ -359,7 +359,7 @@ server <- function(input, output, session) {
   
   output$table_agency_worker <- renderDataTable({
     datatable(
-      workforce_data %>% filter(geographic_level == "Regional") %>% select(
+      workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
         time_period, geo_breakdown,
         agency_worker_rate_fte_perc
       ),
@@ -386,7 +386,7 @@ server <- function(input, output, session) {
 
   output$table_vacancy_rate <- renderDataTable({
     datatable(
-      workforce_data %>% filter(geographic_level == "Regional") %>% select(
+      workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
         time_period, geo_breakdown,
         vacancy_rate_fte_perc
       ),
