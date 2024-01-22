@@ -314,7 +314,7 @@ server <- function(input, output, session) {
   })
   
   
-  #social worker rate plot and table
+  #social worker rate plot and table 
   output$s_w_headline_txt <- renderText({
     stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1)
     paste0(stat,"%","<br>",#input$geographic_breakdown,"<br>",
@@ -401,7 +401,19 @@ server <- function(input, output, session) {
   
   #Caseload
   output$caseload_txt <- renderText({
-    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>", "(",max(workforce_data$time_period),")")
+    previous_year = workforce_data %>% filter(time_period == (max(workforce_data$time_period)-1) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte)
+    current_year = workforce_data %>% filter(time_period == (max(workforce_data$time_period)) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte)
+    
+    if (current_year < previous_year){
+      paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>", "(",max(workforce_data$time_period),")",
+             "<br>", "down from ", previous_year, " in ", (max(workforce_data$time_period)-1), "." )
+    }else{
+      paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>", "(",max(workforce_data$time_period),")",
+             "<br>", "up from ", previous_year, " in ", (max(workforce_data$time_period)-1), "." )
+    }
+    
+   # paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>", "(",max(workforce_data$time_period),")",
+    #       "<br>", )
   })
   
   # output$plotly_caseload <- renderPlotly({
@@ -440,7 +452,7 @@ server <- function(input, output, session) {
   
   output$table_caseload <- renderDataTable({
     datatable(
-      workforce_data %>% filter(geographic_level == "Regional") %>% select(
+      workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
         time_period, geo_breakdown,
         caseload_fte
       ),
