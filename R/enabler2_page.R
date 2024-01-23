@@ -298,17 +298,17 @@ enabler2_tab <- function() {
               "Societal and cultural awareness and diversity",
               fluidRow(
                 br(),
+               # column(
+                 # width = 6,
+                 # value_box(
+                  #  title = "Social Worker White Ethnic Group",
+                  #  value = htmlOutput("white_ethnicity_txt")
+                  #)
+              #  ),
                 column(
                   width = 6,
                   value_box(
-                    title = "Social Worker White Ethnic Group",
-                    value = htmlOutput("white_ethnicity_txt")
-                  )
-                ),
-                column(
-                  width = 6,
-                  value_box(
-                    title = "Social Worker Ethnic Minority Groups",
+                    title = "Social Workers from Ethnic Minority Backgrounds",
                     value = htmlOutput("non_white_txt")
                   )
                 )
