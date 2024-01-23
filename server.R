@@ -343,6 +343,67 @@ server <- function(input, output, session) {
     )
   })
   
+  # Example code I have copied from another project -------------------
+  # Link to the published dashboard to see this code in action:https://department-for-education.shinyapps.io/leo-post16education-labourmarket/
+  # # Observe event looking at the population, subpopulation and comparison checkbox,
+  # # Looks to see if the box is checked. If box is not checked (null), then the plot without the national average line is plotted.
+  # # If it is checked, plot choices including the national average line.
+  # observeEvent(eventExpr = {
+  #   input$comparisoncheck
+  #   input$earn_select1
+  #   input$earn_subcat
+  #   input$earn_picker
+  # }, {
+  #   # Checks to see if the user has selected to compare the trajectories with the national average or not
+  #   # if the checkbox has not been checked
+  #   if (is.null(input$comparisoncheck)) {
+  #     # Double checks to see if the user has picked a values for the subgroups. If they have not, it returns an error message.
+  #     output$earningsplot <- plotly::renderPlotly({
+  #       validate(
+  #         need(!is.null(input$earn_picker), "Please select at least one breakdown.")
+  #       )
+  #       # input$earn_select1, input$earn_subcat,
+  #       plot_earnings(input$earn_picker)
+  #     })
+  #     
+  #     # Displays the data plotted as a table.
+  #     output$table_earnings_tbl <- DT::renderDataTable(
+  #       DT::datatable(table_earnings(input$earn_select1, input$earn_subcat, input$earn_picker),
+  #                     options = list(
+  #                       dom = "ftp",
+  #                       pageLength = 10
+  #                     ), colnames = c("Years after KS4", "Average Earnings (£)", "Subpopulation")
+  #       ) %>%
+  #         formatCurrency("Average Earnings", currency = "", interval = 3, mark = ",", digits = 0)
+  #     )
+  #   } else {
+  #     # else( i.e the box has been checked) then it will call on functions that include the national average into the plots and tables
+  #     output$earningsplot <- plotly::renderPlotly({
+  #       validate(
+  #         need(!is.null(input$earn_picker), "Please select at least one breakdown.")
+  #       )
+  #       # input$earn_select1, input$earn_subcat,
+  #       plot_earnings_comparison(input$earn_picker)
+  #     })
+  #     
+  #     output$table_earnings_tbl <- DT::renderDataTable(
+  #       DT::datatable(table_earnings_comparison(input$earn_select1, input$earn_subcat, input$earn_picker),
+  #                     options = list(
+  #                       dom = "ftp",
+  #                       pageLength = 10
+  #                     ), colnames = c("Years after KS4", "Average Earnings (£)", "Subpopulation"), rownames = FALSE
+  #       ) %>%
+  #         formatCurrency("Average Earnings", currency = "", interval = 3, mark = ",", digits = 0)
+  #     )
+  #   }
+  # })
+  
+  
+  
+  
+  
+  
+  
   #agency worker rate plot ----
   output$agency_rate_txt <- renderText({
     stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(agency_worker_rate_fte_perc), nsmall = 1)

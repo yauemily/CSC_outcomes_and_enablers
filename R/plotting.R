@@ -76,12 +76,12 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue){
       axis.line = element_line(size = 1.0)
     ) +
     scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')#+
-    #scale_color_manual(
-      #"Breakdown",
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
       #breaks = unique(c("England", inputArea)),
-     # values = gss_colour_pallette
-    #)
+      values = gss_colour_pallette
+    )
 }
 
 plotly_time_series_discrete <- function(dataset, level, breakdown, yvalue){
