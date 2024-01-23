@@ -118,3 +118,96 @@ read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicit
   return(workforce_ethnicity_data)
 }
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# General population ethnicity data
+
+
+read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.csv", file2 = "data/ons-ethnic-population-nat.csv", file3 = "data/ons-ethnic-population-la.csv") {
+  # Read the csv files
+  df_regions <- read.csv(file1, check.names = FALSE)
+  df_countries <- read.csv(file2, check.names = FALSE)
+  df_authorities <- read.csv(file3, check.names = FALSE)
+  
+  # Rename the columns to make them consistent across all data frames
+  names(df_regions) <- c("Code", "Name", "EthnicGroupCode", "EthnicGroup", "Observation")
+  names(df_countries) <- c("Code", "Name", "EthnicGroupCode", "EthnicGroup", "Observation")
+  names(df_authorities) <- c("Code", "Name", "EthnicGroupCode", "EthnicGroup", "Observation")
+  
+  # Add 'geographic_level' column to each dataframe
+  df_regions$geographic_level <- "Regional"
+  df_countries$geographic_level <- "National"
+  df_authorities$geographic_level <- "Local authority"
+  
+  # Combine the data frames
+  ethnic_population_data <- rbind(df_regions, df_countries, df_authorities)
+  ethnic_population_data <- subset(ethnic_population_data, select = -c(EthnicGroupCode))
+  
+  # Remove rows where 'EthnicGroup' equals 'Does not apply'
+  ethnic_population_data <- ethnic_population_data[ethnic_population_data$EthnicGroup != "Does not apply", ]
+  
+  # Convert 'EthnicGroup' to character type
+  ethnic_population_data$EthnicGroup <- as.character(ethnic_population_data$EthnicGroup)
+  
+  # Add a new column 'EthnicGroupShort' that has a value of the first 5 characters in the 'EthnicGroup' column
+  ethnic_population_data <- ethnic_population_data %>%
+    mutate(EthnicGroupShort = substr(EthnicGroup, 1, 5))
+  
+  # Calculate the total observation for each 'Name'
+  total_observation <- ethnic_population_data %>%
+    group_by(Name, geographic_level) %>%
+    summarise(TotalObservation = sum(Observation), .groups = "drop")
+  
+  # Join the total observation back to the original dataframe
+  ethnic_population_data <- left_join(ethnic_population_data, total_observation, by = c("Name", "geographic_level"))
+  
+  # Group by 'Name', 'geographic_level' and 'EthnicGroupShort', and calculate the percentage
+  ethnic_population_data <- ethnic_population_data %>%
+    group_by(Name, geographic_level, EthnicGroupShort) %>%
+    summarise(Percentage = sum(Observation) / TotalObservation * 100, .groups = "drop")
+  
+  # Pivot the dataframe
+  ethnic_population_data <- ethnic_population_data %>%
+    pivot_wider(names_from = EthnicGroupShort, values_from = Percentage)
+  
+  # Select the first element of each list
+  ethnic_population_data <- ethnic_population_data %>%
+    mutate(across(c(Asian, Black, Mixed, Other, White), ~ purrr::map_dbl(., ~ .x[1])))
+  
+  return(ethnic_population_data)
+}
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+merge_dataframes <- function() {
+  # Read the data
+  workforce_eth <- read_workforce_eth_data()
+  population_eth <- read_ethnic_population_data()
+  
+  
+  # Filter to include only the latest year of data
+  latest_year <- max(workforce_eth$time_period)
+  workforce_eth <- subset(workforce_eth, time_period == latest_year)
+  
+  # Rename the columns to make it clear which dataset they come from
+  workforce_eth <- rename(workforce_eth, 
+                          Workforce_WhitePercentage = white_perc,
+                          Workforce_BlackPercentage = black_perc,
+                          Workforce_MixedPercentage = mixed_perc,
+                          Workforce_AsianPercentage = asian_perc,
+                          Workforce_OtherPercentage = other_perc)
+  
+  population_eth <- rename(population_eth, 
+                           Population_WhitePercentage = White,
+                           Population_BlackPercentage = Black,
+                           Population_MixedPercentage = Mixed,
+                           Population_AsianPercentage = Asian,
+                           Population_OtherPercentage = Other)
+  
+  # Merge the two data frames
+  merged_data <- left_join(workforce_eth, population_eth, by = c("geo_breakdown" = "Name"))
+  
+  return(merged_data)
+}
+

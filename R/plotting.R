@@ -316,6 +316,8 @@ plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
   # Ensure 'percentage' is numeric
   ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
   
+  custom_x_order <- c("white_perc", "black_perc", "asian_perc", "mixed_perc", "other_perc")
+  
   p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(time_period))) +
     geom_bar(stat = "identity", position = position_dodge()) +
     ylab("Percentage") +
@@ -333,10 +335,67 @@ plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
       "Year",  # Change legend title
       values = gss_colour_pallette
     ) +
-    scale_x_discrete(labels = c("white_perc" = "White %", "mixed_perc" = "Mixed %", "asian_perc" = "Asian %", "black_perc" = "Black %", "other_perc" = "Other %"))  # Rename x-axis labels
+    scale_x_discrete(
+      limits = custom_x_order,
+      labels = c("white_perc" = "White", "mixed_perc" = "Mixed", "asian_perc" = "Asian", "black_perc" = "Black", "other_perc" = "Other")
+      )
   
   return(p)
 }
+
+
+plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
+  
+  # Filter the data based on 'geo_breakdown', 'geographic_level', and 'OrgRole'
+  combined_ethnicity_data <- combined_ethnicity_data[combined_ethnicity_data$geo_breakdown %in% geo_breakdown & 
+                                                       combined_ethnicity_data$OrgRole == "All children and family social workers", ]
+  
+  # Reshape the dataframe to a long format
+  combined_ethnicity_data_long <- reshape2::melt(combined_ethnicity_data, 
+                                                 id.vars = c("geo_breakdown", "geographic_level.x", "time_period", "region_name", "OrgRole"),
+                                                 measure.vars = c("Workforce_WhitePercentage", "Workforce_BlackPercentage", "Workforce_AsianPercentage",
+                                                                  "Workforce_MixedPercentage", "Workforce_OtherPercentage",
+                                                                  "Population_WhitePercentage", "Population_BlackPercentage", "Population_AsianPercentage", 
+                                                                  "Population_MixedPercentage", "Population_OtherPercentage"),
+                                                 variable.name = "EthnicGroup",
+                                                 value.name = "Percentage")
+  
+  # Ensure 'percentage' is numeric
+  combined_ethnicity_data_long$Percentage <- as.numeric(combined_ethnicity_data_long$Percentage)
+  
+  combined_ethnicity_data_long$DataSource <- ifelse(grepl("Workforce", combined_ethnicity_data_long$EthnicGroup), "Workforce", "Population")
+  
+  # Create a new column 'Ethnicity' that contains only the ethnic group name
+  combined_ethnicity_data_long$Ethnicity <- gsub("Workforce_|Population_", "", combined_ethnicity_data_long$EthnicGroup)
+  
+  custom_x_order <- c("WhitePercentage", "BlackPercentage", "AsianPercentage", "MixedPercentage", "OtherPercentage")
+  
+  p <- ggplot(combined_ethnicity_data_long, aes(x = Ethnicity, y = Percentage, fill = factor(DataSource))) +
+    geom_bar(stat = "identity", position = "dodge") +
+    ylab("Percentage") +
+    xlab("Ethnicity") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "Data",  # Change legend title
+      values = gss_colour_pallette
+    ) +
+    scale_x_discrete(
+      limits = custom_x_order,
+      labels = c("WhitePercentage" = "White", "MixedPercentage" = "Mixed", "AsianPercentage" = "Asian", "BlackPercentage" = "Black", "OtherPercentage" = "Other")
+    )
+  
+  return(p)
+}
+
+
 
 
 

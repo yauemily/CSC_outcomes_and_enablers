@@ -334,6 +334,9 @@ enabler2_tab <- function() {
                   )
                 )
               ),
+              fluidRow(
+                plotlyOutput("plot_population_ethnicity_rate")
+              ),
             )
           )
         )
