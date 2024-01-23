@@ -509,6 +509,14 @@ server <- function(input, output, session) {
     )
   })
   
+  output$plot_population_ethnicity_rate <- plotly::renderPlotly({
+    ggplotly(
+      plot_population_ethnicity_rate(input$geographic_breakdown) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
   output$table_ethnicity_rate <- renderDataTable({
     datatable(
       workforce_eth %>% 

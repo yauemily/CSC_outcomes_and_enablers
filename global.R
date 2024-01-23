@@ -28,6 +28,9 @@ shhh(library(shinyalert))
 shhh(library(shinytest2))
 shhh(library(rstudioapi))
 shhh(library(bslib))
+shhh(library(reshape2))
+shhh(library(tidyverse))
+
 # shhh(library(shinya11y))
 
 # Functions ---------------------------------------------------------------------------------
@@ -113,6 +116,8 @@ workforce_data <- read_workforce_data()
 #Read in the workforce characteristics data
 workforce_char <- read_workforce_char_data()
 workforce_eth <- read_workforce_eth_data()
+population_eth <- read_ethnic_population_data()
+combined_ethnicity_data <- merge_dataframes()
 
 #Dropdowns
 choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National")%>% distinct()
