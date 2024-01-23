@@ -223,30 +223,30 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
 # }
 
 #
-plot_caseloads <- function(){
-  caseload_data <- workforce_data %>%
-    filter(geographic_level == "Regional") %>%
-    select(time_period, geo_breakdown, caseload_fte)
-  
-  ggplot(caseload_data, aes(`time_period`, `caseload_fte`, fill = geo_breakdown)) +
-    geom_col() +
-    ylab("Caseload (FTE)") +
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.text.x = element_text(angle = 300),
-      axis.title.x = element_blank(),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 30))+
-    scale_fill_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-    )
-}
+#plot_caseloads <- function(){
+#   caseload_data <- workforce_data %>%
+#     filter(geographic_level == "Regional") %>%
+#     select(time_period, geo_breakdown, caseload_fte)
+#   
+#   ggplot(caseload_data, aes(`time_period`, `caseload_fte`, fill = geo_breakdown)) +
+#     geom_col() +
+#     ylab("Average Caseload (FTE)") +
+#     xlab("Time Period") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.text.x = element_text(angle = 300),
+#       axis.title.x = element_blank(),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 30))+
+#     scale_fill_manual(
+#       "Breakdown",
+#       #breaks = unique(c("England", inputArea)),
+#       values = gss_colour_pallette
+#     )
+# }
 
 
 plot_caseload_rate <- function(geo_lvl, geo_break) {
@@ -258,7 +258,7 @@ plot_caseload_rate <- function(geo_lvl, geo_break) {
     )
   ggplot(vacancy_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown)) +
     geom_line() +
-    ylab("Caseload (FTE)") +
+    ylab("Average Caseload (FTE)") +
     xlab("Time Period") +
     theme_classic() +
     theme(
