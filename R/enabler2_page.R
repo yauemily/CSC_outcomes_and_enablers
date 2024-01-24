@@ -362,17 +362,19 @@ enabler2_tab <- function() {
                   )
                 )
               ),
-              details(
-                inputId = "ethnicity_info",
-                label = "Additional information:",
-                help_text = (
-                  tags$ul(
-                    tags$li("A", tags$b("case"), " is defined as any person allocated to a named social worker, where the work involves child and family social work. Cases may be held by social workers regardless of their role in the organisation and not just those specifically in a ‘case holder’ role."),
-                    tags$li("The ", tags$b("average caseload"), " is calculated as the total number of cases held by FTE social workers (including agency workers) in post at 30 September divided by the number of FTE social workers (including agency workers) in post at 30 September that hold one or more cases."),
-                    tags$br(),
-                    p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+              fluidRow(
+                details(
+                  inputId = "ethnicity_info",
+                  label = "Additional information:",
+                  help_text = (
+                    tags$ul(
+                      tags$li("Population data is taken from the latest available ONS Census data (2021). The Workforce data comparison uses the latest available collection year in the Workforce diversity dataset (2022)."),
+                      tags$li(tags$b("Ethnicity"), " was known for 81% of child and family social workers nationally in 2022."),
                       tags$br(),
-                      "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                      p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                        tags$br(),
+                        "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    )
                   )
                 )
               )

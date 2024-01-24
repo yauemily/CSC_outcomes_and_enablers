@@ -363,7 +363,7 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
   # Ensure 'percentage' is numeric
   combined_ethnicity_data_long$Percentage <- as.numeric(combined_ethnicity_data_long$Percentage)
   
-  combined_ethnicity_data_long$DataSource <- ifelse(grepl("Workforce", combined_ethnicity_data_long$EthnicGroup), "Workforce", "Population")
+  combined_ethnicity_data_long$DataSource <- ifelse(grepl("Workforce", combined_ethnicity_data_long$EthnicGroup), "Workforce (2022)", "Population (2021)")
   
   # Create a new column 'Ethnicity' that contains only the ethnic group name
   combined_ethnicity_data_long$Ethnicity <- gsub("Workforce_|Population_", "", combined_ethnicity_data_long$EthnicGroup)
