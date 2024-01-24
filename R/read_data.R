@@ -163,7 +163,7 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
   # Group by 'Name', 'geographic_level' and 'EthnicGroupShort', and calculate the percentage
   ethnic_population_data <- ethnic_population_data %>%
     group_by(Name, geographic_level, EthnicGroupShort) %>%
-    summarise(Percentage = sum(Observation) / TotalObservation * 100, .groups = "drop")
+    summarise(Percentage = round(sum(Observation) / TotalObservation * 100, 1), .groups = "drop")
   
   # Pivot the dataframe
   ethnic_population_data <- ethnic_population_data %>%
