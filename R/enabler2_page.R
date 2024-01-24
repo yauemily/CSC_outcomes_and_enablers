@@ -333,6 +333,21 @@ enabler2_tab <- function() {
                   help_text = (
                     dataTableOutput("table_ethnicity_rate")
                   )
+                ),
+                details(
+                  inputId = "ethnicity_info",
+                  label = "Additional information:",
+                  help_text = (
+                    tags$ul(
+                     tags$li(tags$b("Ethnicity groups"), " are based on ethnic origin and are provided on a headcount basis."),
+                     tags$li(tags$b("Ethnicity"), " was known for 81% of child and family social workers nationally in 2022."),
+                      tags$li(tags$b("Ethnic minority backgrounds"), " exclude white British, white Irish, or any other white background."),
+                     tags$br(),
+                         p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                        tags$br(),
+                        "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    )
+                  )
                 )
               ),
               fluidRow(
