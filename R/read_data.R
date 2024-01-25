@@ -199,7 +199,7 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
 "E09000024",
 "E09000026",
 "E09000027",
-"09000029",
+"E09000029",
 "E09000031"), ]
 
     #create outer London data
