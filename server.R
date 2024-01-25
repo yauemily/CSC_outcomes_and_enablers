@@ -304,7 +304,7 @@ server <- function(input, output, session) {
   #   }
   #   )
   
-  
+  # Confirmation sentenance -------
   output$choices_confirmation_text <- renderText({
     if (input$select_geography == "National") {
       paste0("You have selected a geographic level of ", tags$b(input$select_geography), ".")
@@ -312,6 +312,18 @@ server <- function(input, output, session) {
     paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
   }
   })
+  
+  
+  # observeEvent(eventExpr = {
+  #   input$select_geography
+  #   input$geography_breakdown
+  #   input$national_comparison_checkbox
+  #   input$region_comparison_checkbox
+  # },{
+  #   if(input$select_geography == "National"){
+  #     
+  #   }
+  # })
   
   
   #social worker rate plot and table -----
