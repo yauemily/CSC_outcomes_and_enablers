@@ -405,11 +405,11 @@ server <- function(input, output, session) {
     current_year = workforce_data %>% filter(time_period == (max(workforce_data$time_period)) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte)
     
     if (current_year < previous_year){
-      paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>", "(",max(workforce_data$time_period),")",
-             "<br>","<p style=font-size:16px; >", "down from ", previous_year, " in ", (max(workforce_data$time_period)-1), ".","</p>")
+      paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>",
+             "<p style=font-size:16px; >","in ",max(workforce_data$time_period), " down from ", previous_year, " in ", (max(workforce_data$time_period)-1), ".","</p>")
     }else{
-      paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>", "(",max(workforce_data$time_period),")",
-             "<br>","<p style=font-size:16px; >","up from ", previous_year, " in ", (max(workforce_data$time_period)-1), ".","</p>")
+      paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>",
+             "<p style=font-size:16px; >","in ",max(workforce_data$time_period)," up from ", previous_year, " in ", (max(workforce_data$time_period)-1), ".","</p>")
             
     }
     
