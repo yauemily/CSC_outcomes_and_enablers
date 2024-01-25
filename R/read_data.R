@@ -128,6 +128,7 @@ read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicit
     ))
   
   workforce_ethnicity_data <- convert_perc_cols_to_numeric(workforce_ethnicity_data)
+
   return(workforce_ethnicity_data)
 }
 
