@@ -369,7 +369,7 @@ enabler2_tab <- function() {
                   help_text = (
                     tags$ul(
                       tags$li("Population data is taken from the latest available ONS Census data (2021). The Workforce data comparison uses the latest available collection year in the Workforce diversity dataset (2022)."),
-                      tags$li(tags$b("Ethnicity"), " was known for 81% of child and family social workers nationally in 2022."),
+                      tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
                       tags$br(),
                       p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
                         tags$br(),

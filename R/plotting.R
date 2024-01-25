@@ -363,7 +363,7 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
   # Ensure 'percentage' is numeric
   combined_ethnicity_data_long$Percentage <- as.numeric(combined_ethnicity_data_long$Percentage)
   
-  combined_ethnicity_data_long$DataSource <- ifelse(grepl("Workforce", combined_ethnicity_data_long$EthnicGroup), "Workforce (2022)", "Population (2021)")
+  combined_ethnicity_data_long$DataSource <- ifelse(grepl("Workforce", combined_ethnicity_data_long$EthnicGroup), sprintf("Workforce (%s)", max(workforce_eth$time_period)), "Population (2021)")
   
   # Create a new column 'Ethnicity' that contains only the ethnic group name
   combined_ethnicity_data_long$Ethnicity <- gsub("Workforce_|Population_", "", combined_ethnicity_data_long$EthnicGroup)
@@ -385,7 +385,7 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
     scale_y_continuous(limits = c(0, 100))+
     scale_fill_manual(
       "Data",  # Change legend title
-      values = gss_colour_pallette
+      values = c("#801650", "#F46A25")
     ) +
     scale_x_discrete(
       limits = custom_x_order,
