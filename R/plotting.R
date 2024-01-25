@@ -385,7 +385,7 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
     scale_y_continuous(limits = c(0, 100))+
     scale_fill_manual(
       "Data",  # Change legend title
-      values = c("#801650", "#F46A25")
+      values = c("#3D3D3D", "#F46A25")
     ) +
     scale_x_discrete(
       limits = custom_x_order,
