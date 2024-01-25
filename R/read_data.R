@@ -112,12 +112,20 @@ read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicit
   )) %>%
   select(
     geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, "time_period", "geographic_level", "region_name", "OrgRole", "white_perc", "mixed_perc", "asian_perc", 
-    "black_perc", "other_perc"
+    "black_perc", "other_perc", known_headcount, white, mixed, asian, black, other
   )
   
   workforce_ethnicity_data$new_la_code[workforce_ethnicity_data$new_la_code == ""] <- NA
   workforce_ethnicity_data$region_code[workforce_ethnicity_data$region_code == ""] <- NA
   workforce_ethnicity_data <- mutate(workforce_ethnicity_data, code = coalesce(new_la_code, region_code, country_code))
+  
+  workforce_ethnicity_data <- workforce_ethnicity_data %>%
+    mutate(seniority = case_when(
+      OrgRole == "Case holder" ~ "Case holder",
+      OrgRole == "Qualified without cases" ~ "Qualified without cases",
+      OrgRole == "Senior practitioner" ~ "Senior practitioner",
+      OrgRole %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
+    ))
   
   workforce_ethnicity_data <- convert_perc_cols_to_numeric(workforce_ethnicity_data)
   return(workforce_ethnicity_data)

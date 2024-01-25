@@ -303,7 +303,9 @@ plot_caseloads_test1 <- function(){
 }
 
 plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
-  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole == 'All children and family social workers', c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc")]
+  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole == 'All children and family social workers', 
+                                  c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc")
+                                  ]
   
   ethnicity_data_long <- reshape(ethnicity_data,
                                  direction = "long",
@@ -390,6 +392,49 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
     scale_x_discrete(
       limits = custom_x_order,
       labels = c("WhitePercentage" = "White", "MixedPercentage" = "Mixed", "AsianPercentage" = "Asian", "BlackPercentage" = "Black", "OtherPercentage" = "Other")
+    )
+  
+  return(p)
+}
+
+plot_seniority_eth <- function(geo_breakdown, geographic_level){
+  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole != 'All children and family social workers', 
+                                  c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc", "known_headcount", "seniority")]
+  
+  
+  # Reshape data using pivot_longer()
+  ethnicity_data_long <- ethnicity_data %>%
+    pivot_longer(
+      cols = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
+      names_to = "ethnicity",
+      values_to = "percentage"
+    )
+  
+  # Ensure 'percentage' is numeric
+  ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
+  
+  custom_x_order <- c("white_perc", "black_perc", "asian_perc", "mixed_perc", "other_perc")
+  
+  p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(seniority))) +
+    geom_bar(stat = "identity", position = position_dodge()) +
+    ylab("Percentage") +
+    xlab("Ethnicity") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "Seniority Level",  # Change legend title
+      values = gss_colour_pallette
+    ) +
+    scale_x_discrete(
+      limits = custom_x_order,
+      labels = c("white_perc" = "White", "mixed_perc" = "Mixed", "asian_perc" = "Asian", "black_perc" = "Black", "other_perc" = "Other")
     )
   
   return(p)
