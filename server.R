@@ -571,6 +571,27 @@ server <- function(input, output, session) {
     )
   })
   
+  output$plot_seniority_eth <- plotly::renderPlotly({
+    ggplotly(
+      plot_seniority_eth(input$geographic_breakdown, input$geographic_level) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$table_seniority_eth <- renderDataTable({
+    datatable(
+      workforce_eth %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown, OrgRole != 'All children and family social workers', time_period == max(workforce_eth$time_period)) %>% 
+        select(time_period, geo_breakdown, seniority, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
+      colnames = c("Time Period", "Geographical Breakdown", "Seniority Level", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
 
   
   # output$enabler1_d1_tab <- renderDataTable({

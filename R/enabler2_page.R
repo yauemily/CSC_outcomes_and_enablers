@@ -377,6 +377,18 @@ enabler2_tab <- function() {
                     )
                   )
                 )
+              ),
+              fluidRow(
+                plotlyOutput("plot_seniority_eth")
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_seniority_eth",
+                  label = "View Chart as a table",
+                  help_text = (
+                    dataTableOutput("table_seniority_eth")
+                  )
+                )
               )
             )
           )
