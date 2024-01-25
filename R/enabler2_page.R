@@ -340,13 +340,21 @@ enabler2_tab <- function() {
                   help_text = (
                     tags$ul(
                      tags$li(tags$b("Ethnicity groups"), " are based on ethnic origin and are provided on a headcount basis."),
-                     tags$li(tags$b("Ethnicity"), " was known for 81% of child and family social workers nationally in 2022."),
+                     tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
                       tags$li(tags$b("Ethnic minority backgrounds"), " exclude white British, white Irish, or any other white background."),
                      tags$br(),
                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
                         tags$br(),
                         "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
                     )
+                  )
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
+                  gov_row(
+                    h2("Ethnic diversity of workforce vs. general population"),
                   )
                 )
               ),
@@ -364,17 +372,25 @@ enabler2_tab <- function() {
               ),
               fluidRow(
                 details(
-                  inputId = "ethnicity_info",
+                  inputId = "population_ethnicity_info",
                   label = "Additional information:",
                   help_text = (
                     tags$ul(
-                      tags$li("Population data is taken from the latest available ONS Census data (2021). The Workforce data comparison uses the latest available collection year in the Workforce diversity dataset (2022)."),
+                      tags$li(sprintf("Population data is taken from the latest available ONS Census data (2021). The Workforce data comparison uses the latest available collection year in the Workforce diversity dataset (%s).", max(workforce_eth$time_period))),
                       tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
                       tags$br(),
                       p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
                         tags$br(),
                         "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
                     )
+                  )
+                )
+              ),
+              fluidRow(
+                column(
+                  width = 12,
+                  gov_row(
+                    h2("Ethnic diversity of workforce by seniority level"),
                   )
                 )
               ),
@@ -387,6 +403,25 @@ enabler2_tab <- function() {
                   label = "View Chart as a table",
                   help_text = (
                     dataTableOutput("table_seniority_eth")
+                  )
+                )
+              ),
+              fluidRow(
+                details(
+                  inputId = "seniority_ethnicity_info",
+                  label = "Additional information:",
+                  help_text = (
+                    tags$ul(
+                      tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
+                      tags$li("Manager roles have been grouped and include first line managers, middle managers and senior managers."),
+                      tags$li("A Senior Practitioner works in a local authority in a children’s services department as a team leader, supervising social worker or senior social worker."),
+                      tags$li("A case holder is a children and family social worker that manages cases, but is not in a manager or senior practitioner role (however, cases can be hold by those not in case holder roles)."),
+                      tags$li("Qualified without cases includes all other qualified and registered social workers, including those without cases (for example Independent Reviewing Officer (IRO), Chairs of Child Protection Conferences, Youth Custody worker, Family Support) and those not currently practicing (for example, those in learning and development or quality assurance roles)."),
+                      tags$br(),
+                      p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                        tags$br(),
+                        "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    )
                   )
                 )
               )

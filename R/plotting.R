@@ -401,7 +401,6 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
   ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole != 'All children and family social workers', 
                                   c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc", "known_headcount", "seniority")]
   
-  
   # Reshape data using pivot_longer()
   ethnicity_data_long <- ethnicity_data %>%
     pivot_longer(
@@ -409,6 +408,7 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
       names_to = "ethnicity",
       values_to = "percentage"
     )
+
   
   # Ensure 'percentage' is numeric
   ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
