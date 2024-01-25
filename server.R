@@ -588,6 +588,14 @@ server <- function(input, output, session) {
     )
   })
   
+  output$plot_population_ethnicity_rate <- plotly::renderPlotly({
+    ggplotly(
+      plot_population_ethnicity_rate(input$geographic_breakdown) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
   output$table_ethnicity_rate <- renderDataTable({
     datatable(
       workforce_eth %>% 
@@ -600,6 +608,30 @@ server <- function(input, output, session) {
       )
     )
   })
+  
+  output$table_population_ethnicity_rate <- renderDataTable({
+    datatable(
+      combined_ethnicity_data %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown, OrgRole == 'All children and family social workers') %>% 
+        select(geographic_level.x, geo_breakdown,
+               Population_WhitePercentage, Workforce_WhitePercentage,
+               Population_BlackPercentage, Workforce_BlackPercentage,
+               Population_AsianPercentage, Workforce_AsianPercentage,
+               Population_MixedPercentage, Workforce_MixedPercentage,
+               Population_OtherPercentage, Workforce_OtherPercentage),
+      colnames = c("Geographic Level", "Geographical Breakdown", 
+                   "White % (Population)", "White % (Workforce)",
+                   "Black % (Population)", "Black % (Workforce)",
+                   "Asian % (Population)", "Asian % (Workforce)",
+                   "Mixed % (Population)", "Mixed % (Workforce)",
+                   "Other % (Population)", "Other % (Workforce)"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
 
   
   # output$enabler1_d1_tab <- renderDataTable({

@@ -302,17 +302,17 @@ enabler2_tab <- function() {
               "Societal and cultural awareness and diversity",
               fluidRow(
                 br(),
+               # column(
+                 # width = 6,
+                 # value_box(
+                  #  title = "Social Worker White Ethnic Group",
+                  #  value = htmlOutput("white_ethnicity_txt")
+                  #)
+              #  ),
                 column(
                   width = 6,
                   value_box(
-                    title = "Social Worker White Ethnic Group",
-                    value = htmlOutput("white_ethnicity_txt")
-                  )
-                ),
-                column(
-                  width = 6,
-                  value_box(
-                    title = "Social Worker Ethnic Minority Groups",
+                    title = "Social Workers from Ethnic Minority Backgrounds",
                     value = htmlOutput("non_white_txt")
                   )
                 )
@@ -337,9 +337,51 @@ enabler2_tab <- function() {
                   help_text = (
                     dataTableOutput("table_ethnicity_rate")
                   )
+                ),
+                details(
+                  inputId = "ethnicity_info",
+                  label = "Additional information:",
+                  help_text = (
+                    tags$ul(
+                     tags$li(tags$b("Ethnicity groups"), " are based on ethnic origin and are provided on a headcount basis."),
+                     tags$li(tags$b("Ethnicity"), " was known for 81% of child and family social workers nationally in 2022."),
+                      tags$li(tags$b("Ethnic minority backgrounds"), " exclude white British, white Irish, or any other white background."),
+                     tags$br(),
+                         p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                        tags$br(),
+                        "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    )
+                  )
                 )
               ),
-            ),
+              fluidRow(
+                plotlyOutput("plot_population_ethnicity_rate")
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_population_ethnicity",
+                  label = "View Chart as a table",
+                  help_text = (
+                    dataTableOutput("table_population_ethnicity_rate")
+                  )
+                )
+              ),
+              fluidRow(
+                details(
+                  inputId = "ethnicity_info",
+                  label = "Additional information:",
+                  help_text = (
+                    tags$ul(
+                      tags$li("Population data is taken from the latest available ONS Census data (2021). The Workforce data comparison uses the latest available collection year in the Workforce diversity dataset (2022)."),
+                      tags$li(tags$b("Ethnicity"), " was known for 81% of child and family social workers nationally in 2022."),
+                      tags$br(),
+                      p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                        tags$br(),
+                        "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    )
+                  )
+                )
+            )),
             tabPanel(
               "Benchmarking",
               fluidRow(
@@ -375,6 +417,7 @@ enabler2_tab <- function() {
                   )
                 )
             )
+
               )
             )
           )
