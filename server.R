@@ -304,7 +304,7 @@ server <- function(input, output, session) {
   #   }
   #   )
   
-  # Confirmation sentenance -------
+  # Confirmation sentence -------
   # output$choices_confirmation_text <- renderText({
   #   if (input$select_geography == "National") {
   #     paste0("You have selected a geographic level of ", tags$b(input$select_geography), ".")
