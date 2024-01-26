@@ -430,41 +430,41 @@ enabler2_tab <- function() {
                   )
                 )
             )),
-            tabPanel(
-              "Benchmarking",
-              fluidRow(
-                h1("Testing Benchmarking"),
-                p("This is a test page for benchmarking")
-              ),
-              fluidRow(
-                column(
-                  width = 6,
-                  box(
-                    width = 12,
-                    p("plot goes here")
-                    #plotlyOutput(" ")
-                  )
-                ),
-                column(
-                  width = 6,
-                  div(
-                    class = "well",
-                    style = "min-height: 100%; height: 100%; overflow-y: visible",
-                    fluidRow(
-                      column(
-                        width = 12,
-                        p("filters here"),
-                        #selectizeInput("selectBenchLAs",
-                        #               "Select benchmark LAs",
-                        #               choices = choicesLAs$area_name,
-                        #               multiple = TRUE,
-                        #               options = list(maxItems = 3)
-                        )
-                      )
-                    )
-                  )
-                )
-            )
+            # tabPanel(
+            #   "Benchmarking",
+            #   fluidRow(
+            #     h1("Testing Benchmarking"),
+            #     p("This is a test page for benchmarking")
+            #   ),
+            #   fluidRow(
+            #     column(
+            #       width = 6,
+            #       box(
+            #         width = 12,
+            #         p("plot goes here")
+            #         #plotlyOutput(" ")
+            #       )
+            #     ),
+            #     column(
+            #       width = 6,
+            #       div(
+            #         class = "well",
+            #         style = "min-height: 100%; height: 100%; overflow-y: visible",
+            #         fluidRow(
+            #           column(
+            #             width = 12,
+            #             p("filters here"),
+            #             #selectizeInput("selectBenchLAs",
+            #             #               "Select benchmark LAs",
+            #             #               choices = choicesLAs$area_name,
+            #             #               multiple = TRUE,
+            #             #               options = list(maxItems = 3)
+            #             )
+            #           )
+            #         )
+            #       )
+            #     )
+            # )
 
               )
             )
