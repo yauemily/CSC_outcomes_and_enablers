@@ -305,25 +305,42 @@ server <- function(input, output, session) {
   #   )
   
   # Confirmation sentenance -------
-  output$choices_confirmation_text <- renderText({
-    if (input$select_geography == "National") {
-      paste0("You have selected a geographic level of ", tags$b(input$select_geography), ".")
-    } else if (input$select_geography != "National") {
-    paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
-  }
-  })
-  
-  
-  # observeEvent(eventExpr = {
-  #   input$select_geography
-  #   input$geography_breakdown
-  #   input$national_comparison_checkbox
-  #   input$region_comparison_checkbox
-  # },{
-  #   if(input$select_geography == "National"){
-  #     
-  #   }
+  # output$choices_confirmation_text <- renderText({
+  #   if (input$select_geography == "National") {
+  #     paste0("You have selected a geographic level of ", tags$b(input$select_geography), ".")
+  #   } else if (input$select_geography != "National") {
+  #   paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
+  # }
   # })
+  
+
+    output$choices_confirmation_text <- renderText({
+      # if they have selected national level
+      if(input$select_geography == "National"){
+        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ".")
+      
+      # if they have selected not national and did not tick any of the checkboxes
+    } else if ((input$select_geography != "National") && is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
+        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
+      
+      # if not national level and ticked the national checkbox
+    } else if ((input$select_geography != "National") && !is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
+        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), "."
+             ,"<br>", "You have also selected to compare with the ", tags$b("National Average."))
+      
+      #if not national level and ticked regional checkbox
+    } else if ((input$select_geography != "National") && is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)){
+        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), "."
+               ,"<br>", "You have also selected to compare with the ", tags$b("Regional average."))
+      
+      #if not national level and ticked national and regional checkbox
+    }else if ((input$select_geography != "National") && !is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)){
+        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), "."
+             ,"<br>", "You have also selected to compare with the ", tags$b("National average"), " and the respective ", tags$b("Regional average."))
+    } else {
+        paste0("testing")
+      }
+    })
   
   
   #social worker rate plot and table -----
