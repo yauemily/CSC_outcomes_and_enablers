@@ -538,7 +538,7 @@ server <- function(input, output, session) {
     )
   })
 
-  # Ethnicity and Diversity Domain
+  # Ethnicity and Diversity Domain-----
   output$white_ethnicity_txt <- renderText({
     paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
                                            & geo_breakdown %in% input$geographic_breakdown 
@@ -621,26 +621,51 @@ server <- function(input, output, session) {
     )
   })
   
+  # output$table_population_ethnicity_rate <- renderDataTable({
+  #   datatable(
+  #     combined_ethnicity_data %>% 
+  #       filter(geo_breakdown %in% input$geographic_breakdown, OrgRole == 'All children and family social workers') %>% 
+  #       select(geographic_level.x, geo_breakdown,
+  #              Population_WhitePercentage, Workforce_WhitePercentage,
+  #              Population_BlackPercentage, Workforce_BlackPercentage,
+  #              Population_AsianPercentage, Workforce_AsianPercentage,
+  #              Population_MixedPercentage, Workforce_MixedPercentage,
+  #              Population_OtherPercentage, Workforce_OtherPercentage),
+  #     colnames = c("Geographic Level", "Geographical Breakdown", 
+  #                  "White % (Population)", "White % (Workforce)",
+  #                  "Black % (Population)", "Black % (Workforce)",
+  #                  "Asian % (Population)", "Asian % (Workforce)",
+  #                  "Mixed % (Population)", "Mixed % (Workforce)",
+  #                  "Other % (Population)", "Other % (Workforce)"),
+  #     options = list(
+  #       scrollx = FALSE,
+  #       paging = TRUE
+  #     )
+  #   )
+  # })
+  
+  
   output$table_population_ethnicity_rate <- renderDataTable({
     datatable(
       combined_ethnicity_data %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown, OrgRole == 'All children and family social workers') %>% 
-        select(geographic_level.x, geo_breakdown,
-               Population_WhitePercentage, Workforce_WhitePercentage,
-               Population_BlackPercentage, Workforce_BlackPercentage,
-               Population_AsianPercentage, Workforce_AsianPercentage,
-               Population_MixedPercentage, Workforce_MixedPercentage,
-               Population_OtherPercentage, Workforce_OtherPercentage),
-      colnames = c("Geographic Level", "Geographical Breakdown", 
-                   "White % (Population)", "White % (Workforce)",
-                   "Black % (Population)", "Black % (Workforce)",
-                   "Asian % (Population)", "Asian % (Workforce)",
-                   "Mixed % (Population)", "Mixed % (Workforce)",
-                   "Other % (Population)", "Other % (Workforce)"),
-      options = list(
-        scrollx = FALSE,
-        paging = TRUE
-      )
+      filter(geo_breakdown %in% input$geographic_breakdown, OrgRole == 'All children and family social workers') %>% 
+      select(geographic_level.x, geo_breakdown,
+             Population_WhitePercentage, Workforce_WhitePercentage,
+             Population_BlackPercentage, Workforce_BlackPercentage,
+             Population_AsianPercentage, Workforce_AsianPercentage,
+             Population_MixedPercentage, Workforce_MixedPercentage,
+             Population_OtherPercentage, Workforce_OtherPercentage) %>%
+      pivot_longer(
+        cols = c(Population_WhitePercentage:Workforce_OtherPercentage), # Specify columns to reshape
+        names_to = c(".value", "Ethnicity"), # Assign names to new columns
+        names_pattern = "(.*)_(.*)Percentage" # Specify pattern to extract values from column names
+      ),
+    colnames = c("Geographic Level", "Geographical Breakdown", 
+                 "Ethnicity Group", "Population Percentage (%)", "Workforce Percentage (%)"),
+    options = list(
+      scrollx = FALSE,
+      paging = TRUE
+    )
     )
   })
   
