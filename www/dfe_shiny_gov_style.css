@@ -168,7 +168,7 @@ template. 80% works well here to reduce white space on the right hand side.*/
 .govuk-details{
   background-color:#fff;
   color: #000;
-  padding: 19px;
+  padding: 0px;
     font-family: GDS Transport, arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     font-size: 19px;

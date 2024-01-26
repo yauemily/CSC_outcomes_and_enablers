@@ -111,10 +111,24 @@ read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicit
       geographic_level == "Local authority" ~ la_name
   )) %>%
   select(
-    geographic_level, geo_breakdown, time_period, "time_period", "geographic_level", "region_name", "OrgRole", "white_perc", "mixed_perc", "asian_perc", 
-    "black_perc", "other_perc"
+    geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, "time_period", "geographic_level", "region_name", "OrgRole", "white_perc", "mixed_perc", "asian_perc", 
+    "black_perc", "other_perc", known_headcount, white, mixed, asian, black, other
   )
+  
+  workforce_ethnicity_data$new_la_code[workforce_ethnicity_data$new_la_code == ""] <- NA
+  workforce_ethnicity_data$region_code[workforce_ethnicity_data$region_code == ""] <- NA
+  workforce_ethnicity_data <- mutate(workforce_ethnicity_data, code = coalesce(new_la_code, region_code, country_code))
+  
+  workforce_ethnicity_data <- workforce_ethnicity_data %>%
+    mutate(seniority = case_when(
+      OrgRole == "Case holder" ~ "Case holder",
+      OrgRole == "Qualified without cases" ~ "Qualified without cases",
+      OrgRole == "Senior practitioner" ~ "Senior practitioner",
+      OrgRole %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
+    ))
+  
   workforce_ethnicity_data <- convert_perc_cols_to_numeric(workforce_ethnicity_data)
+
   return(workforce_ethnicity_data)
 }
 
@@ -149,7 +163,7 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
   
   #create England data
   df_countries <- df_countries %>%
-    mutate(Name = "National",Code = "E13000001") 
+    mutate(Name = "National",Code = "E92000001") 
   
   #include just inner London LAs to make inner London data
     df_Inner_London <-  df_Inner_London[df_Inner_London$Code %in%  c("E09000001",
@@ -185,7 +199,7 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
 "E09000024",
 "E09000026",
 "E09000027",
-"09000029",
+"E09000029",
 "E09000031"), ]
 
     #create outer London data
@@ -224,7 +238,7 @@ total_observation <- ethnic_population_data %>%
 
   # Group by 'Name', 'geographic_level' and 'EthnicGroupShort', and calculate the percentage
   ethnic_population_data <- ethnic_population_data %>%
-    group_by(Name, geographic_level, EthnicGroupShort) %>%
+    group_by(Code, Name, geographic_level, EthnicGroupShort) %>%
     summarise(Percentage = round(sum(Observation) / TotalObservation * 100, 1), .groups = "drop")
 
   # Pivot the dataframe
@@ -266,7 +280,7 @@ merge_dataframes <- function() {
                            Population_OtherPercentage = Other)
   
   # Merge the two data frames
-  merged_data <- left_join(workforce_eth, population_eth, by = c("geo_breakdown" = "Name"))
+  merged_data <- left_join(workforce_eth, population_eth, by = c("code" = "Code"))
   
   return(merged_data)
 }
