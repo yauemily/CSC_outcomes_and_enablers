@@ -406,10 +406,10 @@ server <- function(input, output, session) {
     
     if (current_year < previous_year){
       paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>",
-             "<p style='font-size:16px; font-weight:500;'>","in ",max(workforce_data$time_period), " down from ", previous_year, " in ", (max(workforce_data$time_period)-1), ".","</p>")
+             "<p style='font-size:16px; font-weight:500;'>","in ",max(workforce_data$time_period), " down from ", previous_year, " in ", (max(workforce_data$time_period)-1), "</p>")
     }else{
       paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>",
-             "<p style='font-size:16px; font-weight:500;'>","in ",max(workforce_data$time_period)," up from ", previous_year, " in ", (max(workforce_data$time_period)-1), ".","</p>")
+             "<p style='font-size:16px; font-weight:500;'>","in ",max(workforce_data$time_period)," up from ", previous_year, " in ", (max(workforce_data$time_period)-1), "</p>")
             
     }
     
