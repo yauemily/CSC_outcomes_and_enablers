@@ -208,7 +208,7 @@ read_workforce_eth_seniority_data <- function(file = "data/csww_workforce_role_b
   
   # Filter to include only the latest year of data
   latest_year <- max(workforce_ethnicity_seniority_data$time_period)
-  workforce_eth <- subset(workforce_ethnicity_seniority_data, time_period == latest_year)
+  workforce_ethnicity_seniority_data <- subset(workforce_ethnicity_seniority_data, time_period == latest_year)
   #workforce_ethnicity_seniority_data <- convert_perc_cols_to_numeric(workforce_ethnicity_seniority_data)
   
   return(workforce_ethnicity_seniority_data)

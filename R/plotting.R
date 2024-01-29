@@ -414,8 +414,10 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
   ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
   
   custom_x_order <- c("white_perc", "black_perc", "asian_perc", "mixed_perc", "other_perc")
+  custom_fill_order <- c("Manager",  "Senior practitioner", "Case holder","Qualified without cases")
   
-  p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(seniority))) +
+  
+  p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(seniority,levels = custom_fill_order))) +
     geom_bar(stat = "identity", position = position_dodge()) +
     ylab("Percentage") +
     xlab("Ethnicity") +
