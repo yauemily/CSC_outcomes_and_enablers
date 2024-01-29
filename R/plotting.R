@@ -398,11 +398,11 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
 }
 
 plot_seniority_eth <- function(geo_breakdown, geographic_level){
-  workforce_eth_seniority <- workforce_eth_seniority[workforce_eth_seniority$geo_breakdown %in% geo_breakdown & workforce_eth$seniority != 'All children and family social workers', 
-                                  c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc", "seniority")]
+  ethnicity_data_sen <- workforce_eth_seniority[workforce_eth_seniority$geo_breakdown %in% geo_breakdown & workforce_eth_seniority$seniority != 'All children and family social workers', 
+                                  c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc", "known_headcount", "seniority")]
   
   # Reshape data using pivot_longer()
-  ethnicity_data_long <- ethnicity_data %>%
+  ethnicity_data_long <- ethnicity_data_sen %>%
     pivot_longer(
       cols = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
       names_to = "ethnicity",

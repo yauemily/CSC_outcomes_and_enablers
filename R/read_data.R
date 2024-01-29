@@ -192,13 +192,13 @@ read_workforce_eth_seniority_data <- function(file = "data/csww_workforce_role_b
   
   # #sum ethnicity counts to create grouped manager percents
    workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
-     group_by(geographic_level, geo_breakdown, time_period, seniority)   %>%
+     group_by(geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, region_name, code,seniority)   %>%
      summarise_at(c("known_headcount","white","mixed","asian","black","other"), sum)
   
 
   # # Group by and calculate the percentages
   workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
-    group_by(geographic_level, geo_breakdown,  time_period, seniority) %>%
+    group_by(geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, region_name, code,seniority, known_headcount) %>%
     summarise("white_perc" = round(white/ known_headcount * 100,1),
              "mixed_perc" = round(mixed/ known_headcount * 100,1),
               "asian_perc" = round(asian/ known_headcount * 100,1),
