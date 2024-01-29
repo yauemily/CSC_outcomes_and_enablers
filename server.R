@@ -479,7 +479,7 @@ server <- function(input, output, session) {
                                           & OrgRole == "All children and family social workers") %>% 
       select(white_perc)
     non_white_stat = 100 - as.numeric(white_stat)
-    paste0(format(non_white_stat, nsmall = 1), "%", "<br>", "(", max(workforce_eth$time_period) ,")")
+    paste0(format(non_white_stat, nsmall = 1), "%", "<br>","<p style='font-size:16px; font-weight:500;'>", "(", max(workforce_eth$time_period) ,")", "</p>")
   })
   
   
