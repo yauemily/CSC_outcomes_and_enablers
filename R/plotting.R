@@ -279,7 +279,7 @@ plot_caseload_rate <- function(geo_lvl, geo_break) {
 #bar charts test
 plot_caseloads_test1 <- function(){
   caseload_data <- workforce_data %>%
-    filter(geographic_level == "Regional") %>%
+    filter(geographic_level == "Regional", time_period == max(time_period)) %>%
     select(time_period, geo_breakdown, caseload_fte)
   
   ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = factor(time_period))) +
@@ -298,7 +298,7 @@ plot_caseloads_test1 <- function(){
     scale_fill_manual(
       "Time Period",
       #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
+      values = '#12436D'#gss_colour_pallette
     )
 }
 
