@@ -391,8 +391,7 @@ server <- function(input, output, session) {
   #social worker rate plot and table -----
   output$s_w_headline_txt <- renderText({
     stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1)
-    paste0(stat,"%","<br>",#input$geographic_breakdown,"<br>",
-           "(",max(workforce_data$time_period),")")
+    paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
   })
   
   # output$plot_s_w_turnover <- plotly::renderPlotly({
@@ -481,7 +480,7 @@ server <- function(input, output, session) {
   #agency worker rate plot ----
   output$agency_rate_txt <- renderText({
     stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(agency_worker_rate_fte_perc), nsmall = 1)
-    paste0(stat,"%","<br>", "(",max(workforce_data$time_period),")")
+    paste0(stat,"%","<br>", "<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
     })
   
   output$plot_agency_worker <- plotly::renderPlotly({
@@ -508,7 +507,8 @@ server <- function(input, output, session) {
   
   # Vacancy Rate plot and table -----
   output$vacancy_rate_txt <- renderText({
-    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%","<br>", "(",max(workforce_data$time_period),")")
+    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%",
+           "<br>","<p style='font-size:16px; font-weight:500;'>", "(",max(workforce_data$time_period),")", "</p>")
   })
   
   output$plot_vacancy_rate <- plotly::renderPlotly({
@@ -541,10 +541,10 @@ server <- function(input, output, session) {
     
     if (current_year < previous_year){
       paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>",
-             "<p style=font-size:16px; >","in ",max(workforce_data$time_period), " down from ", previous_year, " in ", (max(workforce_data$time_period)-1), ".","</p>")
+             "<p style='font-size:16px; font-weight:500;'>","in ",max(workforce_data$time_period), " down from ", previous_year, " in ", (max(workforce_data$time_period)-1), "</p>")
     }else{
       paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(caseload_fte), nsmall = 1),"<br>",
-             "<p style=font-size:16px; >","in ",max(workforce_data$time_period)," up from ", previous_year, " in ", (max(workforce_data$time_period)-1), ".","</p>")
+             "<p style='font-size:16px; font-weight:500;'>","in ",max(workforce_data$time_period)," up from ", previous_year, " in ", (max(workforce_data$time_period)-1), "</p>")
             
     }
     
@@ -614,7 +614,7 @@ server <- function(input, output, session) {
                                           & OrgRole == "All children and family social workers") %>% 
       select(white_perc)
     non_white_stat = 100 - as.numeric(white_stat)
-    paste0(format(non_white_stat, nsmall = 1), "%", "<br>", "(", max(workforce_eth$time_period) ,")")
+    paste0(format(non_white_stat, nsmall = 1), "%", "<br>","<p style='font-size:16px; font-weight:500;'>", "(", max(workforce_eth$time_period) ,")", "</p>")
   })
   
   
@@ -739,15 +739,18 @@ server <- function(input, output, session) {
     )
   })
   
+  cols <- c("time_period","geographic_level", "geo_breakdown", "seniority", "known_headcount", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc")
+  
   output$table_seniority_eth <- renderDataTable({
     datatable(
-      workforce_eth %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown, OrgRole != 'All children and family social workers', time_period == max(workforce_eth$time_period)) %>% 
-        select(time_period, geo_breakdown, seniority, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
-      colnames = c("Time Period", "Geographical Breakdown", "Seniority Level", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
+      workforce_eth_seniority[, cols] %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown, seniority != 'All children and family social workers', time_period == max(workforce_eth_seniority$time_period)) %>% 
+        select(time_period,geographic_level, geo_breakdown, seniority, known_headcount, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
+      colnames = c("Time Period","Geographic Level", "Geographical Breakdown", "Seniority Level", "Headcount with known ethnicity", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
       options = list(
         scrollx = FALSE,
-        paging = TRUE
+        paging = TRUE,
+        target = 'column'
       )
     )
   })

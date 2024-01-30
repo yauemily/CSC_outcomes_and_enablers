@@ -279,7 +279,7 @@ plot_caseload_rate <- function(geo_lvl, geo_break) {
 #bar charts test
 plot_caseloads_test1 <- function(){
   caseload_data <- workforce_data %>%
-    filter(geographic_level == "Regional") %>%
+    filter(geographic_level == "Regional", time_period == max(time_period)) %>%
     select(time_period, geo_breakdown, caseload_fte)
   
   ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = factor(time_period))) +
@@ -298,7 +298,7 @@ plot_caseloads_test1 <- function(){
     scale_fill_manual(
       "Time Period",
       #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
+      values = '#12436D'#gss_colour_pallette
     )
 }
 
@@ -398,11 +398,11 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
 }
 
 plot_seniority_eth <- function(geo_breakdown, geographic_level){
-  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole != 'All children and family social workers', 
+  ethnicity_data_sen <- workforce_eth_seniority[workforce_eth_seniority$geo_breakdown %in% geo_breakdown & workforce_eth_seniority$seniority != 'All children and family social workers', 
                                   c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc", "known_headcount", "seniority")]
   
   # Reshape data using pivot_longer()
-  ethnicity_data_long <- ethnicity_data %>%
+  ethnicity_data_long <- ethnicity_data_sen %>%
     pivot_longer(
       cols = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
       names_to = "ethnicity",
@@ -414,8 +414,10 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
   ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
   
   custom_x_order <- c("white_perc", "black_perc", "asian_perc", "mixed_perc", "other_perc")
+  custom_fill_order <- c("Manager",  "Senior practitioner", "Case holder","Qualified without cases")
   
-  p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(seniority))) +
+  
+  p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(seniority,levels = custom_fill_order))) +
     geom_bar(stat = "identity", position = position_dodge()) +
     ylab("Percentage") +
     xlab("Ethnicity") +

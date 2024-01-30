@@ -116,6 +116,7 @@ workforce_data <- read_workforce_data()
 #Read in the workforce characteristics data
 workforce_char <- read_workforce_char_data()
 workforce_eth <- read_workforce_eth_data()
+workforce_eth_seniority <- read_workforce_eth_seniority_data()
 population_eth <- read_ethnic_population_data()
 combined_ethnicity_data <- merge_dataframes()
 
