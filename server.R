@@ -317,66 +317,66 @@ server <- function(input, output, session) {
   
   #Social worker plot benchmarking test
   
-  observeEvent(
-    eventExpr = {
-      input$select_geography
-      input$geographic_breakdown
-      input$national_comparison_checkbox
-      input$region_comparison_checkbox
-    },{
-      if(is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
-        output$plot_s_w_turnover <- plotly::renderPlotly({
-          validate(
-          need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
-        )
-          ggplotly(
-            plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
-              config(displayModeBar = F),
-            height = 420
-          )})
-      }else if(!is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
-        output$plot_s_w_turnover <- plotly::renderPlotly({
-          validate(
-            need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
-          )
-          ggplotly(
-            plot_social_worker_turnover(input$select_geography, input$geographic_breakdown)%>%
-              config(displayModeBar = F),
-            height = 420,
-            title = list(text = "Testing checkbox - selected national")
-          )
-        })
-      }
-    }
-  )
+  # observeEvent(
+  #   eventExpr = {
+  #     input$select_geography
+  #     input$geographic_breakdown
+  #     input$national_comparison_checkbox
+  #     input$region_comparison_checkbox
+  #   },{
+  #     if(is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
+  #       output$plot_s_w_turnover <- plotly::renderPlotly({
+  #         validate(
+  #         need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
+  #       )
+  #         ggplotly(
+  #           plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
+  #             config(displayModeBar = F),
+  #           height = 420
+  #         )})
+  #     }else if(!is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
+  #       output$plot_s_w_turnover <- plotly::renderPlotly({
+  #         validate(
+  #           need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
+  #         )
+  #         ggplotly(
+  #           plot_social_worker_turnover(input$select_geography, input$geographic_breakdown)%>%
+  #             config(displayModeBar = F),
+  #           height = 420,
+  #           title = list(text = "Testing checkbox - selected national")
+  #         )
+  #       })
+  #     }
+  #   }
+  # )
     
   
   
-  output$plot_s_w_turnover <- reactive(
-    if(is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
-      output$plot_s_w_turnover <- plotly::renderPlotly({
-        validate(
-          need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
-        )
-        ggplotly(
-          plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
-            config(displayModeBar = F),
-          height = 420
-        )})
-    }else if(!is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
-      output$plot_s_w_turnover <- plotly::renderPlotly({
-        validate(
-          need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
-        )
-        ggplotly(
-          plot_social_worker_turnover(input$select_geography, input$geographic_breakdown)%>%
-            config(displayModeBar = F),
-          height = 420,
-          title = list(text = "Testing checkbox - selected national")
-        )
-      })
-    }
-  )
+  # output$plot_s_w_turnover <- reactive(
+  #   if(is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
+  #     output$plot_s_w_turnover <- plotly::renderPlotly({
+  #       validate(
+  #         need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
+  #       )
+  #       ggplotly(
+  #         plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
+  #           config(displayModeBar = F),
+  #         height = 420
+  #       )})
+  #   }else if(!is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
+  #     output$plot_s_w_turnover <- plotly::renderPlotly({
+  #       validate(
+  #         need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
+  #       )
+  #       ggplotly(
+  #         plot_social_worker_turnover(input$select_geography, input$geographic_breakdown)%>%
+  #           config(displayModeBar = F),
+  #         height = 420,
+  #         title = list(text = "Testing checkbox - selected national")
+  #       )
+  #     })
+  #   }
+  # )
   
   
   
@@ -394,13 +394,14 @@ server <- function(input, output, session) {
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
   })
   
-  # output$plot_s_w_turnover <- plotly::renderPlotly({
-  #   ggplotly(
-  #     plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
-  #       config(displayModeBar = F),
-  #     height = 420
-  #   )
-  # })
+  output$plot_s_w_turnover <- plotly::renderPlotly({
+    ggplotly(
+      #plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
+      plotly_time_series(workforce_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc') %>%#<- function(dataset, level, breakdown, yvalue)
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
   
   output$table_s_w_turnover <- renderDataTable({
     datatable(
