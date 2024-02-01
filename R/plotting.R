@@ -58,10 +58,10 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 
 
 testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title){
-  filtered_data <- dataset %>%
+  data <- dataset %>%
     select(time_period, geo_breakdown, `yvalue`)
   
-  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+  ggplot(data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
     geom_line() +
     ylab(yaxis_title)+
     xlab("Time Period") +
@@ -73,12 +73,7 @@ testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title
       axis.line = element_line(size = 1.0)
     ) +
     scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')#+
-  #scale_color_manual(
-  #  "Breakdown",
-  #breaks = unique(c("England", inputArea)),
-  #  values = gss_colour_pallette
-  #)
+    labs(color='Breakdown')
 }
 
 

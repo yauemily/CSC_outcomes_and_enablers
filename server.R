@@ -408,35 +408,37 @@ server <- function(input, output, session) {
   
   
   # If statement to go in server side to decide what data to use:
-  filtered_data <- reactive({
+  # filtered_data <- reactive({
+  #  
+  # })
+
+  
+  output$plot_s_w_turnover <- plotly::renderPlotly({
     if(is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
-      workforce_data %>%
+      filtered_data<-workforce_data %>%
         filter(geographic_level %in% level & geo_breakdown %in% breakdown)
       
     }else if(!is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
-      workforce_data %>%
+      filtered_data<-workforce_data %>%
         filter((geographic_level %in% level & geo_breakdown %in% breakdown)|geographic_level == 'National') 
       
     }else if(is.null(input$national_comparison_checkbox) && !is.null(input$regional_comparison_checkbox)){
       location <- location_data %>%
         filter(la_name %in% breakdown)
       
-      workforce_data %>%
+      filtered_data<-workforce_data %>%
         filter((geo_breakdown %in% c(breakdown, location[[1]]))) 
       
     }else if(!is.null(input$national_comparison_checkbox) && !is.null(input$regional_comparison_checkbox)){
       location <- location_data %>%
         filter(la_name %in% breakdown)
       
-      workforce_data %>%
+      filtered_data<- workforce_data %>%
         filter((geo_breakdown %in% c(breakdown, location[[1]])|geographic_level == 'National'))
     }
-  })
-
-  
-  output$plot_s_w_turnover <- plotly::renderPlotly({
+    
     ggplotly(
-      testing_plot_function(filtered_data(),input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %')%>%
+      testing_plot_function(filtered_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %')%>%
                 config(displayModeBar = F),
                 height = 420
     )
