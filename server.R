@@ -443,9 +443,17 @@ server <- function(input, output, session) {
     )
   })
   
-  output$plot_caseload_test1 <- plotly::renderPlotly({
+  output$plot_caseload_reg <- plotly::renderPlotly({
     ggplotly(
-      plot_caseloads_test1() %>%
+      plot_caseloads_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$plot_caseload_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_caseloads_la(input$geographic_breakdown) %>%
         config(displayModeBar = F),
       height = 420
     )
