@@ -352,40 +352,95 @@ server <- function(input, output, session) {
     
   
   
-  # output$plot_s_w_turnover <- reactive(
+  # output$plot_s_w_turnover <- reactive({
+  #   # No comparisons checked
   #   if(is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
-  #     output$plot_s_w_turnover <- plotly::renderPlotly({
+  #     plotly::renderPlotly({
   #       validate(
   #         need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
   #       )
   #       ggplotly(
-  #         plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
+  #         plotly_time_series(workforce_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %') %>%
   #           config(displayModeBar = F),
   #         height = 420
   #       )})
+  #     #National checked
   #   }else if(!is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
-  #     output$plot_s_w_turnover <- plotly::renderPlotly({
+  #     plotly::renderPlotly({
   #       validate(
   #         need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
   #       )
   #       ggplotly(
-  #         plot_social_worker_turnover(input$select_geography, input$geographic_breakdown)%>%
+  #         t_series_nat_comp_plot(workforce_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %')%>%
+  #           config(displayModeBar = F),
+  #         height = 420,
+  #         title = list(text = "Testing checkbox - selected national")
+  #       )
+  #     })
+  #     #Regional checked
+  #   }else if(is.null(input$national_comparison_checkbox) && !is.null(input$regional_comparison_checkbox)){
+  #     plotly::renderPlotly({
+  #       validate(
+  #         need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
+  #       )
+  #       ggplotly(
+  #         t_series_region_la_plot(workforce_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %')%>%
+  #           config(displayModeBar = F),
+  #         height = 420,
+  #         title = list(text = "Testing checkbox - selected national")
+  #       )
+  #     })
+  #     #Both checked
+  #   }else if(!is.null(input$national_comparison_checkbox) && !is.null(input$regional_comparison_checkbox)){
+  #     plotly::renderPlotly({
+  #       validate(
+  #         need(!is.null(input$geographic_breakdown), "Please select at least one breakdown.")
+  #       )
+  #       ggplotly(
+  #         t_series_dual_comp_plot(workforce_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %')%>%
   #           config(displayModeBar = F),
   #         height = 420,
   #         title = list(text = "Testing checkbox - selected national")
   #       )
   #     })
   #   }
-  # )
-  
-  
-  
-  # output$plot_s_W_turnover <- plotly::renderPlotly({
-  #   if(is.null(input$national_comparison_checkbox) && is.null(input$regional_compariso_checkbox)){
-  #     
-  #   }
   # })
   
+  
+  # If statement to go in server side to decide what data to use:
+  filtered_data <- reactive({
+    if(is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
+      workforce_data %>%
+        filter(geographic_level %in% level & geo_breakdown %in% breakdown)
+      
+    }else if(!is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
+      workforce_data %>%
+        filter((geographic_level %in% level & geo_breakdown %in% breakdown)|geographic_level == 'National') 
+      
+    }else if(is.null(input$national_comparison_checkbox) && !is.null(input$regional_comparison_checkbox)){
+      location <- location_data %>%
+        filter(la_name %in% breakdown)
+      
+      workforce_data %>%
+        filter((geo_breakdown %in% c(breakdown, location[[1]]))) 
+      
+    }else if(!is.null(input$national_comparison_checkbox) && !is.null(input$regional_comparison_checkbox)){
+      location <- location_data %>%
+        filter(la_name %in% breakdown)
+      
+      workforce_data %>%
+        filter((geo_breakdown %in% c(breakdown, location[[1]])|geographic_level == 'National'))
+    }
+  })
+
+  
+  output$plot_s_w_turnover <- plotly::renderPlotly({
+    ggplotly(
+      testing_plot_function(filtered_data(),input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %')%>%
+                config(displayModeBar = F),
+                height = 420
+    )
+  })
   
   
   #social worker rate plot and table -----
@@ -394,14 +449,14 @@ server <- function(input, output, session) {
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
   })
   
-  output$plot_s_w_turnover <- plotly::renderPlotly({
-    ggplotly(
-      #plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
-      plotly_time_series(workforce_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc') %>%#<- function(dataset, level, breakdown, yvalue)
-        config(displayModeBar = F),
-      height = 420
-    )
-  })
+  # output$plot_s_w_turnover <- plotly::renderPlotly({
+  #   ggplotly(
+  #     #plot_social_worker_turnover(input$select_geography, input$geographic_breakdown) %>%
+  #     plotly_time_series(workforce_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %') %>%#<- function(dataset, level, breakdown, yvalue)
+  #       config(displayModeBar = F),
+  #     height = 420
+  #   )
+  # })
   
   output$table_s_w_turnover <- renderDataTable({
     datatable(

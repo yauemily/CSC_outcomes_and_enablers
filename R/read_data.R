@@ -94,6 +94,15 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
            "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte") %>% distinct()
   
   workforce_data <- convert_perc_cols_to_numeric(workforce_data)
+  
+  # FACT_location <- read.csv(file)
+  # location <- FACT_location%>%
+  #   select(region_name, la_name) %>%
+  #   filter((la_name != '')) %>%
+  #   unique()
+  # 
+  # workforce_data <- left_join(workforce_data,location, by = c("geo_breakdown" = "la_name"))
+  
   return(workforce_data)
 }
 
