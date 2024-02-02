@@ -307,11 +307,13 @@ server <- function(input, output, session) {
   
   output$choices_confirmation_text <- renderText({
     if (input$select_geography == "National") {
-      paste0("You have selected a geographic level of ", tags$b(input$select_geography), ".")
-    } else if (input$select_geography != "National") {
-    paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
+      paste0("You have selected ", tags$b(input$select_geography), " level statistics on ", tags$b("England"), ".")
+    } else if (input$select_geography == "Regional") {
+    paste0("You have selected ", tags$b(input$select_geography), " level statistics for ", tags$b(input$geographic_breakdown), ".")
+    } else if (input$select_geography == "Local authority") {
+    paste0("You have selected ", tags$b(input$select_geography), " level statistics for ", tags$b(input$geographic_breakdown), ", which is in xx.")
   }
-  })
+    })
   
   
   #social worker rate plot and table -----
