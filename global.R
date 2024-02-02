@@ -112,6 +112,7 @@ definitions <- definitions[,1:4]
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Read in the workforce data
 workforce_data <- read_workforce_data()
+location_data <- GET_location() # fact table linking LA to its region
 #workforce2 <- read_workforce_data2()
 #Read in the workforce characteristics data
 workforce_char <- read_workforce_char_data()
