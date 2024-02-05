@@ -73,7 +73,12 @@ testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title
       axis.line = element_line(size = 1.0)
     ) +
     scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
 }
 
 

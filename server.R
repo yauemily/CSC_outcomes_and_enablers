@@ -414,27 +414,31 @@ server <- function(input, output, session) {
 
   
   output$plot_s_w_turnover <- plotly::renderPlotly({
-    if(is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
+    #not both
+    if(is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
       filtered_data<-workforce_data %>%
-        filter(geographic_level %in% level & geo_breakdown %in% breakdown)
+        filter(geographic_level %in% input$select_geography & geo_breakdown %in% input$geographic_breakdown)
       
-    }else if(!is.null(input$national_comparison_checkbox) && is.null(input$regional_comparison_checkbox)){
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
       filtered_data<-workforce_data %>%
-        filter((geographic_level %in% level & geo_breakdown %in% breakdown)|geographic_level == 'National') 
+        filter((geographic_level %in% input$select_geography & geo_breakdown %in% input$geographic_breakdown)|geographic_level == 'National') 
       
-    }else if(is.null(input$national_comparison_checkbox) && !is.null(input$regional_comparison_checkbox)){
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)){
       location <- location_data %>%
-        filter(la_name %in% breakdown)
+        filter(la_name %in% input$geographic_breakdown)
       
       filtered_data<-workforce_data %>%
-        filter((geo_breakdown %in% c(breakdown, location[[1]]))) 
+        filter((geo_breakdown %in% c(input$geographic_breakdown, location$region_name))) 
       
-    }else if(!is.null(input$national_comparison_checkbox) && !is.null(input$regional_comparison_checkbox)){
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)){
       location <- location_data %>%
-        filter(la_name %in% breakdown)
+        filter(la_name %in% input$geographic_breakdown)
       
       filtered_data<- workforce_data %>%
-        filter((geo_breakdown %in% c(breakdown, location[[1]])|geographic_level == 'National'))
+        filter((geo_breakdown %in% c(input$geographic_breakdown, location$region_name)|geographic_level == 'National'))
     }
     
     ggplotly(
