@@ -392,14 +392,15 @@ plot_caseload_rate <- function(geo_lvl, geo_break) {
 }
 
 #bar charts test
-plot_caseloads_test1 <- function(){
+plot_caseloads_reg <- function(){
   caseload_data <- workforce_data %>%
     filter(geographic_level == "Regional", time_period == max(time_period)) %>%
-    select(time_period, geo_breakdown, caseload_fte)
+    select(time_period, geo_breakdown, caseload_fte) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -caseload_fte)) # Order by caseload_fte
   
   ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Caseload (FTE)") +
+    ylab("Average Caseload (FTE)") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -416,6 +417,66 @@ plot_caseloads_test1 <- function(){
       values = '#12436D'#gss_colour_pallette
     )
 }
+
+plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
+  
+  GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+    FACT_location <- read.csv(file)
+    FACT_location <- FACT_location%>%
+      select(region_name, la_name) %>%
+      filter((la_name != '')) %>%
+      unique()
+  }
+  
+  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+  
+  if (selected_geo_lvl == "Local authority") {
+    caseload_data <- workforce_data %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, caseload_fte) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -caseload_fte), # Order by caseload_fte
+             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+  } else if (selected_geo_lvl == "National") {
+    caseload_data <- workforce_data %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, caseload_fte) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -caseload_fte), # Order by caseload_fte
+             is_selected = "Not Selected")
+  } else if (selected_geo_lvl == "Regional") {
+    
+    # Get the la_name values within the selected region_name
+    location <- location_data %>%
+      filter(region_name == selected_geo_breakdown) %>%
+      pull(la_name)
+    
+    caseload_data <- workforce_data %>%
+      filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, caseload_fte) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -caseload_fte), # Order by caseload_fte
+             is_selected = "Selected")
+  }
+  
+  ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = `is_selected`)) +
+    geom_col(position = position_dodge()) +
+    ylab("Average Caseload (FTE)") +
+    xlab("LA") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_blank(),
+      axis.title.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 30))+
+    scale_fill_manual(
+      "LA Selection",
+      values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
+    )
+}
+
+
 
 plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
   ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole == 'All children and family social workers', 

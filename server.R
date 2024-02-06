@@ -279,10 +279,21 @@ server <- function(input, output, session) {
   # Enabler 1 Server Logic ----
   
   # Confirmation sentence -------
+  
+  output$choices_confirmation_text <- renderText({
+    if (input$select_geography == "National") {
+      paste0("You have selected ", tags$b(input$select_geography), " level statistics on ", tags$b("England"), ".")
+    } else if (input$select_geography == "Regional") {
+      paste0("You have selected ", tags$b(input$select_geography), " level statistics for ", tags$b(input$geographic_breakdown), ".")
+    } else if (input$select_geography == "Local authority") {
+      paste0("You have selected ", tags$b(input$select_geography), " level statistics for ", tags$b(input$geographic_breakdown), ", in ", region(), ".")
+    }
+  })
+  
     output$choices_confirmation_text <- renderText({
       # if they have selected national level
       if(input$select_geography == "National"){
-        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ".")
+        paste0("You have selected ", tags$b(input$select_geography), " level statistics on ", tags$b("England"), ".")
       
       # if they have selected not national and did not tick any of the checkboxes
     } else if ((input$select_geography != "National") && is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
@@ -345,6 +356,13 @@ server <- function(input, output, session) {
                 height = 420
     )
   })
+
+  region <- reactive({
+   location_data %>%
+      filter(la_name == input$geographic_breakdown) %>%
+    pull(region_name)  %>%
+      as.character()  # Convert to character
+       })
   
   
   #social worker rate plot and table -----
@@ -450,9 +468,17 @@ server <- function(input, output, session) {
     )
   })
   
-  output$plot_caseload_test1 <- plotly::renderPlotly({
+  output$plot_caseload_reg <- plotly::renderPlotly({
     ggplotly(
-      plot_caseloads_test1() %>%
+      plot_caseloads_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$plot_caseload_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_caseload_la(input$geographic_breakdown, input$select_geography) %>%
         config(displayModeBar = F),
       height = 420
     )
