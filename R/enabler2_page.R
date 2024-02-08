@@ -86,9 +86,7 @@ enabler2_tab <- function() {
                   width = 4,
                   value_box(
                     title = "Turnover Rate (FTE)",
-                    value = htmlOutput("s_w_headline_txt"),
-                    #showcase = plotlyOutput("stat_test_plot"),
-                    #showcase_layout = "bottom"
+                    value = htmlOutput("s_w_headline_txt")
                   )
                 ),
                 column(
@@ -127,8 +125,6 @@ enabler2_tab <- function() {
                     )),
                     # p("plots go here"),
                     plotlyOutput("plot_s_w_turnover"),
-                    br(),
-                    #plotlyOutput("plotly_test"),
                     br(),
                     # Expandable for the table alternative
                     details(
