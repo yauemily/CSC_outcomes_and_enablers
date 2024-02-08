@@ -230,54 +230,7 @@ server <- function(input, output, session) {
   })
   
   # CSC server logic ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  headline_plotter <- function(d,x,y){
-    info <- getCurrentOutputInfo()
-    large <- isTRUE(info$height() > 200)
-    
-    plot_ly(d, x = x, y = y) %>%
-      add_lines(
-        color = "white",
-        span = I(1),
-        #hoverinfo = if (!large) "none",
-        fill = 'white',
-        alpha = 0.2
-      ) %>%
-      layout(
-        hovermode = "x",
-        margin = list(t = 0, r = 0, l = 0, b = 0),
-        font = list(color = info$fg()),
-        paper_bgcolor = "transparent",
-        plot_bgcolor = "transparent",
-        xaxis = list(
-          title = "",
-          visible = large,
-          showgrid = FALSE
-        ),
-        yaxis = list(
-          title = "",
-          visible = large,
-          showgrid = FALSE
-        )
-      ) %>%
-      config(displayModeBar = FALSE)
-  }
-  
-  stat_test_plot <- renderPlotly({
-    headline_plotter(workforce_data, x = ~time_period, y = ~input$geographic_breakdown)
-  })
-  
-  # plotly_time_series function test: it does work, will need to implement this later
-  
-  output$plotly_test <- renderPlotly({
-    ggplotly(
-      plotly_time_series(workforce_data,input$select_geography, input$geographic_breakdown,"turnover_rate_fte_perc")+ylab("Social worker Turnover rate (FTE) (%)") %>%
-        config(displayModeBar = F),
-      height = 420
-    )#+ylab("Social worker Turnover rate (FTE) (%)")
-  })
-  
   # Enabler 1 Server Logic ----
-  
   # Confirmation sentence -------
   
   region <- reactive({
@@ -411,26 +364,11 @@ server <- function(input, output, session) {
   })
   
   
-  
-  
-  
-  
-  
-  
-  
   #agency worker rate plot ----
   output$agency_rate_txt <- renderText({
     stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(agency_worker_rate_fte_perc), nsmall = 1)
     paste0(stat,"%","<br>", "<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
     })
-  
-  # output$plot_agency_worker <- plotly::renderPlotly({
-  #   ggplotly(
-  #     plt_agency_rates(input$select_geography, input$geographic_breakdown) %>%
-  #       config(displayModeBar = F),
-  #     height = 420
-  #   )
-  # })
   
   
   output$plot_agency_worker <- plotly::renderPlotly({
@@ -489,14 +427,6 @@ server <- function(input, output, session) {
     paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%",
            "<br>","<p style='font-size:16px; font-weight:500;'>", "(",max(workforce_data$time_period),")", "</p>")
   })
-  
-  # output$plot_vacancy_rate <- plotly::renderPlotly({
-  #   ggplotly(
-  #     plot_vacancy_rate(input$select_geography, input$geographic_breakdown) %>%
-  #       config(displayModeBar = F),
-  #     height = 420
-  #   )
-  # })
   
   output$plot_vacancy_rate <- plotly::renderPlotly({
     validate(need(!is.null(input$select_geography), 'Select a geography level.'),
@@ -565,14 +495,6 @@ server <- function(input, output, session) {
     }
   })
   
- 
-  # output$caseload_plot <- plotly::renderPlotly({
-  #   ggplotly(
-  #     plot_caseload_rate(input$select_geography, input$geographic_breakdown)%>%
-  #       config(displayModeBar = F),
-  #     height = 420
-  #   )
-  # })
   
   output$caseload_plot <- plotly::renderPlotly({
     validate(need(!is.null(input$select_geography), 'Select a geography level.'),
@@ -796,147 +718,10 @@ server <- function(input, output, session) {
     )
   })
   
-
   
-  # output$enabler1_d1_tab <- renderDataTable({
-  #   datatable(
-  #     definitions %>% filter(Domain == "Workforce Stability") %>% select("Indicator", "Rationale/Description"), rownames = FALSE,
-  #     #shinyGovstyle::govTable("enabler1_d1_tab", definitions, "testtable", "s")
-  #   )
-  # })
-
-  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Define server logic to create a box
-
-  # output$boxavgRevBal <- renderValueBox({
-  #   # Put value into box to plug into app
-  #   valueBox(
-  #     # take input number
-  #     paste0("£", format(
-  #       (reactiveRevBal() %>% filter(
-  #         year == max(year),
-  #         area_name == input$selectArea,
-  #         school_phase == input$selectPhase
-  #       ))$average_revenue_balance,
-  #       big.mark = ","
-  #     )),
-  #     # add subtitle to explain what it's hsowing
-  #     paste0("This is the latest value for the selected inputs"),
-  #     color = "blue"
-  #   )
-  # })
-  # 
-  # output$boxpcRevBal <- renderValueBox({
-  #   latest <- (reactiveRevBal() %>% filter(
-  #     year == max(year),
-  #     area_name == input$selectArea,
-  #     school_phase == input$selectPhase
-  #   ))$average_revenue_balance
-  #   penult <- (reactiveRevBal() %>% filter(
-  #     year == max(year) - 1,
-  #     area_name == input$selectArea,
-  #     school_phase == input$selectPhase
-  #   ))$average_revenue_balance
-  # 
-  #   # Put value into box to plug into app
-  #   valueBox(
-  #     # take input number
-  #     paste0("£", format(latest - penult,
-  #       big.mark = ","
-  #     )),
-  #     # add subtitle to explain what it's hsowing
-  #     paste0("This is the change on previous year"),
-  #     color = "blue"
-  #   )
-  # })
-  # 
-  # output$boxavgRevBal_small <- renderValueBox({
-  #   # Put value into box to plug into app
-  #   valueBox(
-  #     # take input number
-  #     paste0("£", format(
-  #       (reactiveRevBal() %>% filter(
-  #         year == max(year),
-  #         area_name == input$selectArea,
-  #         school_phase == input$selectPhase
-  #       ))$average_revenue_balance,
-  #       big.mark = ","
-  #     )),
-  #     # add subtitle to explain what it's hsowing
-  #     paste0("This is the latest value for the selected inputs"),
-  #     color = "orange",
-  #     fontsize = "small"
-  #   )
-  # })
-  # 
-  # output$boxpcRevBal_small <- renderValueBox({
-  #   latest <- (reactiveRevBal() %>% filter(
-  #     year == max(year),
-  #     area_name == input$selectArea,
-  #     school_phase == input$selectPhase
-  #   ))$average_revenue_balance
-  #   penult <- (reactiveRevBal() %>% filter(
-  #     year == max(year) - 1,
-  #     area_name == input$selectArea,
-  #     school_phase == input$selectPhase
-  #   ))$average_revenue_balance
-  # 
-  #   # Put value into box to plug into app
-  #   valueBox(
-  #     # take input number
-  #     paste0("£", format(latest - penult,
-  #       big.mark = ","
-  #     )),
-  #     # add subtitle to explain what it's showing
-  #     paste0("This is the change on previous year"),
-  #     color = "orange",
-  #     fontsize = "small"
-  #   )
-  # })
-  # 
-  # output$boxavgRevBal_large <- renderValueBox({
-  #   # Put value into box to plug into app
-  #   valueBox(
-  #     # take input number
-  #     paste0("£", format(
-  #       (reactiveRevBal() %>% filter(
-  #         year == max(year),
-  #         area_name == input$selectArea,
-  #         school_phase == input$selectPhase
-  #       ))$average_revenue_balance,
-  #       big.mark = ","
-  #     )),
-  #     # add subtitle to explain what it's hsowing
-  #     paste0("This is the latest value for the selected inputs"),
-  #     color = "green",
-  #     fontsize = "large"
-  #   )
-  # })
-  # 
-  # output$boxpcRevBal_large <- renderValueBox({
-  #   latest <- (reactiveRevBal() %>% filter(
-  #     year == max(year),
-  #     area_name == input$selectArea,
-  #     school_phase == input$selectPhase
-  #   ))$average_revenue_balance
-  #   penult <- (reactiveRevBal() %>% filter(
-  #     year == max(year) - 1,
-  #     area_name == input$selectArea,
-  #     school_phase == input$selectPhase
-  #   ))$average_revenue_balance
-  # 
-  #   # Put value into box to plug into app
-  #   valueBox(
-  #     # take input number
-  #     paste0("£", format(latest - penult,
-  #       big.mark = ","
-  #     )),
-  #     # add subtitle to explain what it's showing
-  #     paste0("This is the change on previous year"),
-  #     color = "green",
-  #     fontsize = "large"
-  #   )
-  # })
+  
+  
+  # Don't touch the code below -----------------------
 
   observeEvent(input$go, {
     toggle(id = "div_a", anim = T)
