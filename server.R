@@ -280,7 +280,14 @@ server <- function(input, output, session) {
   
   # Confirmation sentence -------
   
-  output$choices_confirmation_text <- renderText({
+  region <- reactive({
+    location_data %>%
+      filter(la_name == input$geographic_breakdown) %>%
+      pull(region_name)  %>%
+      as.character()  # Convert to character
+  })
+  
+  output$enabler1_choice_text1 <- renderText({
     if (input$select_geography == "National") {
       paste0("You have selected ", tags$b(input$select_geography), " level statistics on ", tags$b("England"), ".")
     } else if (input$select_geography == "Regional") {
@@ -290,33 +297,25 @@ server <- function(input, output, session) {
     }
   })
   
-    output$choices_confirmation_text <- renderText({
-      # if they have selected national level
-      if(input$select_geography == "National"){
-        paste0("You have selected ", tags$b(input$select_geography), " level statistics on ", tags$b("England"), ".")
-      
-      # if they have selected not national and did not tick any of the checkboxes
-    } else if ((input$select_geography != "National") && is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
-        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), ".")
-      
-      # if not national level and ticked the national checkbox
-    } else if ((input$select_geography != "National") && !is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
-        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), "."
-             ,"<br>", "You have also selected to compare with the ", tags$b("National Average."))
-      
-      #if not national level and ticked regional checkbox
-    } else if ((input$select_geography != "National") && is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)){
-        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), "."
-               ,"<br>", "You have also selected to compare with the ", tags$b("Regional average."))
-      
-      #if not national level and ticked national and regional checkbox
-    }else if ((input$select_geography != "National") && !is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)){
-        paste0("You have selected a geographic level of ", tags$b(input$select_geography), ", with a specific breakdown of ", tags$b(input$geographic_breakdown), "."
-             ,"<br>", "You have also selected to compare with the ", tags$b("National average"), " and the respective ", tags$b("Regional average."))
-    } else {
-        paste0("testing")
-      }
-    })
+  output$enabler1_choice_text2 <- renderText({
+    #Checking to see if they picked national average comparison
+    if (!is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)) {
+      paste0("You have also selected to compare with the ", tags$b("National Average."))
+      # If they picked regional comparison
+    } else if (is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)) {
+      paste0("You have also selected to compare with the ", tags$b("Regional average."))
+      #Picked both national and regional comparison
+    } else if (!is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)) {
+      paste0("You have also selected to compare with the ", tags$b("National average"), " and the ", tags$b("Regional average."))
+    }
+  })
+  
+  
+  #social worker rate plot and table -----
+  output$s_w_headline_txt <- renderText({
+    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1)
+    paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
+  })
   
   #Social worker plot benchmarking
   
@@ -325,7 +324,7 @@ server <- function(input, output, session) {
              need(!is.null(input$geographic_breakdown),'Select a breakdown.'))
     #not both
     if(is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
-       filtered_data<-workforce_data %>%
+      filtered_data<-workforce_data %>%
         filter(geographic_level %in% input$select_geography & geo_breakdown %in% input$geographic_breakdown)
       
       #national only
@@ -352,25 +351,10 @@ server <- function(input, output, session) {
     
     ggplotly(
       testing_plot_function(filtered_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %')%>%
-                config(displayModeBar = F),
-                height = 420
+        config(displayModeBar = F),
+      height = 420
     )
   })
-
-  region <- reactive({
-   location_data %>%
-      filter(la_name == input$geographic_breakdown) %>%
-    pull(region_name)  %>%
-      as.character()  # Convert to character
-       })
-  
-  
-  #social worker rate plot and table -----
-  output$s_w_headline_txt <- renderText({
-    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown) %>% select(turnover_rate_fte_perc), nsmall = 1)
-    paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
-  })
-  
   
   output$table_s_w_turnover <- renderDataTable({
     datatable(

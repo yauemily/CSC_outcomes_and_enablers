@@ -65,18 +65,14 @@ enabler2_tab <- function() {
                 small = TRUE
               )
             ),
-            ),
-            column(
-              width = 3,
-              p(htmlOutput("testing_checkboxes"))
-            )
           )
-        )
+        ))
       ),
       br(),
       gov_row(
         br(),
-        p(htmlOutput("choices_confirmation_text")),
+        p(htmlOutput("enabler1_choice_text1"),htmlOutput("enabler1_choice_text2") ),
+        #p(htmlOutput("enabler1_choice_text2")),
         br(),
         div(
           tabsetPanel(
