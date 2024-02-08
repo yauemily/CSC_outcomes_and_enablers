@@ -356,12 +356,52 @@ server <- function(input, output, session) {
     )
   })
   
+  # output$table_s_w_turnover <- renderDataTable({
+  #   datatable(
+  #     workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
+  #       time_period, geo_breakdown,
+  #       turnover_rate_fte_perc
+  #     ),
+  #     colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
+  #     options = list(
+  #       scrollx = FALSE,
+  #       paging = TRUE
+  #     )
+  #   )
+  # })
+  
   output$table_s_w_turnover <- renderDataTable({
+    #neither checkboxes
+    if(is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
+    filtered_data <- workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% 
+      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+    
+    #national only
+  }else if(!is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)){
+    filtered_data<-workforce_data %>%
+      filter((geographic_level %in% input$select_geography & geo_breakdown %in% input$geographic_breakdown)|geographic_level == 'National') %>% 
+      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+    
+    #regional only
+  }else if(is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)){
+    location <- location_data %>%
+      filter(la_name %in% input$geographic_breakdown)
+    
+    filtered_data<-workforce_data %>%
+      filter((geo_breakdown %in% c(input$geographic_breakdown, location$region_name))) %>% 
+      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+    
+    #both selected
+  }else if(!is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)){
+    location <- location_data %>%
+      filter(la_name %in% input$geographic_breakdown)
+    
+    filtered_data<- workforce_data %>%
+      filter((geo_breakdown %in% c(input$geographic_breakdown, location$region_name)|geographic_level == 'National'))%>% 
+      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+  }
     datatable(
-      workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
-        time_period, geo_breakdown,
-        turnover_rate_fte_perc
-      ),
+      filtered_data,
       colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
@@ -369,6 +409,13 @@ server <- function(input, output, session) {
       )
     )
   })
+  
+  
+  
+  
+  
+  
+  
   
   
   #agency worker rate plot ----
