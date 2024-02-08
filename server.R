@@ -675,6 +675,60 @@ server <- function(input, output, session) {
   #   )
   # })
 
+  
+  output$table_caseload_reg <- renderDataTable({
+    datatable(
+      workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
+        time_period, geo_breakdown,
+        caseload_fte
+      ) %>%
+        arrange(desc(caseload_fte)),
+      colnames = c("Time Period", "Geographical Breakdown", "Average Caseload (FTE)"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  output$table_caseload_la <- renderDataTable({
+    if (input$select_geography == "Regional") {
+      if (input$geographic_breakdown == "London") {
+        # Include both Inner London and Outer London
+        location <- location_data %>%
+          filter(region_name %in% c("Inner London", "Outer London")) %>%
+          pull(la_name)
+      } else {
+        # Get the la_name values within the selected region_name
+        location <- location_data %>%
+          filter(region_name == input$geographic_breakdown) %>%
+          pull(la_name)
+      }
+      
+      data <- workforce_data %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+        select(time_period, geo_breakdown, caseload_fte)  %>%
+        arrange(desc(caseload_fte))
+      
+    } else if (input$select_geography %in% c("Local authority", "National")) {
+      data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
+        time_period, geo_breakdown,
+        caseload_fte
+      ) %>%
+        arrange(desc(caseload_fte))
+    }
+    
+    datatable(
+      data,
+      colnames = c("Time Period", "Geographical Breakdown", "Average Caseload (FTE)"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+
   # Ethnicity and Diversity Domain-----
   output$white_ethnicity_txt <- renderText({
     paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 

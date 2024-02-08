@@ -444,10 +444,18 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
              is_selected = "Not Selected")
   } else if (selected_geo_lvl == "Regional") {
     
-    # Get the la_name values within the selected region_name
-    location <- location_data %>%
-      filter(region_name == selected_geo_breakdown) %>%
-      pull(la_name)
+    # Check if the selected region is London
+    if (selected_geo_breakdown == "London") {
+      # Include both Inner London and Outer London
+      location <- location_data %>%
+        filter(region_name %in% c("Inner London", "Outer London")) %>%
+        pull(la_name)
+    } else {
+      # Get the la_name values within the selected region_name
+      location <- location_data %>%
+        filter(region_name == selected_geo_breakdown) %>%
+        pull(la_name)
+    }
     
     caseload_data <- workforce_data %>%
       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
@@ -456,16 +464,14 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
              is_selected = "Selected")
   }
   
-  ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = `is_selected`)) +
+  
+  p <- ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
     ylab("Average Caseload (FTE)") +
-    xlab("LA") +
+    xlab("") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
-      axis.text.x = element_blank(),
-      axis.title.x = element_blank(),
-      axis.ticks.x = element_blank(),
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
@@ -474,6 +480,15 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
       "LA Selection",
       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
     )
+  
+  # Conditionally set the x-axis labels and ticks
+  if (selected_geo_lvl == "Regional") {
+    p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
+  } else {
+    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  }
+  
+  return(p)
 }
 
 
