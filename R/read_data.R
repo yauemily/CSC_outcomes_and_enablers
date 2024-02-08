@@ -294,7 +294,8 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
 "E09000027",
 "E09000029",
 "E09000031"), ]
-
+    
+  
     #create outer London data
     df_Inner_London <- df_Inner_London %>%
     mutate(Name = "Inner London",Code = "E13000001") %>%

@@ -292,11 +292,29 @@ enabler2_tab <- function() {
                     plotlyOutput("plot_caseload_reg"),
                   ),
                   fluidRow(
+                    details(
+                      inputId = "tbl_caseload_reg",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_caseload_reg")
+                      )
+                    )
+                  ),
+                  fluidRow(
                     h2("Social Worker Caseloads by Local Authority"),
                     p("This chart is reactive to the Local authority filter at the top and will not react to National or Regional filters."),
                     p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
                     br(),
                     plotlyOutput("plot_caseload_la"),
+                  ),
+                  fluidRow(
+                    details(
+                      inputId = "tbl_caseload_la",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_caseload_la")
+                      )
+                    )
                   ),
                 )
               )
