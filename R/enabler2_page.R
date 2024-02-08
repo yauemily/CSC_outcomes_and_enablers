@@ -40,39 +40,39 @@ enabler2_tab <- function() {
             )
           ),
           gov_row(
-            # column(
-            #   width = 3,
-            #   checkbox_Input(
-            #     inputId = "national_comparison_checkbox",
-            #     cb_labels = "Compare with National",
-            #     checkboxIds = "Yes_national",
-            #     label = "",
-            #     hint_label = NULL,
-            #     small = TRUE
-            #   )
-            # ),
-            # column(
-            #   width = 3,
-            #   checkbox_Input(
-            #     inputId = "region_comparison_checkbox",
-            #     cb_labels = "Compare with Region",
-            #     checkboxIds = "Yes_region",
-            #     label = "",
-            #     hint_label = NULL,
-            #     small = TRUE
-            #   )
-            # ),
-            # column(
-            #   width = 3,
-            #   p(htmlOutput("testing_checkboxes"))
-            # )
+            conditionalPanel(condition = "input.select_geography != 'National'",
+              column(
+              width = 3,
+              checkbox_Input(
+                inputId = "national_comparison_checkbox",
+                cb_labels = "Compare with National",
+                checkboxIds = "Yes_national",
+                label = "",
+                hint_label = NULL,
+                small = TRUE
+              )
+            )),
+            conditionalPanel(
+              condition = "(input.select_geography == 'Local authority')",
+            column(
+              width = 3,
+              checkbox_Input(
+                inputId = "region_comparison_checkbox",
+                cb_labels = "Compare with Region",
+                checkboxIds = "Yes_region",
+                label = "",
+                hint_label = NULL,
+                small = TRUE
+              )
+            ),
           )
-        )
+        ))
       ),
       br(),
       gov_row(
         br(),
-        p(htmlOutput("choices_confirmation_text")),
+        p(htmlOutput("enabler1_choice_text1"),htmlOutput("enabler1_choice_text2") ),
+        #p(htmlOutput("enabler1_choice_text2")),
         br(),
         div(
           tabsetPanel(
@@ -435,11 +435,46 @@ enabler2_tab <- function() {
                     )
                   )
                 )
+            )),
+            # tabPanel(
+            #   "Benchmarking",
+            #   fluidRow(
+            #     h1("Testing Benchmarking"),
+            #     p("This is a test page for benchmarking")
+            #   ),
+            #   fluidRow(
+            #     column(
+            #       width = 6,
+            #       box(
+            #         width = 12,
+            #         p("plot goes here")
+            #         #plotlyOutput(" ")
+            #       )
+            #     ),
+            #     column(
+            #       width = 6,
+            #       div(
+            #         class = "well",
+            #         style = "min-height: 100%; height: 100%; overflow-y: visible",
+            #         fluidRow(
+            #           column(
+            #             width = 12,
+            #             p("filters here"),
+            #             #selectizeInput("selectBenchLAs",
+            #             #               "Select benchmark LAs",
+            #             #               choices = choicesLAs$area_name,
+            #             #               multiple = TRUE,
+            #             #               options = list(maxItems = 3)
+            #             )
+            #           )
+            #         )
+            #       )
+            #     )
+            # )
+
               )
             )
           )
         )
       )
-    )
-  )
 }

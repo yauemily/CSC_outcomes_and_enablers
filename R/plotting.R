@@ -56,17 +56,44 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 
 # CSC charts
 
+
+testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title){
+  data <- dataset %>%
+    select(time_period, geo_breakdown, `yvalue`)
+  
+  ggplot(data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+    geom_line() +
+    ylab(yaxis_title)+
+    xlab("Time Period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
+}
+
+
+
 #This is test code to try and create a function for the plots instead of lots of the same bits of code
 #at least a framework for the time series plots ----
 
-plotly_time_series <- function(dataset, level, breakdown, yvalue){
+plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
   filtered_data <- dataset %>%
     filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
-    select(time_period, geo_breakdown, yvalue)
+    select(time_period, geo_breakdown, `yvalue`)
   
-  ggplot(filtered_data, aes(`time_period`, yvalue, color = geo_breakdown))+
+  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
     geom_line() +
-    #ylab("Social worker Turnover rate (FTE) (%)")+
+    ylab(yaxis_title)+
     xlab("Time Period") +
     theme_classic() +
     theme(
@@ -77,21 +104,22 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue){
     ) +
     scale_y_continuous(limits = c(0, 100))+
     labs(color='Breakdown')#+
-    #scale_color_manual(
-      #"Breakdown",
-      #breaks = unique(c("England", inputArea)),
-     # values = gss_colour_pallette
-    #)
+  #scale_color_manual(
+  #  "Breakdown",
+  #breaks = unique(c("England", inputArea)),
+  #  values = gss_colour_pallette
+  #)
 }
 
-plotly_time_series_discrete <- function(dataset, level, breakdown, yvalue){
+# function for time series but with a national comparison
+t_series_nat_comp_plot <- function(dataset, level, breakdown, yvalue, yaxis_title){
   filtered_data <- dataset %>%
-    filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
-    select(time_period, geo_breakdown, yvalue)
+    filter((geographic_level %in% level & geo_breakdown %in% breakdown)|geographic_level == 'National') %>%
+    select(time_period, geo_breakdown, `yvalue`)
   
-  ggplot(filtered_data, aes(`time_period`, yvalue, color = geo_breakdown))+
+  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
     geom_line() +
-    #ylab("Social worker Turnover rate (FTE) (%)")+
+    ylab(yaxis_title)+
     xlab("Time Period") +
     theme_classic() +
     theme(
@@ -100,14 +128,101 @@ plotly_time_series_discrete <- function(dataset, level, breakdown, yvalue){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 50))+
+    scale_y_continuous(limits = c(0, 100))+
     labs(color='Breakdown')#+
   #scale_color_manual(
-  #"Breakdown",
+  #  "Breakdown",
   #breaks = unique(c("England", inputArea)),
-  # values = gss_colour_pallette
+  #  values = gss_colour_pallette
   #)
 }
+
+#function just showing la and region
+t_series_region_la_plot <- function(dataset, level, breakdown, yvalue, yaxis_title){
+  #Need to find the correct Region for this breakdown
+  location <- location_data %>%
+    filter(la_name %in% breakdown)
+  
+  filtered_data <- dataset %>%
+    filter((geo_breakdown %in% c(breakdown, location[[1]]))) %>%
+    select(time_period, geo_breakdown, `yvalue`)
+  
+  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+    geom_line() +
+    ylab(yaxis_title)+
+    xlab("Time Period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
+}
+
+#function to have both comparisons (regional and national)
+t_series_dual_comp_plot <- function(dataset, level, breakdown, yvalue, yaxis_title){
+  #Need to find the correct Region for this breakdown
+  location <- location_data %>%
+    filter(la_name %in% breakdown)
+  
+  filtered_data <- dataset %>%
+    filter((geo_breakdown %in% c(breakdown, location[[1]])|geographic_level == 'National')) %>%
+    select(time_period, geo_breakdown, `yvalue`)
+  
+  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+    geom_line() +
+    ylab(yaxis_title)+
+    xlab("Time Period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')+
+  scale_color_manual(
+    "Breakdown",
+  #breaks = unique(c("England", inputArea)),
+    values = gss_colour_pallette
+  )
+}
+
+
+
+# plotly_time_series_discrete <- function(dataset, level, breakdown, yvalue){
+#   filtered_data <- dataset %>%
+#     filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
+#     select(time_period, geo_breakdown, yvalue)
+#   
+#   ggplot(filtered_data, aes(`time_period`, yvalue, color = geo_breakdown))+
+#     geom_line() +
+#     #ylab("Social worker Turnover rate (FTE) (%)")+
+#     xlab("Time Period") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.x = element_text(margin = margin(t = 12)),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 50))+
+#     labs(color='Breakdown')#+
+#   #scale_color_manual(
+#   #"Breakdown",
+#   #breaks = unique(c("England", inputArea)),
+#   # values = gss_colour_pallette
+#   #)
+# }
 
 
 # Enabler 1 - Workforce charts ----

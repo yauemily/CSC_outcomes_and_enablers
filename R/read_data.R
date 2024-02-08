@@ -67,6 +67,8 @@ read_definitions <- function(file = "data/definitions.csv") {
 # }
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # Need a fact table for the LA's and their Regions
 GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
   FACT_location <- read.csv(file)
@@ -76,6 +78,8 @@ GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
     unique()
 }
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #For filters to work nicely, we want to have two levels of grouping: geographic level (national, regional, LA) 
 #and level breakdown (region names and la names)
@@ -93,6 +97,15 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
            "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte") %>% distinct()
   
   workforce_data <- convert_perc_cols_to_numeric(workforce_data)
+  
+  # FACT_location <- read.csv(file)
+  # location <- FACT_location%>%
+  #   select(region_name, la_name) %>%
+  #   filter((la_name != '')) %>%
+  #   unique()
+  # 
+  # workforce_data <- left_join(workforce_data,location, by = c("geo_breakdown" = "la_name"))
+  
   return(workforce_data)
 }
 
