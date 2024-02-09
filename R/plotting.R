@@ -329,6 +329,18 @@ plot_agency_reg <- function(){
       text = element_text(size = 12),
       axis.text.x = element_text(angle = 300),
       axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+          axis.line = element_line(size = 1.0)
+        ) +
+        scale_y_continuous(limits = c(0, 100))+
+        scale_fill_manual(
+          "Time Period",
+          #breaks = unique(c("England", inputArea)),
+          values = '#12436D'#gss_colour_pallette
+        )
+      }
+      
+      
 plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
   
   GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
@@ -388,12 +400,6 @@ plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl 
     ) +
     scale_y_continuous(limits = c(0, 100))+
     scale_fill_manual(
-      "Time Period",
-      #breaks = unique(c("England", inputArea)),
-      values = '#12436D'#gss_colour_pallette
-    )
-}
-
       "LA Selection",
       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
     )
