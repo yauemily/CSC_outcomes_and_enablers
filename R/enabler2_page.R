@@ -223,7 +223,18 @@ enabler2_tab <- function() {
                             "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
                         )
                       )
-                    )
+                    ),
+                    br(),
+                    plotlyOutput("plot_vacancy_rate_la"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_vacancy_rate_la",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_vacancy_rate_la")
+                      )
+                    ),
                   ) 
                 ),
               ),
@@ -302,6 +313,8 @@ enabler2_tab <- function() {
                     p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
                     br(),
                     plotlyOutput("plot_caseload_la"),
+                    br(),
+                    br(),
                   ),
                   fluidRow(
                     details(
