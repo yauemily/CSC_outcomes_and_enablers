@@ -238,6 +238,9 @@ enabler2_tab <- function() {
                         )
                       )
                     ),
+                    h2("Vacancy Rates by Local Authority"),
+                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                    p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
                     br(),
                     plotlyOutput("plot_vacancy_rate_la"),
                     br(),
@@ -323,7 +326,7 @@ enabler2_tab <- function() {
                   ),
                   fluidRow(
                     h2("Social Worker Caseloads by Local Authority"),
-                    p("This chart is reactive to the Local authority filter at the top and will not react to National or Regional filters."),
+                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
                     p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
                     br(),
                     plotlyOutput("plot_caseload_la"),
