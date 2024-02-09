@@ -502,6 +502,51 @@ server <- function(input, output, session) {
   })
   
   
+  output$plot_agency_rate_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_agency_rate_la(input$geographic_breakdown, input$select_geography) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  
+  output$table_agency_rate_la <- renderDataTable({
+    if (input$select_geography == "Regional") {
+      if (input$geographic_breakdown == "London") {
+        # Include both Inner London and Outer London
+        location <- location_data %>%
+          filter(region_name %in% c("Inner London", "Outer London")) %>%
+          pull(la_name)
+      } else {
+        # Get the la_name values within the selected region_name
+        location <- location_data %>%
+          filter(region_name == input$geographic_breakdown) %>%
+          pull(la_name)
+      }
+      
+      data <- workforce_data %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+        select(time_period, geo_breakdown, agency_worker_rate_fte_perc)  %>%
+        arrange(desc(caseload_fte))
+      
+    } else if (input$select_geography %in% c("Local authority", "National")) {
+      data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
+        time_period, geo_breakdown,
+        agency_worker_rate_fte_perc
+      ) %>%
+        arrange(desc(agency_worker_rate_fte_perc))
+    }
+    
+    datatable(
+      data,
+      colnames = c("Time Period", "Geographical Breakdown", "Agency Rate %"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
   
   # Vacancy Rate plot and table -----
   output$vacancy_rate_txt <- renderText({
