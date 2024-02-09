@@ -528,7 +528,7 @@ server <- function(input, output, session) {
       data <- workforce_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
         select(time_period, geo_breakdown, agency_worker_rate_fte_perc)  %>%
-        arrange(desc(caseload_fte))
+        arrange(desc(agency_worker_rate_fte_perc))
       
     } else if (input$select_geography %in% c("Local authority", "National")) {
       data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
@@ -670,7 +670,7 @@ server <- function(input, output, session) {
       data <- workforce_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
         select(time_period, geo_breakdown, vacancy_rate_fte_perc)  %>%
-        arrange(desc(caseload_fte))
+        arrange(desc(vacancy_rate_fte_perc))
       
     } else if (input$select_geography %in% c("Local authority", "National")) {
       data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(

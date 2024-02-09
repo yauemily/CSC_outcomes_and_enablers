@@ -357,13 +357,13 @@ plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl 
     agency_rates_data <- workforce_data %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
+      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by agency rate
              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
   } else if (selected_geo_lvl == "National") {
     agency_rates_data <- workforce_data %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
+      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by agency rate
              is_selected = "Not Selected")
   } else if (selected_geo_lvl == "Regional") {
     
@@ -383,7 +383,7 @@ plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl 
     agency_rates_data <- workforce_data %>%
       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
+      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by agency rate
              is_selected = "Selected")
   }
   
@@ -487,13 +487,13 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
     vacancy_data <- workforce_data %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
   } else if (selected_geo_lvl == "National") {
     vacancy_data <- workforce_data %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
              is_selected = "Not Selected")
   } else if (selected_geo_lvl == "Regional") {
     
@@ -513,7 +513,7 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
     vacancy_data <- workforce_data %>%
       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
              is_selected = "Selected")
   }
   
