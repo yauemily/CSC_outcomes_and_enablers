@@ -152,7 +152,7 @@ enabler2_tab <- function() {
                     ),
                     fluidRow(
                       details(
-                        inputId = "tbl_caseload_reg",
+                        inputId = "tbl_turnover_reg",
                         label = "View chart as a table",
                         help_text = (
                           dataTableOutput("table_turnover_reg")
@@ -201,6 +201,21 @@ enabler2_tab <- function() {
                         )
                       )
                     ), 
+                    fluidRow(
+                      h2("Agency Rates by Region"),
+                      p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                      br(),
+                      plotlyOutput("plot_agency_reg"),
+                    ),
+                    fluidRow(
+                      details(
+                        inputId = "tbl_agency_reg",
+                        label = "View chart as a table",
+                        help_text = (
+                          dataTableOutput("table_agency_reg")
+                        )
+                      )
+                    ),
                   ),
                   
                   # Vacancy Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -235,6 +250,21 @@ enabler2_tab <- function() {
                           p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
                             tags$br(),
                             "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                        )
+                      )
+                    ),
+                    fluidRow(
+                      h2("Vacancy Rates by Region"),
+                      p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                      br(),
+                      plotlyOutput("plot_vacancy_reg"),
+                    ),
+                    fluidRow(
+                      details(
+                        inputId = "tbl_vacancy_reg",
+                        label = "View chart as a table",
+                        help_text = (
+                          dataTableOutput("table_vacancy_reg")
                         )
                       )
                     ),

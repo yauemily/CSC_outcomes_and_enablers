@@ -476,6 +476,31 @@ server <- function(input, output, session) {
     )
   })
   
+  #agency rate plot by region
+  output$plot_agency_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_agency_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  #agency rate table by region
+  output$table_agency_reg <- renderDataTable({
+    datatable(
+      workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
+        time_period, geo_breakdown,
+        agency_worker_rate_fte_perc
+      ) %>%
+        arrange(desc(agency_worker_rate_fte_perc)),
+      colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
   
   
   # Vacancy Rate plot and table -----
@@ -619,6 +644,35 @@ server <- function(input, output, session) {
       )
     )
   })
+  
+  
+  #agency rate plot by region
+  output$plot_vacancy_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_vacancy_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  #vacancy rate table by region
+  output$table_vacancy_reg <- renderDataTable({
+    datatable(
+      workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
+        time_period, geo_breakdown,
+        vacancy_rate_fte_perc
+      ) %>%
+        arrange(desc(vacancy_rate_fte_perc)),
+      colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate (FTE) %"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  
+  
   
   
   #Caseload ----

@@ -254,7 +254,7 @@ plot_social_worker_turnover <- function(geo_lvl, geo_break){
     )
 }
 
-#bar charts test
+#bar chart by region
 plot_turnover_reg <- function(){
   turnover_reg_data <- workforce_data %>%
     filter(geographic_level == "Regional", time_period == max(time_period)) %>%
@@ -313,6 +313,33 @@ plt_agency_rates <- function(geo_lvl, geo_break){
     )
 }
 
+#bar chart by region
+plot_agency_reg <- function(){
+ agency_reg_data <- workforce_data %>%
+    filter(geographic_level == "Regional", time_period == max(time_period)) %>%
+    select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc)) # Order by turnover rate
+  
+  ggplot( agency_reg_data , aes(`geo_breakdown`, `agency_worker_rate_fte_perc`, fill = factor(time_period))) +
+    geom_col(position = position_dodge()) +
+    ylab("Agency Worker Rate (FTE) %") +
+    xlab("Region") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "Time Period",
+      #breaks = unique(c("England", inputArea)),
+      values = '#12436D'#gss_colour_pallette
+    )
+}
+
 
 # Vacancy Rate over time ----
 plot_vacancy_rate <- function(geo_lvl, geo_break) {
@@ -341,6 +368,35 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
       values = gss_colour_pallette
     )
 }
+
+
+#bar chart by region
+plot_vacancy_reg <- function(){
+  vacancy_reg_data <- workforce_data %>%
+    filter(geographic_level == "Regional", time_period == max(time_period)) %>%
+    select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc)) # Order by turnover rate
+  
+  ggplot( vacancy_reg_data  , aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = factor(time_period))) +
+    geom_col(position = position_dodge()) +
+    ylab("Vacancy Rate (FTE) %") +
+    xlab("Region") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "Time Period",
+      #breaks = unique(c("England", inputArea)),
+      values = '#12436D'#gss_colour_pallette
+    )
+}
+
 
 plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
   
