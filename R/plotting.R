@@ -254,6 +254,37 @@ plot_social_worker_turnover <- function(geo_lvl, geo_break){
     )
 }
 
+#bar charts test
+plot_turnover_reg <- function(){
+  turnover_reg_data <- workforce_data %>%
+    filter(geographic_level == "Regional", time_period == max(time_period)) %>%
+    select(time_period, geo_breakdown, turnover_rate_fte_perc) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -turnover_rate_fte_perc)) # Order by turnover rate
+  
+  ggplot( turnover_reg_data , aes(`geo_breakdown`, `turnover_rate_fte_perc`, fill = factor(time_period))) +
+    geom_col(position = position_dodge()) +
+    ylab("Turnover Rate FTE %") +
+    xlab("Region") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "Time Period",
+      #breaks = unique(c("England", inputArea)),
+      values = '#12436D'#gss_colour_pallette
+    )
+}
+
+
+
+
+
 # Agency Rates ----
 plt_agency_rates <- function(geo_lvl, geo_break){
   agency_rates_data <- workforce_data %>%

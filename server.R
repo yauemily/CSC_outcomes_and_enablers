@@ -350,6 +350,30 @@ server <- function(input, output, session) {
     )
   })
   
+  #turnover rate plot by region
+  output$plot_turnover_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_turnover_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  #turnover rate table by region
+  output$table_turnover_reg <- renderDataTable({
+    datatable(
+      workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
+        time_period, geo_breakdown,
+        turnover_rate_fte_perc
+      ) %>%
+        arrange(desc(turnover_rate_fte_perc)),
+      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate FTE %"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
   
   
   

@@ -134,8 +134,7 @@ enabler2_tab <- function() {
                         dataTableOutput("table_s_w_turnover")
                       )
                     ),
-                    
-                    #expandable for the additional info links
+                                  #expandable for the additional info links
                     details(
                       inputId = "turnover_info",
                       label = "Additional information:",
@@ -143,6 +142,21 @@ enabler2_tab <- function() {
                         p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
                           tags$br(),
                           "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                      )
+                    ),
+                    fluidRow(
+                      h2("Social Worker Turnover by Region"),
+                      p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                      br(),
+                      plotlyOutput("plot_turnover_reg"),
+                    ),
+                    fluidRow(
+                      details(
+                        inputId = "tbl_caseload_reg",
+                        label = "View chart as a table",
+                        help_text = (
+                          dataTableOutput("table_turnover_reg")
+                        )
                       )
                     ),
                   ),
