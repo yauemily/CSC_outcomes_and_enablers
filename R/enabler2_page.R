@@ -159,6 +159,20 @@ enabler2_tab <- function() {
                         )
                       )
                     ),
+                    h2("Turnover Rates by Local Authority"),
+                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                    p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
+                    br(),
+                    plotlyOutput("plot_turnover_la"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_turnover_la",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_turnover_la")
+                      )
+                    ),
                   ),
                   
                   
