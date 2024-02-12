@@ -303,7 +303,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      testing_plot_function(filtered_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate FTE %')%>%
+      testing_plot_function(filtered_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -367,7 +367,7 @@ server <- function(input, output, session) {
         turnover_rate_fte_perc
       ) %>%
         arrange(desc(turnover_rate_fte_perc)),
-      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate FTE %"),
+      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -412,7 +412,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate FTE %"),
+      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -582,7 +582,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Agency Rate %"),
+      colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -724,7 +724,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate %"),
+      colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE

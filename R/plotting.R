@@ -263,7 +263,7 @@ plot_turnover_reg <- function(){
   
   ggplot( turnover_reg_data , aes(`geo_breakdown`, `turnover_rate_fte_perc`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Turnover Rate FTE %") +
+    ylab("Turnover Rate (FTE) %") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -330,7 +330,7 @@ plot_turnover_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   
   p <- ggplot(turnover_reg_data, aes(`geo_breakdown`, `turnover_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Turnover Rate FTE %") +
+    ylab("Turnover Rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -505,7 +505,7 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
   
   p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Vacancy Rate %") +
+    ylab("Vacancy Rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -635,7 +635,7 @@ plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl 
   
   p <- ggplot(agency_rates_data, aes(`geo_breakdown`, `agency_worker_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Agency Rate %") +
+    ylab("Agency Worker Rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -765,7 +765,7 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
   
   p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Vacancy Rate %") +
+    ylab("Vacancy Rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(

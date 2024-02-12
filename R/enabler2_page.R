@@ -145,7 +145,7 @@ enabler2_tab <- function() {
                       )
                     ),
                     fluidRow(
-                      h2("Social Worker Turnover by Region"),
+                      h2("Turnover Rates by Region"),
                       p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                       br(),
                       plotlyOutput("plot_turnover_reg"),
