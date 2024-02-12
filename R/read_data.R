@@ -250,6 +250,7 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
   df_Inner_London <- read.csv(file3, check.names = FALSE)
   df_Outer_London <- read.csv(file3, check.names = FALSE)
   df_Kingston_upon_Thames <- read.csv(file3, check.names = FALSE)
+  df_North_Northamptonshire <- read.csv(file3, check.names = FALSE)
   
   # Rename the columns to make them consistent across all data frames
   names(df_regions) <- c("Code", "Name", "EthnicGroupCode", "EthnicGroup", "Observation")
@@ -258,12 +259,14 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
   names(df_Inner_London) <- c("Code", "Name", "EthnicGroupCode", "EthnicGroup", "Observation")
   names(df_Outer_London) <- c("Code", "Name", "EthnicGroupCode", "EthnicGroup", "Observation")
   names(df_Kingston_upon_Thames) <- c("Code", "Name", "EthnicGroupCode", "EthnicGroup", "Observation")
+  names( df_North_Northamptonshire) <- c("Code", "Name", "EthnicGroupCode", "EthnicGroup", "Observation")
   
   # Add 'geographic_level' column to each dataframe
    df_regions$geographic_level <- "Regional"
   df_countries$geographic_level <- "National"
   df_authorities$geographic_level <- "Local authority"
   df_Kingston_upon_Thames$geographic_level <- "Local authority"
+  df_North_Northamptonshire$geographic_level <- "Local authority"
   df_Inner_London$geographic_level <- "Regional"
   df_Outer_London$geographic_level <- "Regional"
   
@@ -275,11 +278,13 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
     mutate(Name = "National",Code = "E92000001") 
   
   #select just Richmond upon Thames and Kingston upon Thames
-  df_Kingston_upon_Thames <-  df_Kingston_upon_Thames[df_Kingston_upon_Thames$Code %in%  c("E09000021",
-                                                                   "E09000027"), ]
+  df_Kingston_upon_Thames <-  df_Kingston_upon_Thames[df_Kingston_upon_Thames$Code %in%  c("E09000021", "E09000027"), ]
   
-  #remove Richmond upon Thames and Kingston upon Thames from LA file
-  df_authorities <- df_authorities[!(df_authorities$Code %in% c("E09000021", "E09000027")), ]
+  #select just North Northamptonshire and West Northamptonshire
+  df_North_Northamptonshire <-  df_North_Northamptonshire[df_North_Northamptonshire$Code %in%  c("E06000061", "E06000062"), ]
+  
+  #remove Richmond upon Thames, Kingston upon Thames, North Northmptonshire & West Northamptonshire from LA file
+  df_authorities <- df_authorities[!(df_authorities$Code %in% c("E09000021", "E09000027","E06000061", "E06000062")), ]
                                                                    
   #include just inner London LAs to make inner London data
     df_Inner_London <-  df_Inner_London[df_Inner_London$Code %in%  c("E09000001",
@@ -321,11 +326,14 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
   
     #create Kingston upon Thames data (they submit a joint workforce return with Richmond)
     df_Kingston_upon_Thames <- df_Kingston_upon_Thames %>%
-      mutate(Name = "Kingston upon Thames",Code = "E09000021") %>%
+      mutate(Name = "Kingston upon Thames",Code = "E09000021") %>%
       group_by(Code,Name,EthnicGroupCode,EthnicGroup, geographic_level)   %>%
       summarise(Observation = sum(Observation), .groups = "drop")
     
-    
+    df_North_Northamptonshire <- df_North_Northamptonshire %>%
+      mutate(Name = "North Northamptonshire",Code = "E06000061") %>%
+      group_by(Code,Name,EthnicGroupCode,EthnicGroup, geographic_level)   %>%
+      summarise(Observation = sum(Observation), .groups = "drop")
     
       #create outer London data
     df_Inner_London <- df_Inner_London %>%
@@ -340,7 +348,7 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
       summarise(Observation = sum(Observation), .groups = "drop")
     
   # Combine the data frames
-  ethnic_population_data <- rbind(df_regions, df_countries, df_authorities,df_Inner_London, df_Outer_London, df_Kingston_upon_Thames)
+  ethnic_population_data <- rbind(df_regions, df_countries, df_authorities,df_Inner_London, df_Outer_London, df_Kingston_upon_Thames, df_North_Northamptonshire)
   ethnic_population_data <- subset(ethnic_population_data, select = -c(EthnicGroupCode))
 
   # Remove rows where 'EthnicGroup' equals 'Does not apply'
