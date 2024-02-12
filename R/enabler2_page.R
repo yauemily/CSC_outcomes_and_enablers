@@ -71,7 +71,12 @@ enabler2_tab <- function() {
       br(),
       gov_row(
         br(),
-        p(htmlOutput("enabler1_choice_text1"),htmlOutput("enabler1_choice_text2") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown != 'Richmond upon Thames')",
+          p(htmlOutput("enabler1_choice_text1"),htmlOutput("enabler1_choice_text2") )),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown == 'Richmond upon Thames')",
+          p("Please select ", strong("Kingston upon Thames"), " to view jointly reported statistics for Kingston upon Thames and Richmond upon Thames.") ),
         #p(htmlOutput("enabler1_choice_text2")),
         br(),
         div(
