@@ -418,3 +418,36 @@ merge_dataframes <- function() {
   return(merged_data)
 }
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# CLA rate per 10k children data
+read_cla_rate_data <- function(file = "data/cla_number_and_rate_per_10k_children.csv"){
+  cla_rate_data <- read.csv(file)
+  cla_rate_data <- colClean(cla_rate_data)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+    select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, population_count, population_estimate, number, rate_per_10000) %>% distinct()
+  
+  workforce_data <- convert_perc_cols_to_numeric(cla_rate_data)
+  
+  return(cla_rate_data)
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# CLA rate per 10k children data
+read_cla_placement_data <- function(file = "data/la_children_who_started_to_be_looked_after_during_the_year.csv"){
+  cla_placement_data <- read.csv(file)
+  cla_placement_data <- colClean(cla_placement_data)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+    select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, cla_group, characteristic, number, percentage) %>% distinct()
+  
+  workforce_data <- convert_perc_cols_to_numeric(cla_placement_data)
+  
+  return(cla_placement_data)
+}

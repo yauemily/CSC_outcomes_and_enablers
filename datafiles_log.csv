@@ -10,4 +10,6 @@ data/csww_workforce_role_by_ethnicity_2019_to_2022.csv,published
 data/ons-ethnic-population-la.csv,published
 data/ons-ethnic-population-reg.csv,published
 data/ons-ethnic-population-nat.csv,published
-
+data/la_cla_during_year_new_placements.csv,published
+data/cla_number_and_rate_per_10k_children.csv,published
+data/la_children_who_started_to_be_looked_after_during_the_year.csv,published
