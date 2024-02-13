@@ -124,7 +124,7 @@ ui <- function(input, output, session) {
       well = FALSE,
       introductionPanel(),
       #dashboard_panel(),
-      #outcome1_tab(),
+      outcome1_tab(),
       #outcome2_tab(),
       #outcome3_tab(),
       #outcome4_tab(),
