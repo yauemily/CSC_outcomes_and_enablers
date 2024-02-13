@@ -124,10 +124,14 @@ enabler2_tab <- function() {
                 ),
                 br(),
               ),
-              fluidRow(
-                column(
-                  width = 12,
-                  # Social Worker Turnover ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              #fluidRow(
+              #  column(
+              #    width = 12,
+                  
+                  accordion(
+                    accordion_panel(
+                      "Social Worker Turnover",
+                      # Social Worker Turnover ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
                     h2("Social Worker Turnover"),
                     
@@ -191,9 +195,10 @@ enabler2_tab <- function() {
                       )
                     ),
                   ),
-                  
-                  
-                  # Agency Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ),
+                  accordion_panel(
+                    "Agency Rates",
+                    # Agency Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
                     h2("Agency Rates"),
                     p("Prioritising a stable and permanent workforce allows children, young people and families to maintain consistent relationships with practitioners.
@@ -262,8 +267,10 @@ enabler2_tab <- function() {
                       )
                     ),
                   ),
-                  
-                  # Vacancy Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ),
+                  accordion_panel(
+                    "Vacancy Rates",
+                    # Vacancy Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
                     h2("Vacancy Rates"),
                     p("A workforce strategy should develop and maintain an effective workforce. With a well-supported workforce vacancy rates should remain low."),
@@ -328,8 +335,11 @@ enabler2_tab <- function() {
                       )
                     ),
                   ) 
-                ),
-              ),
+                  )
+                  )
+                  
+              #  ),
+            #  ),
             ),
             # Second Domain - "quality of support for children and families" -------------
             tabPanel(
