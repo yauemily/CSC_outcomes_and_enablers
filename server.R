@@ -176,6 +176,7 @@ server <- function(input, output, session) {
     }
   )
   
+  
   output$choice_text_test <- renderText({
     c(paste0("you have selected",input$select_geography))
   })
@@ -251,6 +252,29 @@ server <- function(input, output, session) {
   })
   
   output$enabler1_choice_text2 <- renderText({
+    #Checking to see if they picked national average comparison
+    if (!is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)) {
+      paste0("You have also selected to compare with the ", tags$b("National Average."))
+      # If they picked regional comparison
+    } else if (is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)) {
+      paste0("You have also selected to compare with the ", tags$b("Regional average."))
+      #Picked both national and regional comparison
+    } else if (!is.null(input$national_comparison_checkbox) && !is.null(input$region_comparison_checkbox)) {
+      paste0("You have also selected to compare with the ", tags$b("National average"), " and the ", tags$b("Regional average."))
+    }
+  })
+  
+  output$outcome1_choice_text1 <- renderText({
+    if (input$select_geography == "National") {
+      paste0("You have selected ", tags$b(input$select_geography), " level statistics on ", tags$b("England"), ".")
+    } else if (input$select_geography == "Regional") {
+      paste0("You have selected ", tags$b(input$select_geography), " level statistics for ", tags$b(input$geographic_breakdown), ".")
+    } else if (input$select_geography == "Local authority") {
+      paste0("You have selected ", tags$b(input$select_geography), " level statistics for ", tags$b(input$geographic_breakdown), ", in ", region(), ".")
+    }
+  })
+  
+  output$outcome1_choice_text2 <- renderText({
     #Checking to see if they picked national average comparison
     if (!is.null(input$national_comparison_checkbox) && is.null(input$region_comparison_checkbox)) {
       paste0("You have also selected to compare with the ", tags$b("National Average."))
@@ -1095,7 +1119,33 @@ server <- function(input, output, session) {
   })
   
   
+  # CLA rate headline
+  output$cla_rate_headline_txt <- renderText({
+    stat <- format(cla_rates %>% filter(time_period == max(cla_rates$time_period) & geo_breakdown %in% input$geographic_breakdown & population_count == "Children starting to be looked after each year") 
+                   %>% select(rate_per_10000), nsmall = 1)
+    paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cla_rates$time_period),")", "</p>")
+  })
   
+  output$plot_cla_rate <- plotly::renderPlotly({
+    ggplotly(
+      plot_cla_rate(input$geographic_level, input$geographic_breakdown) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$table_cla_rate <- renderDataTable({
+    datatable(
+      cla_rates %>% 
+        filter(geographic_level %in% input$geographic_level, geo_breakdown %in% input$geographic_breakdown, population_count == "Children starting to be looked after each year") %>% 
+        select(time_period, geo_breakdown, rate_per_10000),
+      colnames = c("Time Period", "Geographical Breakdown", "CLA Rate Per 10000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
   
   # Don't touch the code below -----------------------
 
