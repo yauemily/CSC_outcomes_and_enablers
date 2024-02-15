@@ -119,7 +119,10 @@ workforce_char <- read_workforce_char_data()
 workforce_eth <- read_workforce_eth_data()
 workforce_eth_seniority <- read_workforce_eth_seniority_data()
 population_eth <- read_ethnic_population_data()
-combined_ethnicity_data <- merge_dataframes()
+combined_ethnicity_data <- merge_eth_dataframes()
+cla_rates <- read_cla_rate_data()
+cla_placements <- read_cla_placement_data()
+combined_cla_data <- merge_cla_dataframes()
 
 #Dropdowns
 choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National")%>% distinct()
