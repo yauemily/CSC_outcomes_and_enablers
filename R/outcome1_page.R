@@ -135,7 +135,7 @@ outcome1_tab <- function(){
                     "Rate of children in need at 31 March, per 10,000 children in the general population."
                   )),
                   # p("plots go here"),
-                  #plotlyOutput("plot_cla_rate"),
+                  plotlyOutput("plot_cin_rate"),
                   br(),
                   # Expandable for the table alternative
                   details(
@@ -161,10 +161,40 @@ outcome1_tab <- function(){
                         "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/characteristics-of-children-in-need-methodology", "Children in need methodology."))
                     )
                   )
+                ),
+                fluidRow(
+                  h2("Children In Need Rates by Region"),
+                  p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                  br(),
+                  plotlyOutput("plot_cin_rate_reg"),
+                ),
+                fluidRow(
+                  details(
+                    inputId = "tbl_cin_rates_reg",
+                    label = "View chart as a table",
+                    help_text = (
+                      dataTableOutput("table_cin_rates_reg")
+                    )
+                  )
+                ),
+                h2("CIN Rates by Local Authority"),
+                p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                p(sprintf("The graph represents data from %s.", max(cin_rates$time_period))),
+                br(),
+                plotlyOutput("plot_cin_rates_la"),
+                br(),
+                br(),
+                details(
+                  inputId = "tbl_cin_rates_la",
+                  label = "View chart as a table",
+                  help_text = (
+                    dataTableOutput("table_cin_rates_la")
+                   )
+                  ),
                 )
+                ),
               ),
-              )
-            ),
+            
                      tabPanel(
               "Child wellbeing and development",
               fluidRow(

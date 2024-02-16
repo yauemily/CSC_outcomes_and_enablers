@@ -1147,6 +1147,102 @@ server <- function(input, output, session) {
     )
   })
   
+  
+  # CIN rate headline
+  output$cin_rate_headline_txt <- renderText({
+   stat <- format(cin_rates %>% filter(time_period == max(cin_rates$time_period) & geo_breakdown %in% input$geographic_breakdown) 
+                 %>% select(CIN_rate), nsmall = 1)
+    paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_rates$time_period),")", "</p>")
+  })
+  
+  #CIN table alternative
+  output$table_cin_rate <- renderDataTable({
+    datatable(
+      cin_rates %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown) %>% 
+        select(time_period, geo_breakdown, CIN_rate),
+      colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  
+  #cin rate plot by region
+  output$plot_cin_rate_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_rate_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  #cin rate table by region
+  output$table_cin_rates_reg <- renderDataTable({
+    datatable(
+      cin_rates %>% filter(geographic_level == 'Regional', time_period == max(cin_rates$time_period)) %>% select(
+        time_period, geo_breakdown,
+        CIN_rate
+      ) %>%
+        arrange(desc(CIN_rate)),
+      colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  #cin rate table by LA
+  output$table_cin_rates_la <- renderDataTable({
+    if (input$select_geography == "Regional") {
+      if (input$geographic_breakdown == "London") {
+        # Include both Inner London and Outer London
+        location <- location_data %>%
+          filter(region_name %in% c("Inner London", "Outer London")) %>%
+          pull(la_name)
+      } else {
+        # Get the la_name values within the selected region_name
+        location <- location_data %>%
+          filter(region_name == input$geographic_breakdown) %>%
+          pull(la_name)
+      }
+      
+      data <- cin_rates %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+        select(time_period, geo_breakdown, CIN_rate)  %>%
+        arrange(desc(CIN_rate))
+      
+    } else if (input$select_geography %in% c("Local authority", "National")) {
+      data <- cin_rates %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
+        time_period, geo_breakdown,
+        CIN_rate
+      ) %>%
+        arrange(desc(CIN_rate))
+    }
+    
+    datatable(
+      data,
+      colnames = c("Time Period", "Geographical Breakdown", "CIN rates per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  
+  #cin rate  chart by LA
+  output$plot_cin_rates_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_rates_la(input$geographic_breakdown, input$select_geography) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
   # Don't touch the code below -----------------------
 
   observeEvent(input$go, {

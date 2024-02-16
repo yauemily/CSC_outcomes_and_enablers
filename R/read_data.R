@@ -473,3 +473,33 @@ merge_cla_dataframes <- function() {
   
   return(merged_data)
 }
+
+# CIN rate per 10k children data
+read_cin_rate_data <- function(file = "data/b1_children_in_need_2013_to_2023.csv"){
+  cin_rate_data <- read.csv(file)
+  cin_rate_data <- colClean(cin_rate_data)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+      mutate(At31_episodes = case_when(
+        At31_episodes == "Z" ~ NA,
+        At31_episodes == "x"  ~ NA,
+        At31_episodes == "c"  ~ NA,
+      TRUE ~ as.numeric(At31_episodes)))   %>%
+    mutate(At31_episodes_rate = case_when(
+      At31_episodes_rate == "Z" ~ NA,
+      At31_episodes_rate == "x"  ~ NA,
+      At31_episodes_rate == "c"  ~ NA,
+      TRUE ~ as.numeric(At31_episodes_rate)))   %>%
+        select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, At31_episodes, At31_episodes_rate) %>% distinct() %>%
+    rename(CIN_rate = At31_episodes_rate)
+  
+  
+  return(cin_rate_data)
+}
+
+
+
+
