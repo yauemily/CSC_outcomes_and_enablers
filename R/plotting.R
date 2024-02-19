@@ -1,4 +1,4 @@
-# Template sample data charts
+# Template sample data charts ----
 createAvgRevTimeSeries <- function(df, inputArea) {
   ggplot(df, aes(
     x = year,
@@ -112,6 +112,114 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
     )
 }
 
+# By LA bar chart repeat function ----
+by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_lvl = NULL, yvalue, yaxis_title){
+  
+  #This function does not need to be defined again if it is exactly the same as the one defined in the
+  #read_data.R file and is called in global.R
+  # GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+  #   FACT_location <- read.csv(file)
+  #   FACT_location <- FACT_location%>%
+  #     select(region_name, la_name) %>%
+  #     filter((la_name != '')) %>%
+  #     unique()
+  # }
+  #location_data <- GET_location(file = "data/csww_headline_measures_2017_to_2022.csv")
+  
+  if (selected_geo_lvl == "Local authority") {
+    turnover_reg_data <- dataset %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, `yvalue`) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`),
+             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+  } else if (selected_geo_lvl == "National") {
+    turnover_reg_data <- dataset %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, `yvalue`) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`),
+             is_selected = "Not Selected")
+  } else if (selected_geo_lvl == "Regional") {
+    
+    # Check if the selected region is London
+    if (selected_geo_breakdown == "London") {
+      # Include both Inner London and Outer London
+      location <- location_data %>%
+        filter(region_name %in% c("Inner London", "Outer London")) %>%
+        pull(la_name)
+    } else {
+      # Get the la_name values within the selected region_name
+      location <- location_data %>%
+        filter(region_name == selected_geo_breakdown) %>%
+        pull(la_name)
+    }
+    
+    turnover_reg_data <- dataset %>%
+      filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, `yvalue`) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`),
+             is_selected = "Selected")
+  }
+  
+  
+  p <- ggplot(turnover_reg_data, aes( x =`geo_breakdown`, y=!!sym(yvalue), fill = `is_selected`)) +
+    geom_col(position = position_dodge()) +
+    ylab(yaxis_title)+
+    #ylab("Turnover Rate (FTE) %") +
+    xlab("") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "LA Selection",
+      values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
+    )
+  
+  # Conditionally set the x-axis labels and ticks
+  if (selected_geo_lvl == "Regional") {
+    p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
+  } else {
+    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  }
+  
+  return(p)
+}
+
+
+
+# By Region bar chart repeat function -----
+
+by_region_plot_function <- function(dataset, yvalue, yaxis_title){
+  turnover_reg_data <- dataset %>%
+    filter(geographic_level == "Regional", time_period == max(time_period)) %>%
+    select(time_period, geo_breakdown, `yvalue`) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`)) # Order by turnover rate
+  
+  ggplot(turnover_reg_data , aes(x = `geo_breakdown`, y=!!sym(yvalue), fill = factor(time_period))) +
+    geom_col(position = position_dodge()) +
+    ylab(yaxis_title)+
+    #ylab("Turnover Rate (FTE) %") +
+    xlab("Region") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "Time Period",
+      #breaks = unique(c("England", inputArea)),
+      values = '#12436D'#gss_colour_pallette
+    )
+}
+
+
 
 # Enabler 1 - Workforce charts ----
 # Social Worker Turnover -------
@@ -216,81 +324,81 @@ plot_turnover_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   return(p)
 }
 
+# I think this is duplicated further below
+# plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
+#   
+#   GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+#     FACT_location <- read.csv(file)
+#     FACT_location <- FACT_location%>%
+#       select(region_name, la_name) %>%
+#       filter((la_name != '')) %>%
+#       unique()
+#   }
+#   
+#   location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+#   
+#   if (selected_geo_lvl == "Local authority") {
+#     agency_rates_data <- workforce_data %>%
+#       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
+#              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+#   } else if (selected_geo_lvl == "National") {
+#     agency_rates_data <- workforce_data %>%
+#       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
+#              is_selected = "Not Selected")
+#   } else if (selected_geo_lvl == "Regional") {
+#     
+#     # Check if the selected region is London
+#     if (selected_geo_breakdown == "London") {
+#       # Include both Inner London and Outer London
+#       location <- location_data %>%
+#         filter(region_name %in% c("Inner London", "Outer London")) %>%
+#         pull(la_name)
+#     } else {
+#       # Get the la_name values within the selected region_name
+#       location <- location_data %>%
+#         filter(region_name == selected_geo_breakdown) %>%
+#         pull(la_name)
+#     }
+#     
+#     agency_rates_data <- workforce_data %>%
+#       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
+#              is_selected = "Selected")
+#   }
+#   
+#   
+#   p <- ggplot(agency_rates_data, aes(`geo_breakdown`, `agency_worker_rate_fte_perc`, fill = `is_selected`)) +
+#     geom_col(position = position_dodge()) +
+#     ylab("Agency Rate %") +
+#     xlab("") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 100))+
+#     scale_fill_manual(
+#       "LA Selection",
+#       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
+#     )
+#   
+#   # Conditionally set the x-axis labels and ticks
+#   if (selected_geo_lvl == "Regional") {
+#     p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
+#   } else {
+#     p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+#   }
+#   
+#   return(p)
+# }
 
-plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
-  
-  GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
-    FACT_location <- read.csv(file)
-    FACT_location <- FACT_location%>%
-      select(region_name, la_name) %>%
-      filter((la_name != '')) %>%
-      unique()
-  }
-  
-  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
-  
-  if (selected_geo_lvl == "Local authority") {
-    agency_rates_data <- workforce_data %>%
-      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
-             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
-  } else if (selected_geo_lvl == "National") {
-    agency_rates_data <- workforce_data %>%
-      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
-             is_selected = "Not Selected")
-  } else if (selected_geo_lvl == "Regional") {
-    
-    # Check if the selected region is London
-    if (selected_geo_breakdown == "London") {
-      # Include both Inner London and Outer London
-      location <- location_data %>%
-        filter(region_name %in% c("Inner London", "Outer London")) %>%
-        pull(la_name)
-    } else {
-      # Get the la_name values within the selected region_name
-      location <- location_data %>%
-        filter(region_name == selected_geo_breakdown) %>%
-        pull(la_name)
-    }
-    
-    agency_rates_data <- workforce_data %>%
-      filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, agency_worker_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -agency_worker_rate_fte_perc), # Order by caseload_fte
-             is_selected = "Selected")
-  }
-  
-  
-  p <- ggplot(agency_rates_data, aes(`geo_breakdown`, `agency_worker_rate_fte_perc`, fill = `is_selected`)) +
-    geom_col(position = position_dodge()) +
-    ylab("Agency Rate %") +
-    xlab("") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    scale_fill_manual(
-      "LA Selection",
-      values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
-    )
-  
-  # Conditionally set the x-axis labels and ticks
-  if (selected_geo_lvl == "Regional") {
-    p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
-  } else {
-    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-  }
-  
-  return(p)
-}
-
-# Vacancy Rate -----
+# Vacancy Rate Duplicate delete later-----
 # 
 # plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
 #   
