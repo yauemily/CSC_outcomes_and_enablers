@@ -327,7 +327,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      testing_plot_function(filtered_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography, input$geographic_breakdown,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -482,7 +482,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      testing_plot_function(filtered_data, input$select_geography, input$geographic_breakdown,'agency_worker_rate_fte_perc', 'Agency Worker Rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography, input$geographic_breakdown,'agency_worker_rate_fte_perc', 'Agency Worker Rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -651,7 +651,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      testing_plot_function(filtered_data, input$select_geography, input$geographic_breakdown,'vacancy_rate_fte_perc', 'Vacancy Rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography, input$geographic_breakdown,'vacancy_rate_fte_perc', 'Vacancy Rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -832,7 +832,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      testing_plot_function(filtered_data, input$select_geography, input$geographic_breakdown,'caseload_fte', 'Average Caseload (FTE)')%>%
+      plotly_time_series(filtered_data, input$select_geography, input$geographic_breakdown,'caseload_fte', 'Average Caseload (FTE)')%>%
         config(displayModeBar = F),
       height = 420
     )
