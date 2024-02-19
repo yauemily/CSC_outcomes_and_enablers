@@ -387,7 +387,7 @@ total_observation <- ethnic_population_data %>%
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-merge_dataframes <- function() {
+merge_eth_dataframes <- function() {
   # Read the data
   workforce_eth <- read_workforce_eth_data()
   population_eth <- read_ethnic_population_data()
@@ -418,3 +418,58 @@ merge_dataframes <- function() {
   return(merged_data)
 }
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# CLA rate per 10k children data
+read_cla_rate_data <- function(file = "data/cla_number_and_rate_per_10k_children.csv"){
+  cla_rate_data <- read.csv(file)
+  cla_rate_data <- colClean(cla_rate_data)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+    select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, population_count, population_estimate, number, rate_per_10000) %>% distinct()
+  
+  
+  return(cla_rate_data)
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# CLA rate per 10k children data
+read_cla_placement_data <- function(file = "data/la_children_who_started_to_be_looked_after_during_the_year.csv"){
+  cla_placement_data <- read.csv(file)
+  cla_placement_data <- colClean(cla_placement_data)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+    select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, cla_group, characteristic, number, percentage) %>% distinct()
+  
+  return(cla_placement_data)
+}
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+merge_cla_dataframes <- function() {
+  
+  # Read the data
+  cla_rates <- read_cla_rate_data()
+  cla_placements <- read_cla_placement_data()
+  
+  
+  # Merge the two data frames
+  # merged_data <- left_join(workforce_eth, population_eth, by = c("code" = "Code"))
+  
+  # Rename the columns to make it clear which dataset they come from
+  cla_rates <- rename(cla_rates, 
+                          rates_number = number)
+  
+  cla_placements <- rename(cla_placements, 
+                           placements_number = number)
+  
+  #merge two data frames
+  merged_data = merge(cla_rates, cla_placements, by.x=c('geo_breakdown', 'time_period', 'geographic_level', 'region_code', 'region_name', 'new_la_code', 'la_name'), 
+                                                 by.y=c('geo_breakdown', 'time_period', 'geographic_level', 'region_code', 'region_name', 'new_la_code', 'la_name'))
+  
+  return(merged_data)
+}
