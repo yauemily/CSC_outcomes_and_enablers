@@ -115,32 +115,6 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
 
 # Enabler 1 - Workforce charts ----
 # Social Worker Turnover -------
-plot_social_worker_turnover <- function(geo_lvl, geo_break){
-  social_worker_data <- workforce_data %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
-    select(
-      time_period, geo_breakdown,
-      turnover_rate_fte_perc
-    )
-  ggplot(social_worker_data, aes(`time_period`, `turnover_rate_fte_perc`, color = geo_breakdown))+
-    geom_line() +
-    ylab("Social worker Turnover rate (FTE) (%)")+
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-    )
-}
 
 #bar chart by region
 plot_turnover_reg <- function(){
