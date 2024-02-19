@@ -19,7 +19,7 @@ enabler2_tab <- function() {
               selectizeInput(
                 inputId = "select_geography",
                 label = "Select a geographical level:",
-                choices = distinct(dropdown_choices['geographic_level']),
+                choices = distinct(workforce_data['geographic_level']),
                 selected = NULL,
                 multiple = FALSE,
                 options = NULL

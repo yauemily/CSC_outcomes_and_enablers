@@ -290,135 +290,109 @@ plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl 
   return(p)
 }
 
-# Vacancy Rate over time ----
-plot_vacancy_rate <- function(geo_lvl, geo_break) {
-  vacancy_data <- workforce_data %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
-    select(
-      time_period, geo_breakdown,
-      vacancy_rate_fte_perc
-    )
-  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
-    geom_line() +
-    ylab("Vacancy rate (FTE) (%)") +
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-    )
-}
-
-plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
-  
-  GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
-    FACT_location <- read.csv(file)
-    FACT_location <- FACT_location%>%
-      select(region_name, la_name) %>%
-      filter((la_name != '')) %>%
-      unique()
-  }
-  
-  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
-  
-  if (selected_geo_lvl == "Local authority") {
-    vacancy_data <- workforce_data %>%
-      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
-             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
-  } else if (selected_geo_lvl == "National") {
-    vacancy_data <- workforce_data %>%
-      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
-             is_selected = "Not Selected")
-  } else if (selected_geo_lvl == "Regional") {
-    
-    # Check if the selected region is London
-    if (selected_geo_breakdown == "London") {
-      # Include both Inner London and Outer London
-      location <- location_data %>%
-        filter(region_name %in% c("Inner London", "Outer London")) %>%
-        pull(la_name)
-    } else {
-      # Get the la_name values within the selected region_name
-      location <- location_data %>%
-        filter(region_name == selected_geo_breakdown) %>%
-        pull(la_name)
-    }
-    
-    vacancy_data <- workforce_data %>%
-      filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
-             is_selected = "Selected")
-  }
-  
-  
-  p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
-    geom_col(position = position_dodge()) +
-    ylab("Vacancy Rate (FTE) %") +
-    xlab("") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    scale_fill_manual(
-      "LA Selection",
-      values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
-    )
-  
-  # Conditionally set the x-axis labels and ticks
-  if (selected_geo_lvl == "Regional") {
-    p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
-  } else {
-    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-  }
-  
-  return(p)
-}
+# Vacancy Rate -----
+# 
+# plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
+#   
+#   GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+#     FACT_location <- read.csv(file)
+#     FACT_location <- FACT_location%>%
+#       select(region_name, la_name) %>%
+#       filter((la_name != '')) %>%
+#       unique()
+#   }
+#   
+#   location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+#   
+#   if (selected_geo_lvl == "Local authority") {
+#     vacancy_data <- workforce_data %>%
+#       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+#              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+#   } else if (selected_geo_lvl == "National") {
+#     vacancy_data <- workforce_data %>%
+#       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+#              is_selected = "Not Selected")
+#   } else if (selected_geo_lvl == "Regional") {
+#     
+#     # Check if the selected region is London
+#     if (selected_geo_breakdown == "London") {
+#       # Include both Inner London and Outer London
+#       location <- location_data %>%
+#         filter(region_name %in% c("Inner London", "Outer London")) %>%
+#         pull(la_name)
+#     } else {
+#       # Get the la_name values within the selected region_name
+#       location <- location_data %>%
+#         filter(region_name == selected_geo_breakdown) %>%
+#         pull(la_name)
+#     }
+#     
+#     vacancy_data <- workforce_data %>%
+#       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+#              is_selected = "Selected")
+#   }
+#   
+#   
+#   p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
+#     geom_col(position = position_dodge()) +
+#     ylab("Vacancy Rate (FTE) %") +
+#     xlab("") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 100))+
+#     scale_fill_manual(
+#       "LA Selection",
+#       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
+#     )
+#   
+#   # Conditionally set the x-axis labels and ticks
+#   if (selected_geo_lvl == "Regional") {
+#     p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
+#   } else {
+#     p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+#   }
+#   
+#   return(p)
+# }
 
 
 # Agency Rates ----
-plt_agency_rates <- function(geo_lvl, geo_break){
-  agency_rates_data <- workforce_data %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
-    select(
-      time_period, geo_breakdown,
-      agency_worker_rate_fte_perc
-    )
-  ggplot(agency_rates_data, aes(`time_period`, `agency_worker_rate_fte_perc`, color = geo_breakdown))+
-    geom_line() +
-    ylab("Agency worker rate (FTE) (%)")+
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-    )
-}
+# plt_agency_rates <- function(geo_lvl, geo_break){
+#   agency_rates_data <- workforce_data %>%
+#     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
+#     select(
+#       time_period, geo_breakdown,
+#       agency_worker_rate_fte_perc
+#     )
+#   ggplot(agency_rates_data, aes(`time_period`, `agency_worker_rate_fte_perc`, color = geo_breakdown))+
+#     geom_line() +
+#     ylab("Agency worker rate (FTE) (%)")+
+#     xlab("Time Period") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.x = element_text(margin = margin(t = 12)),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 100))+
+#     labs(color='Breakdown')+
+#     scale_color_manual(
+#       "Breakdown",
+#       #breaks = unique(c("England", inputArea)),
+#       values = gss_colour_pallette
+#     )
+# }
 
 #bar chart by region
 plot_agency_reg <- function(){
@@ -521,34 +495,7 @@ plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl 
   return(p)
 }
 
-# Vacancy Rate over time ----
-plot_vacancy_rate <- function(geo_lvl, geo_break) {
-  vacancy_data <- workforce_data %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
-    select(
-      time_period, geo_breakdown,
-      vacancy_rate_fte_perc
-    )
-  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
-    geom_line() +
-    ylab("Vacancy rate (FTE) (%)") +
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-    )
-}
-
+# Vacancy Rate -----
 
 #bar chart by region
 plot_vacancy_reg <- function(){
@@ -653,14 +600,16 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
 
 
 # Worker Caseloads ----
-# plotly_caseloads <- function(level, breakdown){
-#   filtered_data <- workforce_data %>%
-#     filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
-#     select(time_period, geo_breakdown, `caseload_fte`)
-#   
-#   ggplot(filtered_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown))+
+# plot_caseload_rate <- function(geo_lvl, geo_break) {
+#   vacancy_data <- workforce_data %>%
+#     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
+#     select(
+#       time_period, geo_breakdown,
+#       caseload_fte
+#     )
+#   ggplot(vacancy_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown)) +
 #     geom_line() +
-#     #ylab("Social worker Turnover rate (FTE) (%)")+
+#     ylab("Average Caseload (FTE)") +
 #     xlab("Time Period") +
 #     theme_classic() +
 #     theme(
@@ -669,68 +618,14 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
 #       axis.title.y = element_text(margin = margin(r = 12)),
 #       axis.line = element_line(size = 1.0)
 #     ) +
-#     scale_y_continuous(limits = c(0, 50))+
-#     labs(color='Breakdown')#+
-#   #scale_color_manual(
-#   #"Breakdown",
-#   #breaks = unique(c("England", inputArea)),
-#   # values = gss_colour_pallette
-#   #)
-# }
-
-#
-#plot_caseloads <- function(){
-#   caseload_data <- workforce_data %>%
-#     filter(geographic_level == "Regional") %>%
-#     select(time_period, geo_breakdown, caseload_fte)
-#   
-#   ggplot(caseload_data, aes(`time_period`, `caseload_fte`, fill = geo_breakdown)) +
-#     geom_col() +
-#     ylab("Average Caseload (FTE)") +
-#     xlab("Time Period") +
-#     theme_classic() +
-#     theme(
-#       text = element_text(size = 12),
-#       axis.text.x = element_text(angle = 300),
-#       axis.title.x = element_blank(),
-#       axis.title.y = element_text(margin = margin(r = 12)),
-#       axis.line = element_line(size = 1.0)
-#     ) +
-#     scale_y_continuous(limits = c(0, 30))+
-#     scale_fill_manual(
+#     scale_y_continuous(limits = c(0, 35))+
+#     labs(color='Breakdown')+
+#     scale_color_manual(
 #       "Breakdown",
 #       #breaks = unique(c("England", inputArea)),
 #       values = gss_colour_pallette
 #     )
 # }
-
-
-plot_caseload_rate <- function(geo_lvl, geo_break) {
-  vacancy_data <- workforce_data %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
-    select(
-      time_period, geo_breakdown,
-      caseload_fte
-    )
-  ggplot(vacancy_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown)) +
-    geom_line() +
-    ylab("Average Caseload (FTE)") +
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 35))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-    )
-}
 
 #bar charts test
 plot_caseloads_reg <- function(){
@@ -833,6 +728,7 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
 }
 
 
+# Ethnicity Rate ----
 
 plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
   ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole == 'All children and family social workers', 

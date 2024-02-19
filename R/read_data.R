@@ -98,11 +98,11 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
   
   workforce_data <- convert_perc_cols_to_numeric(workforce_data)
   
-  colnames(workforce_data) <- c("Geographic Level","Geographic Breakdown", "Turnover Rate (FTE) %", "Time Period", "Absence Rate (FTE) %",
-                              "Agency Worker Rate (FTE) %", "Agency Cover Rate (FTE) %", "Vacancy Rate (FTE) %", "Vacancy Agency Cover Rate (FTE) %",
-                              "Turnover Rate Headcount %", "Agency Worker Rate Headcount %", "Caseload (FTE)")
-
-  
+  # colnames(workforce_data) <- c("Geographic Level","Geographic Breakdown", "Turnover Rate (FTE) %", "Time Period", "Absence Rate (FTE) %",
+  #                             "Agency Worker Rate (FTE) %", "Agency Cover Rate (FTE) %", "Vacancy Rate (FTE) %", "Vacancy Agency Cover Rate (FTE) %",
+  #                             "Turnover Rate Headcount %", "Agency Worker Rate Headcount %", "Caseload (FTE)")
+  # 
+  # 
   return(workforce_data)
 }
 
