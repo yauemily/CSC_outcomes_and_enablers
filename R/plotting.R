@@ -57,11 +57,41 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 # CSC charts
 
 
-testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title){
-  data <- dataset %>%
+#testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title){
+#  data <- dataset %>%
+#    select(time_period, geo_breakdown, `yvalue`)
+#  
+#  ggplot(data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+#    geom_line() +
+#    ylab(yaxis_title)+
+#    xlab("Time Period") +
+#    theme_classic() +
+#    theme(
+#      text = element_text(size = 12),
+#      axis.title.x = element_text(margin = margin(t = 12)),
+#      axis.title.y = element_text(margin = margin(r = 12)),
+#      axis.line = element_line(size = 1.0)
+#    ) +
+#    scale_y_continuous(limits = c(0, 100))+
+#    labs(color='Breakdown')+
+#    scale_color_manual(
+#      "Breakdown",
+#      #breaks = unique(c("England", inputArea)),
+#      values = gss_colour_pallette
+#    )
+#}
+
+
+
+#This is test code to try and create a function for the plots instead of lots of the same bits of code
+#at least a framework for the time series plots ----
+
+plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
+  filtered_data <- dataset %>%
+    #filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
     select(time_period, geo_breakdown, `yvalue`)
   
-  ggplot(data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
     geom_line() +
     ylab(yaxis_title)+
     xlab("Time Period") +
@@ -78,37 +108,7 @@ testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title
       "Breakdown",
       #breaks = unique(c("England", inputArea)),
       values = gss_colour_pallette
-    )
-}
-
-
-
-#This is test code to try and create a function for the plots instead of lots of the same bits of code
-#at least a framework for the time series plots ----
-
-plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
-  filtered_data <- dataset %>%
-    filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
-    select(time_period, geo_breakdown, `yvalue`)
-  
-  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
-    geom_line() +
-    ylab(yaxis_title)+
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')#+
-  #scale_color_manual(
-  #  "Breakdown",
-  #breaks = unique(c("England", inputArea)),
-  #  values = gss_colour_pallette
-  #)
+  )
 }
 
 # function for time series but with a national comparison
