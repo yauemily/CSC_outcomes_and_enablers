@@ -1122,7 +1122,7 @@ server <- function(input, output, session) {
   # CLA rate headline
   output$cla_rate_headline_txt <- renderText({
     stat <- format(cla_rates %>% filter(time_period == max(cla_rates$time_period) & geo_breakdown %in% input$geographic_breakdown & population_count == "Children starting to be looked after each year") 
-                   %>% select(rate_per_10000), nsmall = 1)
+                   %>% select(rate_per_10000), nsmall = 0)
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cla_rates$time_period),")", "</p>")
   })
   
@@ -1137,7 +1137,7 @@ server <- function(input, output, session) {
   output$table_cla_rate <- renderDataTable({
     datatable(
       cla_rates %>% 
-        filter(geographic_level %in% input$geographic_level, geo_breakdown %in% input$geographic_breakdown, population_count == "Children starting to be looked after each year") %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown, population_count == "Children starting to be looked after each year") %>% 
         select(time_period, geo_breakdown, rate_per_10000),
       colnames = c("Time Period", "Geographical Breakdown", "CLA Rate Per 10000"),
       options = list(

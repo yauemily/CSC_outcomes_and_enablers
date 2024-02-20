@@ -47,8 +47,6 @@ outcome1_tab <- function(){
       ),
       gov_row(
         br(),
-        h2("Confirmation Sentence"),
-        br(),
         div(
           tabsetPanel(
             id = "outcome1_panels",
