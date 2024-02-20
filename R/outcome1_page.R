@@ -55,6 +55,8 @@ outcome1_tab <- function(){
               "Family Stability",
               fluidRow(
                 br(),
+              ),
+              fluidRow(
                 column(
                   width = 4,
                   value_box(

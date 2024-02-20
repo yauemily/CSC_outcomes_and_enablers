@@ -331,9 +331,19 @@ template. 80% works well here to reduce white space on the right hand side.*/
 }
 
 /* Headline Stats boxes */
+.card, .well{
+  --bs-card-color: #1d70b8!important;
+  --bs-card-spacer-y: 0em;
+  --bs-card-spacer-x: 0em;
+}
+
 .bslib-value-box.default {
-    --bslib-value-box-bg-default: var(--bs-card-bg, #1d70b8);
+    --bslib-value-box-bg-default: #1d70b8 !important;
     border-radius: 4px;
+}
+
+.bslib-value-box .value-box-area{
+  padding: 0.5em 0.5em;
 }
 
 .bslib-value-box .value-box-area>:first-child{
@@ -344,6 +354,7 @@ template. 80% works well here to reduce white space on the right hand side.*/
   -webkit-font-smoothing: antialiased;
   text-align: left;
   font-weight: 700;
+  padding: 0.5em, 0.5em;
 }
 
 .bslib-value-box .value-box-area>:nth-child(2){
@@ -354,6 +365,7 @@ template. 80% works well here to reduce white space on the right hand side.*/
   -webkit-font-smoothing: antialiased;
   font-weight: 700;
   text-align: left;
+  padding: 0.5em, 0.5em !important;
   /*line-height: 1.25;*/
 }
 

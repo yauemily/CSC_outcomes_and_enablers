@@ -14,8 +14,7 @@ enabler2_tab <- function() {
           class = "input_box",
           style = "min-height:100%; height = 100%; overflow-y: visible",
           gov_row(
-            column(
-              width = 6,
+            layout_columns(
               selectizeInput(
                 inputId = "select_geography_e2",
                 label = "Select a geographical level:",
@@ -23,10 +22,7 @@ enabler2_tab <- function() {
                 selected = NULL,
                 multiple = FALSE,
                 options = NULL
-              )
-            ),
-            column(
-              width = 6,
+              ),
               conditionalPanel(condition = "input.select_geography_e2 != 'National'",selectizeInput(
                 inputId = "geographic_breakdown_e2",
                 label = "Select a breakdown: ",
@@ -34,39 +30,98 @@ enabler2_tab <- function() {
                 selected = NULL,
                 multiple = FALSE,
                 options = NULL
-               #multiple = TRUE,
+                #multiple = TRUE,
                 #options = list(maxItems = 3)
               )),
+              col_widths = c(4,5)
             )
           ),
           gov_row(
-            conditionalPanel(condition = "input.select_geography_e2 != 'National'",
-              column(
-              width = 3,
-              checkbox_Input(
-                inputId = "national_comparison_checkbox_e2",
-                cb_labels = "Compare with National",
-                checkboxIds = "Yes_national",
-                label = "",
-                hint_label = NULL,
-                small = TRUE
-              )
-            )),
-            conditionalPanel(
-              condition = "(input.select_geography_e2 == 'Local authority')",
-            column(
-              width = 3,
-              checkbox_Input(
-                inputId = "region_comparison_checkbox_e2",
-                cb_labels = "Compare with Region",
-                checkboxIds = "Yes_region",
-                label = "",
-                hint_label = NULL,
-                small = TRUE
+            layout_columns(
+              conditionalPanel(condition = "input.select_geography_e2 != 'National'",
+                               column(
+                                 width = 3,
+                                 checkbox_Input(
+                                   inputId = "national_comparison_checkbox_e2",
+                                   cb_labels = "Compare with National",
+                                   checkboxIds = "Yes_national",
+                                   label = "",
+                                   hint_label = NULL,
+                                   small = TRUE
+                                 )
+                               )),
+              conditionalPanel(
+                condition = "(input.select_geography_e2 == 'Local authority')",
+                column(
+                  width = 3,
+                  checkbox_Input(
+                    inputId = "region_comparison_checkbox_e2",
+                    cb_labels = "Compare with Region",
+                    checkboxIds = "Yes_region",
+                    label = "",
+                    hint_label = NULL,
+                    small = TRUE
+                  )
+                ),
               )
             ),
-          )
-        ))
+            col_widths = c(6,6)
+          ),
+          # gov_row(
+          #   column(
+          #     width = 6,
+          #     selectizeInput(
+          #       inputId = "select_geography_e2",
+          #       label = "Select a geographical level:",
+          #       choices = distinct(dropdown_choices['geographic_level']),
+          #       selected = NULL,
+          #       multiple = FALSE,
+          #       options = NULL
+          #     )
+          #   ),
+          #   column(
+          #     width = 6,
+          #     conditionalPanel(condition = "input.select_geography_e2 != 'National'",selectizeInput(
+          #       inputId = "geographic_breakdown_e2",
+          #       label = "Select a breakdown: ",
+          #       choices = NULL,
+          #       selected = NULL,
+          #       multiple = FALSE,
+          #       options = NULL
+          #      #multiple = TRUE,
+          #       #options = list(maxItems = 3)
+          #     )),
+          #   )
+          # ),
+        #   gov_row(
+        #     conditionalPanel(condition = "input.select_geography_e2 != 'National'",
+        #       column(
+        #       width = 3,
+        #       checkbox_Input(
+        #         inputId = "national_comparison_checkbox_e2",
+        #         cb_labels = "Compare with National",
+        #         checkboxIds = "Yes_national",
+        #         label = "",
+        #         hint_label = NULL,
+        #         small = TRUE
+        #       )
+        #     )),
+        #     conditionalPanel(
+        #       condition = "(input.select_geography_e2 == 'Local authority')",
+        #     column(
+        #       width = 3,
+        #       checkbox_Input(
+        #         inputId = "region_comparison_checkbox_e2",
+        #         cb_labels = "Compare with Region",
+        #         checkboxIds = "Yes_region",
+        #         label = "",
+        #         hint_label = NULL,
+        #         small = TRUE
+        #       )
+        #     ),
+        #   )
+        # )
+        )
       ),
       br(),
       gov_row(
@@ -99,6 +154,8 @@ enabler2_tab <- function() {
               "Workforce Stability",
               fluidRow(
                 br(),
+              ),
+              fluidRow(
                 column(
                   width = 4,
                   value_box(
@@ -124,10 +181,9 @@ enabler2_tab <- function() {
                 ),
                 br(),
               ),
-              #fluidRow(
-              #  column(
+              # fluidRow(
+              #   column(
               #    width = 12,
-                  
                   accordion(
                     accordion_panel(
                       "Social Worker Turnover",
@@ -346,6 +402,8 @@ enabler2_tab <- function() {
               "Quality of support for children and families",
               fluidRow(
                 br(),
+              ),
+              fluidRow(
                 column(
                   width = 4,
                   value_box(
@@ -431,11 +489,13 @@ enabler2_tab <- function() {
               )
             ),
             
-            # Third tab panel
+            # Third tab panel -----
             tabPanel(
               "Societal and cultural awareness and diversity",
               fluidRow(
                 br(),
+              ),
+              fluidRow(
                # column(
                  # width = 6,
                  # value_box(
