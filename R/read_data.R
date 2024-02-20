@@ -440,7 +440,6 @@ read_cla_rate_data <- function(file = "data/cla_number_and_rate_per_10k_children
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# CLA rate per 10k children data
 read_cla_placement_data <- function(file = "data/la_children_who_started_to_be_looked_after_during_the_year.csv"){
   cla_placement_data <- read.csv(file)
   cla_placement_data <- colClean(cla_placement_data)%>%

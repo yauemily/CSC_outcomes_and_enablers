@@ -1095,7 +1095,7 @@ server <- function(input, output, session) {
   })
   
   #Outcome 1 -----
-  # Geographic breakdown e2 (list of either LA names or Region names)
+  # Geographic breakdown o1 (list of either LA names or Region names)
   observeEvent(eventExpr={input$select_geography_o1},{
     updateSelectizeInput(
       session = session,
