@@ -192,7 +192,7 @@ by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_
 
 # By Region bar chart repeat function -----
 
-by_region_plot_function <- function(dataset, yvalue, yaxis_title){
+by_region_bar_plot <- function(dataset, yvalue, yaxis_title){
   turnover_reg_data <- dataset %>%
     filter(geographic_level == "Regional", time_period == max(time_period)) %>%
     select(time_period, geo_breakdown, `yvalue`) %>%
