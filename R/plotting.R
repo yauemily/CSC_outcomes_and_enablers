@@ -1115,7 +1115,7 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
 
 plot_cla_rate <- function(geo_lvl, geo_break) {
   cla_data <- cla_rates %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break & population_count == "Children starting to be looked after each year") %>%
+    filter(geo_breakdown %in% geo_break & population_count == "Children starting to be looked after each year") %>%
     select(
       time_period, geo_breakdown, rate_per_10000
     )

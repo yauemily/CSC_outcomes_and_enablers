@@ -428,6 +428,11 @@ read_cla_rate_data <- function(file = "data/cla_number_and_rate_per_10k_children
       geographic_level == "Regional" ~ region_name,
       geographic_level == "Local authority" ~ la_name
     )) %>%
+      mutate(rate_per_10000 = case_when(
+        rate_per_10000 == "z" ~ NA,
+        rate_per_10000 == "x"  ~ NA,
+        TRUE ~ as.numeric(rate_per_10000)))   %>%
+    
     select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, population_count, population_estimate, number, rate_per_10000) %>% distinct()
   
   

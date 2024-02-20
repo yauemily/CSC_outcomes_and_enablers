@@ -17,7 +17,7 @@ outcome1_tab <- function(){
             column(
               width = 6,
               selectizeInput(
-                inputId = "select_geography",
+                inputId = "select_geography_o1",
                 label = "Select a geographical level:",
                 choices = distinct(dropdown_choices['geographic_level']),
                 selected = NULL,
@@ -27,8 +27,8 @@ outcome1_tab <- function(){
             ),
             column(
               width = 6,
-              conditionalPanel(condition = "input.select_geography != 'National'",selectizeInput(
-                inputId = "geographic_breakdown",
+              conditionalPanel(condition = "input.select_geography_o1 != 'National'",selectizeInput(
+                inputId = "geographic_breakdown_o1",
                 label = "Select a breakdown: ",
                 choices = NULL,
                 selected = NULL,
@@ -46,8 +46,6 @@ outcome1_tab <- function(){
         p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2") ),
       ),
       gov_row(
-        br(),
-        h2("Confirmation Sentence"),
         br(),
         div(
           tabsetPanel(
