@@ -1155,6 +1155,15 @@ server <- function(input, output, session) {
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_rates$time_period),")", "</p>")
   })
   
+  # CIN plot
+  output$plot_cin_rate <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_rate(input$geographic_level, input$geographic_breakdown) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
   #CIN table alternative
   output$table_cin_rate <- renderDataTable({
     datatable(
@@ -1178,6 +1187,9 @@ server <- function(input, output, session) {
       height = 420
     )
   })
+  
+  
+  
   
   #cin rate table by region
   output$table_cin_rates_reg <- renderDataTable({

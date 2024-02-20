@@ -1144,7 +1144,7 @@ plot_cla_rate <- function(geo_lvl, geo_break) {
 # CIN rates -------
 plot_cin_rate <- function(geo_lvl, geo_break){
   Cin_data <- cin_rates %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
+    filter(geo_breakdown %in% geo_break, time_period >= 2017 ) %>%
     select(
       time_period, geo_breakdown,
       CIN_rate
@@ -1168,7 +1168,6 @@ plot_cin_rate <- function(geo_lvl, geo_break){
       values = gss_colour_pallette
     )
 }
-
 #cin rate chart by region
 plot_cin_rate_reg <- function(){
   cin_reg_data <- cin_rates %>%
