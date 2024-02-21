@@ -1180,11 +1180,18 @@ server <- function(input, output, session) {
     filtered_data <- filtered_data %>%
       filter(population_count == "Children starting to be looked after each year")
     
-    ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'rate_per_10000', 'CLA Rate Per 10,000')%>%
-        config(displayModeBar = F),
-      height = 420
-    )
+    # Set the max y-axis scale
+    max_rate <- max(cla_rates$rate_per_10000[cla_rates$population_count == "Children starting to be looked after each year"], na.rm = TRUE)
+    
+    # Round the max_rate to the nearest 50
+    max_rate <- ceiling(max_rate / 50) * 50
+    
+    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'rate_per_10000', 'CLA Rate Per 10,000', max_rate) %>%
+      config(displayModeBar = F)
+    
+    
+    ggplotly(p, height = 420) %>%
+      layout(yaxis = list(range = c(0, max_rate)))
   })
   
   output$table_cla_rate <- renderDataTable({
