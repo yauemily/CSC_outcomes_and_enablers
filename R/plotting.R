@@ -1209,7 +1209,7 @@ plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
     }
     
     cla_data <- cla_rates %>%
-      filter(geo_breakdown %in% location, time_period == max(time_period),population_count == "Children starting to be looked after each year") %>%
+      filter(geo_breakdown %in% location, time_period == max(time_period), population_count == "Children starting to be looked after each year", rate_per_10000 != "NA") %>%
       select(time_period, geo_breakdown, rate_per_10000) %>%
       mutate(geo_breakdown = reorder(geo_breakdown, -rate_per_10000), # Order by rate_per_10000
              is_selected = "Selected")

@@ -1278,7 +1278,7 @@ server <- function(input, output, session) {
       } else {
         # Get the la_name values within the selected region_name
         location <- location_data %>%
-          filter(region_name == input$geographic_breakdown_e2) %>%
+          filter(region_name == input$geographic_breakdown_o1) %>%
           pull(la_name)
       }
       
@@ -1288,7 +1288,7 @@ server <- function(input, output, session) {
         arrange(desc(rate_per_10000))
       
     } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
-      data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(cla_rates$time_period)) %>% select(
+      data <- cla_rates %>% filter(geographic_level == 'Local authority', time_period == max(cla_rates$time_period)) %>% select(
         time_period, geo_breakdown,
         rate_per_10000
       ) %>%
