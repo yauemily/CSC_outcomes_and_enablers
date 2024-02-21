@@ -1215,7 +1215,7 @@ plot_cin_rates_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = 
     cin_data <- cin_rates %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, CIN_rate) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -cin_rates), # Order by cin rate
+      mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate), # Order by cin rate
              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
   } else if (selected_geo_lvl == "National") {
     cin_data <- cin_rates %>%
