@@ -317,13 +317,13 @@ server <- function(input, output, session) {
       select(time_period, geo_breakdown,turnover_rate_fte_perc)
 
     #national only
-  }else if(!is.null(input$national_comparison_checkbox_e2) && is.null(input$national_comparison_checkbox_e2)){
+  }else if(!is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
     filtered_data<-workforce_data %>%
       filter((geographic_level %in% input$select_geography_e2 & geo_breakdown %in% input$geographic_breakdown_e2)|geographic_level == 'National') %>%
       select(time_period, geo_breakdown,turnover_rate_fte_perc)
 
     #regional only
-  }else if(is.null(input$national_comparison_checkbox_e2) && !is.null(input$national_comparison_checkbox_e2)){
+  }else if(is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
     location <- location_data %>%
       filter(la_name %in% input$geographic_breakdown_e2)
 
@@ -332,7 +332,7 @@ server <- function(input, output, session) {
       select(time_period, geo_breakdown,turnover_rate_fte_perc)
 
     #both selected
-  }else if(!is.null(input$national_comparison_checkbox_e2) && !is.null(input$national_comparison_checkbox_e2)){
+  }else if(!is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
     location <- location_data %>%
       filter(la_name %in% input$geographic_breakdown_e2)
 
@@ -1177,47 +1177,57 @@ server <- function(input, output, session) {
         filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))
     }
     
-    ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'cla_rate_per_10k', 'CLA Rate Per 10,000')%>%
-        config(displayModeBar = F),
-      height = 420
-    )
+    filtered_data <- filtered_data %>%
+      filter(population_count == "Children starting to be looked after each year")
+    
+    # Set the max y-axis scale
+    max_rate <- max(cla_rates$rate_per_10000[cla_rates$population_count == "Children starting to be looked after each year"], na.rm = TRUE)
+    
+    # Round the max_rate to the nearest 50
+    max_rate <- ceiling(max_rate / 50) * 50
+    
+    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'rate_per_10000', 'CLA Rate Per 10,000', max_rate) %>%
+      config(displayModeBar = F)
+    
+    
+    ggplotly(p, height = 420) %>%
+      layout(yaxis = list(range = c(0, max_rate)))
   })
   
   output$table_cla_rate <- renderDataTable({
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
       filtered_data <- cla_rates %>% filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
-        select(time_period, geo_breakdown,caseload_fte)
+        select(time_period, geo_breakdown,rate_per_10000,population_count)
       
       #national only
     }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
       filtered_data<-cla_rates %>%
-        filter((geographic_level %in% input$select_geography_e2 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') %>%
-        select(time_period, geo_breakdown,caseload_fte)
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') %>%
+        select(time_period, geo_breakdown,rate_per_10000,population_count)
       
       #regional only
     }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
-      location <- cla_rates %>%
+      location <- location_data %>%
         filter(la_name %in% input$geographic_breakdown_o1)
       
-      filtered_data<-workforce_data %>%
+      filtered_data<-cla_rates %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) %>%
-        select(time_period, geo_breakdown,caseload_fte)
+        select(time_period, geo_breakdown,rate_per_10000,population_count)
       
       #both selected
     }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
-      location <- cla_rates %>%
+      location <- location_data %>%
         filter(la_name %in% input$geographic_breakdown_o1)
       
-      filtered_data<- workforce_data %>%
+      filtered_data<- cla_rates %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))%>%
-        select(time_period, geo_breakdown,caseload_fte)
+        select(time_period, geo_breakdown,rate_per_10000,population_count)
     }
     
     datatable(
       filtered_data %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown_o1, population_count == "Children starting to be looked after each year") %>% 
+        filter(population_count == "Children starting to be looked after each year") %>% 
         select(time_period, geo_breakdown, rate_per_10000),
       colnames = c("Time Period", "Geographical Breakdown", "CLA Rate Per 10000"),
       options = list(

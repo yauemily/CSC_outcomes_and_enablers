@@ -111,6 +111,30 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
   )
 }
 
+# function for time series with a custom y-axis scale
+plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, yaxis_title, ylim_upper){
+  filtered_data <- dataset %>%
+    select(time_period, geo_breakdown, `yvalue`)
+  
+  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+    geom_line() +
+    ylab(yaxis_title)+
+    xlab("Time Period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, ylim_upper))+
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      values = gss_colour_pallette
+    )
+}
+
 # function for time series but with a national comparison
 t_series_nat_comp_plot <- function(dataset, level, breakdown, yvalue, yaxis_title){
   filtered_data <- dataset %>%
@@ -1113,30 +1137,6 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
 }
 
 
-plot_cla_rate <- function(geo_lvl, geo_break) {
-  cla_data <- cla_rates %>%
-    filter(geo_breakdown %in% geo_break & population_count == "Children starting to be looked after each year") %>%
-    select(
-      time_period, geo_breakdown, rate_per_10000
-    )
-  ggplot(cla_data, aes(x = time_period, y = rate_per_10000, color = geo_breakdown)) +
-    geom_line() +
-    ylab("CLA Rate per 10,000") +
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0,300))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      values = gss_colour_pallette
-    )
-}
 
 
 
