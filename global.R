@@ -126,7 +126,7 @@ combined_cla_data <- merge_cla_dataframes()
 
 #Read in the CIN  data
 cin_rates <- read_cin_rate_data()
-cin_referral_data <- read_cin_referral_data()
+cin_referrals <- read_cin_referral_data()
 
 #Dropdowns
 choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National")%>% distinct()

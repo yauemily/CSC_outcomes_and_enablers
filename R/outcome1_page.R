@@ -191,10 +191,80 @@ outcome1_tab <- function(){
                     dataTableOutput("table_cin_rates_la")
                    )
                   ),
+                ),
+                gov_row(
+                  h2("Repeat referrals (within 12 months)"),
+                  
+                  p("If children are being referred to services repeatedly, this suggests that they and their families may not be receiving 
+                   the support necessary to allow them to thrive  independently as a family unit. Multiple referrals can be inefficient and 
+                   cause additional upset and trauma for the child and family, therefore reducing the rate of repeat referrals will result in better outcomes."), 
+                  # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
+                  
+                  insert_text(inputId = "CIN_referrals_definition", text = paste(
+                    "<b>","Re-referrals within 12 months", "</b><br>",
+                    "Percentage of re-referrals within 12 months of a previous referral in the year to 31 March."
+                  )),
+                  # p("plots go here"),
+                  plotlyOutput("plot_cin_referral"),
+                  br(),
+                  # Expandable for the table alternative
+                  details(
+                    inputId = "table_cin_referral",
+                    label = "View chart as a table",
+                    help_text = (
+                      dataTableOutput("table_cin_referral")
+                    )
+                  ),
+                  #expandable for the additional info links
+                  details(
+                    inputId = "CIN_referalls_info",
+                    label = "Additional information:",
+                    help_text = (
+                      tags$ul(
+                        tags$li("Rate of children as at 31 March 2023 assessed as needing help and protection as a result of risks to their devlopment or health."),
+                        tags$li("Rates per 10,000 children are calculated based on ONS", a(href = "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/annualmidyearpopulationestimates/mid2021","mid-year population estimates."),  "for children aged 0 to 17 years. The rates for 2022 and 2023 are based on 2021 population estimates which in turn are based on 2021 Census data."),
+                        tags$li("The rates for 2023 have been calculated based on 2021 population estimates as 2022 estimates were not available at the time of publication. Therefore, some caution is needed when interpreting the 2023 rates, either in isolation or in comparison with other years. The 2023 rates will be revised as part of the next 2024 publication."),
+                        tags$li("Revised population estimates for 2012 to 2020 based on 2021 Census data, to calculate revised 2013 to 2021 rates, were not available at the time of publication. Therefore, some caution is needed when interpreting these rates, either in isolation or in comparison with other years. The 2013 to 2021 rates will be revised as part of the next 2024 publication."),
+                        tags$br(),
+                        p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/characteristics-of-children-in-need/data-guidance", "Children in need data guidance."),
+                          tags$br(),
+                          "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/characteristics-of-children-in-need-methodology", "Children in need methodology."))
+                      )
+                    )
+                  ),
+                  fluidRow(
+                    h2("Re-referrals by Region"),
+                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                    br(),
+                    plotlyOutput("plot_cin_rate_reg"),
+                  ),
+                  fluidRow(
+                    details(
+                      inputId = "tbl_cin_referral_reg",
+                      label = "View chart as a table",
+                      help_text = (
+                       dataTableOutput("table_cin_rates_reg")
+                      )
+                    )
+                  ),
+                  h2("Re-referrals by Local Authority"),
+                  p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                  p(sprintf("The graph represents data from %s.", max(cin_rates$time_period))),
+                  br(),
+                  plotlyOutput("plot_cin_rates_la"),
+                  br(),
+                  br(),
+                  details(
+                    inputId = "tbl_cin_referral_la",
+                    label = "View chart as a table",
+                    help_text = (
+                     dataTableOutput("table_cin_rates_la")
+                    )
+                  ),
                 )
                 ),
               ),
-            
+    
                      tabPanel(
               "Child wellbeing and development",
               fluidRow(

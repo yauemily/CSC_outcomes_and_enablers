@@ -1246,7 +1246,7 @@ server <- function(input, output, session) {
   })
   
   
-  #cin rate  chart by LA
+  #cin rate chart by LA
   output$plot_cin_rates_la <- plotly::renderPlotly({
     ggplotly(
       plot_cin_rates_la(input$geographic_breakdown, input$select_geography) %>%
@@ -1302,3 +1302,35 @@ server <- function(input, output, session) {
     stopApp()
   })
 }
+
+
+# CIN plot
+output$plot_cin_referral <- plotly::renderPlotly({
+  ggplotly(
+    plot_cin_referrals(input$geographic_level, input$geographic_breakdown) %>%
+      config(displayModeBar = F),
+    height = 420
+  )
+})
+
+#CIN table alternative
+output$table_cin_referral  <- renderDataTable({
+  datatable(
+    cin_referrals %>%
+      filter(geo_breakdown %in% input$geographic_breakdown) %>%
+      select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
+    colnames = c("Time Period", "Geographical Breakdown",  "Number of referrals in the year", "Number of Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months of a previous referral (%)"),
+    options = list(
+      scrollx = FALSE,
+      paging = TRUE
+    )
+  )
+})
+
+
+
+
+
+
+
+

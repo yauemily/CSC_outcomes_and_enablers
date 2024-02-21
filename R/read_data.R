@@ -535,18 +535,9 @@ read_cin_referral_data <- function(file = "data/c1_children_in_need_referrals_an
               .groups = "drop")
 
  # Join the referall back to the original dataframe
-   cin_referral_data <- 
- merge(referrals, cin_referral_data)
+   cin_referral_data <-  merge(referrals, cin_referral_data)
   
   
-  
-  
-  
-  # Join the referall back to the original dataframe
- # cin_referral_data <-  cin_referral_data %>%
-  #  left_join(select(referrals, referrals_not_including_re_referrals, time_period, region_code, new_la_code), by = c(time_period, region_code, new_la_code))
-
-
   return(cin_referral_data)
 }
 
