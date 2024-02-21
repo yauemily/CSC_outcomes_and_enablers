@@ -530,9 +530,19 @@ read_cin_referral_data <- function(file = "data/c1_children_in_need_referrals_an
   # Calculate the number of referrals not including re-referrals
   referrals <- cin_referral_data %>%
     group_by(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name) %>%
-    summarise(referrals_not_including_re_referrals = Referrals - Re_referrals, .groups = "drop")
+    summarise(referrals_not_including_re_referrals_perc = round((Referrals - Re_referrals)/Referrals * 100,1),
+              referrals_not_including_re_referrals = Referrals - Re_referrals,
+              .groups = "drop")
 
-  # Join the total observation back to the original dataframe
+ # Join the referall back to the original dataframe
+   cin_referral_data <- 
+ merge(referrals, cin_referral_data)
+  
+  
+  
+  
+  
+  # Join the referall back to the original dataframe
  # cin_referral_data <-  cin_referral_data %>%
   #  left_join(select(referrals, referrals_not_including_re_referrals, time_period, region_code, new_la_code), by = c(time_period, region_code, new_la_code))
 
