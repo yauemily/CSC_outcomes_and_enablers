@@ -500,6 +500,32 @@ read_cin_rate_data <- function(file = "data/b1_children_in_need_2013_to_2023.csv
   return(cin_rate_data)
 }
 
+# CIN referrals data
+read_cin_referral_data <- function(file = "data/c1_children_in_need_referrals_and_rereferrals_2013_to_2023.csv"){
+  cin_referral_data <- read.csv(file)
+  cin_referral_data <- colClean(cin_referral_data)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+    mutate(Referrals = case_when(
+      Referrals == "Z" ~ NA,
+      Referrals == "x"  ~ NA,
+      Referrals == "c"  ~ NA,
+      TRUE ~ as.numeric(Referrals)))   %>%
+    mutate(Re_referrals = case_when(
+      Re_referrals == "Z" ~ NA,
+      Re_referrals == "x"  ~ NA,
+      Re_referrals == "c"  ~ NA,
+      TRUE ~ as.numeric(Re_referrals)))   %>%
+    select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, Referrals, Re_referrals, Re_referrals_percent) %>% distinct() 
+   
+  
+  
+  return(cin_referral_data)
+}
+
 
 
 
