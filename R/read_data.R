@@ -500,7 +500,7 @@ read_cin_rate_data <- function(file = "data/b1_children_in_need_2013_to_2023.csv
   return(cin_rate_data)
 }
 
-# CIN referrals data
+#CIN referrals data
 read_cin_referral_data <- function(file = "data/c1_children_in_need_referrals_and_rereferrals_2013_to_2023.csv"){
   cin_referral_data <- read.csv(file)
   cin_referral_data <- colClean(cin_referral_data)%>%
@@ -519,10 +519,24 @@ read_cin_referral_data <- function(file = "data/c1_children_in_need_referrals_an
       Re_referrals == "x"  ~ NA,
       Re_referrals == "c"  ~ NA,
       TRUE ~ as.numeric(Re_referrals)))   %>%
-    select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, Referrals, Re_referrals, Re_referrals_percent) %>% distinct() 
-   
-  
-  
+    mutate(Re_referrals_percent = case_when(
+      Re_referrals_percent == "Z" ~ NA,
+      Re_referrals_percent == "x"  ~ NA,
+      Re_referrals_percent == "c"  ~ NA,
+      TRUE ~ as.numeric(Re_referrals_percent)))   %>%
+    select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, Referrals, Re_referrals, Re_referrals_percent) %>% distinct()
+
+
+  # Calculate the number of referrals not including re-referrals
+  referrals <- cin_referral_data %>%
+    group_by(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name) %>%
+    summarise(referrals_not_including_re_referrals = Referrals - Re_referrals, .groups = "drop")
+
+  # Join the total observation back to the original dataframe
+ # cin_referral_data <-  cin_referral_data %>%
+  #  left_join(select(referrals, referrals_not_including_re_referrals, time_period, region_code, new_la_code), by = c(time_period, region_code, new_la_code))
+
+
   return(cin_referral_data)
 }
 
