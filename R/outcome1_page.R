@@ -132,7 +132,7 @@ outcome1_tab <- function(){
                   
                   insert_text(inputId = "CIN_definition", text = paste(
                     "<b>","Children in Need (CIN) rate", "</b><br>",
-                    "Rate of children in need at 31 March, per 10,000 children in the general population."
+                    "Rate of children in need at 31 March, per 10,000 children in the population."
                   )),
                   # p("plots go here"),
                   plotlyOutput("plot_cin_rate"),

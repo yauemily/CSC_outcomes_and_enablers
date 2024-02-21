@@ -1144,7 +1144,7 @@ plot_cla_rate <- function(geo_lvl, geo_break) {
 # CIN rates -------
 plot_cin_rate <- function(geo_lvl, geo_break){
   Cin_data <- cin_rates %>%
-    filter(geo_breakdown %in% geo_break, time_period >= 2017 ) %>%
+    filter(geo_breakdown %in% geo_break) %>%
     select(
       time_period, geo_breakdown,
       CIN_rate
@@ -1187,7 +1187,7 @@ plot_cin_rate_reg <- function(){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 1000))+
+    scale_y_continuous(limits = c(0, 2000))+
     scale_fill_manual(
       "Time Period",
       #breaks = unique(c("England", inputArea)),
