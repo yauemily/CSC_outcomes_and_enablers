@@ -123,7 +123,7 @@ outcome1_tab <- function(){
                     
                     insert_text(inputId = "social_work_turnover_definition", text = paste(
                       "<b>","Children looked after (CLA) rate", "</b><br>",
-                      "The CLA rate is calculated as the number of children that are looked after per 10000 people in the general population."
+                      "The CLA rate is calculated as the number of children that are looked after per 10,000 children in the general population."
                     )),
                     # p("plots go here"),
                     plotlyOutput("plot_cla_rate"),
