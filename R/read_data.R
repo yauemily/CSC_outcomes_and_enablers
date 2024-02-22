@@ -428,6 +428,12 @@ read_cla_rate_data <- function(file = "data/cla_number_and_rate_per_10k_children
       geographic_level == "Regional" ~ region_name,
       geographic_level == "Local authority" ~ la_name
     )) %>%
+      mutate(rate_per_10000 = case_when(
+        rate_per_10000 == "z" ~ NA,
+        rate_per_10000 == "x"  ~ NA,
+        TRUE ~ as.numeric(rate_per_10000)))   %>%
+    filter(!is.na(rate_per_10000)) %>%
+    
     select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, population_count, population_estimate, number, rate_per_10000) %>% distinct()
   
   
@@ -435,7 +441,6 @@ read_cla_rate_data <- function(file = "data/cla_number_and_rate_per_10k_children
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# CLA rate per 10k children data
 read_cla_placement_data <- function(file = "data/la_children_who_started_to_be_looked_after_during_the_year.csv"){
   cla_placement_data <- read.csv(file)
   cla_placement_data <- colClean(cla_placement_data)%>%

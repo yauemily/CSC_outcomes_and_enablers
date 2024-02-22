@@ -17,7 +17,7 @@ outcome1_tab <- function(){
             column(
               width = 6,
               selectizeInput(
-                inputId = "select_geography",
+                inputId = "select_geography_o1",
                 label = "Select a geographical level:",
                 choices = distinct(dropdown_choices['geographic_level']),
                 selected = NULL,
@@ -27,8 +27,8 @@ outcome1_tab <- function(){
             ),
             column(
               width = 6,
-              conditionalPanel(condition = "input.select_geography != 'National'",selectizeInput(
-                inputId = "geographic_breakdown",
+              conditionalPanel(condition = "input.select_geography_o1 != 'National'",selectizeInput(
+                inputId = "geographic_breakdown_o1",
                 label = "Select a breakdown: ",
                 choices = NULL,
                 selected = NULL,
@@ -39,15 +39,59 @@ outcome1_tab <- function(){
               )),
             )
           ),
+          gov_row(
+            conditionalPanel(condition = "input.select_geography_o1 != 'National'",
+                             column(
+                               width = 3,
+                               checkbox_Input(
+                                 inputId = "national_comparison_checkbox_o1",
+                                 cb_labels = "Compare with National",
+                                 checkboxIds = "Yes_national",
+                                 label = "",
+                                 hint_label = NULL,
+                                 small = TRUE
+                               )
+                             )),
+            conditionalPanel(
+              condition = "(input.select_geography_o1 == 'Local authority')",
+              column(
+                width = 3,
+                checkbox_Input(
+                  inputId = "region_comparison_checkbox_o1",
+                  cb_labels = "Compare with Region",
+                  checkboxIds = "Yes_region",
+                  label = "",
+                  hint_label = NULL,
+                  small = TRUE
+                )
+              ),
+            )
+          )
         )
       ),
       br(),
       gov_row(
-        p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2") ),
+        br(),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 != 'Richmond upon Thames' && input.geographic_breakdown_o1 != 'West Northamptonshire')",
+          p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2") )),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'Richmond upon Thames')",
+          p("Please select ", strong("Kingston upon Thames"), " to view jointly reported statistics for Kingston upon Thames and Richmond upon Thames.") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'Kingston upon Thames')",
+          p("Kingston upon Thames and Richmond upon Thames submit a joint workforce return each year and their data is reported together against Kingston upon Thames.") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'North Northamptonshire')",
+          p("North Northamptonshire and West Northamptonshire submitted a joint workforce return in 2021 and onwards, and their data is reported together against North Northamptonshire. ") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'West Northamptonshire')",
+          p("Please select ", strong("North Northamptonshire"), ", or Northamptonshire for pre-2021 data, to view jointly reported statistics for North Northamptonshire and West Northamptonshire. ") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'Northamptonshire')",
+          p("To view 2021 and onwards data select ", strong("North Northamptonshire"), ". Northamptonshire local authority was replaced with two new unitary authorities, North Northamptonshire and West Northamptonshire, in April 2021.") ),
       ),
       gov_row(
-        br(),
-        h2("Confirmation Sentence"),
         br(),
         div(
           tabsetPanel(
@@ -79,7 +123,7 @@ outcome1_tab <- function(){
                     
                     insert_text(inputId = "social_work_turnover_definition", text = paste(
                       "<b>","Children looked after (CLA) rate", "</b><br>",
-                      "The CLA rate is calculated as the number of children that are looked after per 10000 people in the general population."
+                      "The CLA rate is calculated as the number of children that are looked after per 10,000 children in the general population."
                     )),
                     # p("plots go here"),
                     plotlyOutput("plot_cla_rate"),
@@ -105,7 +149,35 @@ outcome1_tab <- function(){
                   )
                 )
               ),
-              
+              fluidRow(
+                h2("CLA Rates by Region"),
+                p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                br(),
+                plotlyOutput("plot_cla_rate_reg"),
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_cla_rate_reg",
+                  label = "View chart as a table",
+                  help_text = (
+                    dataTableOutput("table_cla_rate_reg")
+                  )
+                )
+              ),
+              h2("CLA Rates by Local Authority"),
+              p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+              p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
+              br(),
+              plotlyOutput("plot_cla_rate_la"),
+              br(),
+              br(),
+              details(
+                inputId = "tbl_cla_rate_la",
+                label = "View chart as a table",
+                help_text = (
+                  dataTableOutput("table_cla_rate_la")
+                )
+              ),
             ),
             tabPanel(
               "Access to support and getting help",

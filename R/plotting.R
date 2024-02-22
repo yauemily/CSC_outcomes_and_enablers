@@ -57,11 +57,41 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 # CSC charts
 
 
-testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title){
-  data <- dataset %>%
+#testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title){
+#  data <- dataset %>%
+#    select(time_period, geo_breakdown, `yvalue`)
+#  
+#  ggplot(data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+#    geom_line() +
+#    ylab(yaxis_title)+
+#    xlab("Time Period") +
+#    theme_classic() +
+#    theme(
+#      text = element_text(size = 12),
+#      axis.title.x = element_text(margin = margin(t = 12)),
+#      axis.title.y = element_text(margin = margin(r = 12)),
+#      axis.line = element_line(size = 1.0)
+#    ) +
+#    scale_y_continuous(limits = c(0, 100))+
+#    labs(color='Breakdown')+
+#    scale_color_manual(
+#      "Breakdown",
+#      #breaks = unique(c("England", inputArea)),
+#      values = gss_colour_pallette
+#    )
+#}
+
+
+
+#This is test code to try and create a function for the plots instead of lots of the same bits of code
+#at least a framework for the time series plots ----
+
+plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
+  filtered_data <- dataset %>%
+    #filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
     select(time_period, geo_breakdown, `yvalue`)
   
-  ggplot(data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
+  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
     geom_line() +
     ylab(yaxis_title)+
     xlab("Time Period") +
@@ -78,17 +108,12 @@ testing_plot_function <- function(dataset, level, breakdown, yvalue, yaxis_title
       "Breakdown",
       #breaks = unique(c("England", inputArea)),
       values = gss_colour_pallette
-    )
+  )
 }
 
-
-
-#This is test code to try and create a function for the plots instead of lots of the same bits of code
-#at least a framework for the time series plots ----
-
-plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
+# function for time series with a custom y-axis scale
+plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, yaxis_title, ylim_upper){
   filtered_data <- dataset %>%
-    filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
     select(time_period, geo_breakdown, `yvalue`)
   
   ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
@@ -102,13 +127,12 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')#+
-  #scale_color_manual(
-  #  "Breakdown",
-  #breaks = unique(c("England", inputArea)),
-  #  values = gss_colour_pallette
-  #)
+    scale_y_continuous(limits = c(0, ylim_upper))+
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      values = gss_colour_pallette
+    )
 }
 
 # function for time series but with a national comparison
@@ -1112,30 +1136,115 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
   return(p)
 }
 
-
-plot_cla_rate <- function(geo_lvl, geo_break) {
-  cla_data <- cla_rates %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break & population_count == "Children starting to be looked after each year") %>%
-    select(
-      time_period, geo_breakdown, rate_per_10000
-    )
-  ggplot(cla_data, aes(x = time_period, y = rate_per_10000, color = geo_breakdown)) +
-    geom_line() +
-    ylab("CLA Rate per 10,000") +
-    xlab("Time Period") +
+#bar chart by region
+plot_cla_rate_reg <- function(){
+  cla_reg_data <- cla_rates %>%
+    filter(geographic_level == "Regional", time_period == max(time_period), population_count == "Children starting to be looked after each year") %>%
+    select(time_period, geo_breakdown, rate_per_10000) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -rate_per_10000)) # Order by cla rate
+  
+  # Set the max y-axis scale
+  max_rate <- max(cla_rates$rate_per_10000[cla_rates$population_count == "Children starting to be looked after each year"], na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  ggplot( cla_reg_data , aes(`geo_breakdown`, `rate_per_10000`, fill = factor(time_period))) +
+    geom_col(position = position_dodge()) +
+    ylab("CLA Rate Per 10,000 Children") +
+    xlab("Region") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0,300))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      values = gss_colour_pallette
+    scale_y_continuous(limits = c(0, max_rate))+
+    scale_fill_manual(
+      "Time Period",
+      #breaks = unique(c("England", inputArea)),
+      values = '#12436D'#gss_colour_pallette
     )
+}
+
+plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
+  
+  GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+    FACT_location <- read.csv(file)
+    FACT_location <- FACT_location%>%
+      select(region_name, la_name) %>%
+      filter((la_name != '')) %>%
+      unique()
+  }
+  
+  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+  
+  if (selected_geo_lvl == "Local authority") {
+    cla_data <- cla_rates %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period), population_count == "Children starting to be looked after each year") %>%
+      select(time_period, geo_breakdown, rate_per_10000) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -rate_per_10000), # Order by rate_per_10000
+             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+  } else if (selected_geo_lvl == "National") {
+    cla_data <- cla_rates %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period), population_count == "Children starting to be looked after each year") %>%
+      select(time_period, geo_breakdown, rate_per_10000) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -rate_per_10000), # Order by rate_per_10000
+             is_selected = "Not Selected")
+  } else if (selected_geo_lvl == "Regional") {
+    
+    # Check if the selected region is London
+    if (selected_geo_breakdown == "London") {
+      # Include both Inner London and Outer London
+      location <- location_data %>%
+        filter(region_name %in% c("Inner London", "Outer London")) %>%
+        pull(la_name)
+    } else {
+      # Get the la_name values within the selected region_name
+      location <- location_data %>%
+        filter(region_name == selected_geo_breakdown) %>%
+        pull(la_name)
+    }
+    
+    cla_data <- cla_rates %>%
+      filter(geo_breakdown %in% location, time_period == max(time_period), population_count == "Children starting to be looked after each year", rate_per_10000 != "NA") %>%
+      select(time_period, geo_breakdown, rate_per_10000) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -rate_per_10000), # Order by rate_per_10000
+             is_selected = "Selected")
+  }
+  
+  # Set the max y-axis scale
+  max_rate <- max(cla_rates$rate_per_10000[cla_rates$population_count == "Children starting to be looked after each year"], na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  p <- ggplot(cla_data, aes(`geo_breakdown`, `rate_per_10000`, fill = `is_selected`)) +
+    geom_col(position = position_dodge()) +
+    ylab("CLA Rate Per 10,000 Children") +
+    xlab("") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, max_rate))+
+    scale_fill_manual(
+      "LA Selection",
+      values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
+    )
+  
+  # Conditionally set the x-axis labels and ticks
+  if (selected_geo_lvl == "Regional") {
+    p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
+  } else {
+    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  }
+  
+  return(p)
 }
 
 
