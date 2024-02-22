@@ -1284,6 +1284,12 @@ plot_cin_rate_reg <- function(){
     select(time_period, geo_breakdown, CIN_rate) %>%
     mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate)) # Order by turnover rate
   
+  # Set the max y-axis scale
+  max_rate <- max(cin_rates$CIN_rate, na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
   ggplot( cin_reg_data , aes(`geo_breakdown`, `CIN_rate`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
     ylab("CIN rates per 10,000") +
@@ -1296,7 +1302,7 @@ plot_cin_rate_reg <- function(){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 2000))+
+    scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
       "Time Period",
       #breaks = unique(c("England", inputArea)),
@@ -1354,6 +1360,11 @@ plot_cin_rates_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = 
              is_selected = "Selected")
   }
   
+  # Set the max y-axis scale
+  max_rate <- max(cin_rates$CIN_rate, na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
   
   p <- ggplot(cin_data, aes(`geo_breakdown`, `CIN_rate`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
@@ -1365,7 +1376,7 @@ plot_cin_rates_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = 
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 2000))+
+    scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
       "LA Selection",
       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
