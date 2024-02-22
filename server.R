@@ -1314,13 +1314,13 @@ server <- function(input, output, session) {
   })
   
   # CIN plot
-  output$plot_cin_rate <- plotly::renderPlotly({
-    ggplotly(
-      plot_cin_rate(input$geographic_breakdown_o1, input$select_geography_o1) %>%
-        config(displayModeBar = F),
-      height = 420
-    )
-  })
+  # output$plot_cin_rate <- plotly::renderPlotly({
+  #   ggplotly(
+  #     plot_cin_rate(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+  #       config(displayModeBar = F),
+  #     height = 420
+  #   )
+  # })
   
   #CIN table alternative
   output$table_cin_rate <- renderDataTable({
@@ -1445,6 +1445,63 @@ server <- function(input, output, session) {
     )
   })
 
+  
+  
+  output$plot_cin_rate <- plotly::renderPlotly({
+    validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
+             need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
+    #not both
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_rates %>%
+        filter(geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_rates %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') 
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cin_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) 
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cin_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))
+    }
+    
+ 
+    # Set the max y-axis scale
+    max_rate <- max(cin_rates$CIN_rate, na.rm = TRUE)
+    
+    # Round the max_rate to the nearest 50
+    max_rate <- ceiling(max_rate / 50) * 50
+    
+    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'CIN_rate', 'CIN Rate Per 10,000 Children', max_rate) %>%
+      config(displayModeBar = F)
+    
+    
+    ggplotly(p, height = 420) %>%
+      layout(yaxis = list(range = c(0, max_rate)))
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
