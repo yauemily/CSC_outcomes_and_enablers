@@ -1284,7 +1284,7 @@ plot_cin_referrals <- function(geo_lvl, geo_break){
     )
   ggplot(Cin__referrals_data , aes(`time_period`, `Re_referrals_percent`, color = geo_breakdown))+
     geom_line() +
-    ylab("Re-referrals within 12 months of a previous referral (%)")+
+    ylab("Re-referrals within 12 months (%)")+
     xlab("Time Period") +
     theme_classic() +
     theme(

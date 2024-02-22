@@ -1255,6 +1255,45 @@ server <- function(input, output, session) {
     )
   })
   
+  
+  # CIN referral headline
+  output$cin_referral_headline_txt <- renderText({
+    stat <- format(cin_referrals %>% filter(time_period == max(cin_referrals$time_period) & geo_breakdown %in% input$geographic_breakdown) 
+                   %>% select(Re_referrals_percent), nsmall = 1)
+    paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_referrals$time_period),")", "</p>")
+  })
+  
+  
+  # CIN referral plot
+  output$plot_cin_referral <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_referrals(input$geographic_level, input$geographic_breakdown) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+
+ # CIN referral table alternative
+  output$table_cin_referral  <- renderDataTable({
+    datatable(
+      cin_referrals %>%
+        filter(geo_breakdown %in% input$geographic_breakdown) %>%
+        select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
+      colnames = c("Time Period", "Geographical Breakdown",  "Number of referrals in the year", "Number of Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months of a previous referral (%)"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+
+  
+  
+  
+  
+  
+  
+  
   # Don't touch the code below -----------------------
 
   observeEvent(input$go, {
@@ -1304,28 +1343,7 @@ server <- function(input, output, session) {
 }
 
 
-# CIN plot
-output$plot_cin_referral <- plotly::renderPlotly({
-  ggplotly(
-    plot_cin_referrals(input$geographic_level, input$geographic_breakdown) %>%
-      config(displayModeBar = F),
-    height = 420
-  )
-})
 
-#CIN table alternative
-output$table_cin_referral  <- renderDataTable({
-  datatable(
-    cin_referrals %>%
-      filter(geo_breakdown %in% input$geographic_breakdown) %>%
-      select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
-    colnames = c("Time Period", "Geographical Breakdown",  "Number of referrals in the year", "Number of Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months of a previous referral (%)"),
-    options = list(
-      scrollx = FALSE,
-      paging = TRUE
-    )
-  )
-})
 
 
 
