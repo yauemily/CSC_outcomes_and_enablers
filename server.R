@@ -1308,7 +1308,7 @@ server <- function(input, output, session) {
   
   # CIN rate headline
   output$cin_rate_headline_txt <- renderText({
-   stat <- format(cin_rates %>% filter(time_period == max(cin_rates$time_period) & geo_breakdown %in% input$geographic_breakdown) 
+   stat <- format(cin_rates %>% filter(time_period == max(cin_rates$time_period) & geo_breakdown %in% input$geographic_breakdown_o1) 
                  %>% select(CIN_rate), nsmall = 1)
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_rates$time_period),")", "</p>")
   })
@@ -1316,7 +1316,7 @@ server <- function(input, output, session) {
   # CIN plot
   output$plot_cin_rate <- plotly::renderPlotly({
     ggplotly(
-      plot_cin_rate(input$geographic_level, input$geographic_breakdown) %>%
+      plot_cin_rate(input$geographic_breakdown_o1, input$select_geography_o1) %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -1326,7 +1326,7 @@ server <- function(input, output, session) {
   output$table_cin_rate <- renderDataTable({
     datatable(
       cin_rates %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown) %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown_o1) %>% 
         select(time_period, geo_breakdown, CIN_rate),
       colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
       options = list(
@@ -1367,8 +1367,8 @@ server <- function(input, output, session) {
   
   #cin rate table by LA
   output$table_cin_rates_la <- renderDataTable({
-    if (input$select_geography == "Regional") {
-      if (input$geographic_breakdown == "London") {
+    if (input$select_geography_o1 == "Regional") {
+      if (input$geographic_breakdown_o1 == "London") {
         # Include both Inner London and Outer London
         location <- location_data %>%
           filter(region_name %in% c("Inner London", "Outer London")) %>%
@@ -1376,7 +1376,7 @@ server <- function(input, output, session) {
       } else {
         # Get the la_name values within the selected region_name
         location <- location_data %>%
-          filter(region_name == input$geographic_breakdown) %>%
+          filter(region_name == input$geographic_breakdown_o1) %>%
           pull(la_name)
       }
       
@@ -1385,7 +1385,7 @@ server <- function(input, output, session) {
         select(time_period, geo_breakdown, CIN_rate)  %>%
         arrange(desc(CIN_rate))
       
-    } else if (input$select_geography %in% c("Local authority", "National")) {
+    } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
       data <- cin_rates %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
         CIN_rate
@@ -1407,7 +1407,7 @@ server <- function(input, output, session) {
   #cin rate chart by LA
   output$plot_cin_rates_la <- plotly::renderPlotly({
     ggplotly(
-      plot_cin_rates_la(input$geographic_breakdown, input$select_geography) %>%
+      plot_cin_rates_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -1416,7 +1416,7 @@ server <- function(input, output, session) {
   
   # CIN referral headline
   output$cin_referral_headline_txt <- renderText({
-    stat <- format(cin_referrals %>% filter(time_period == max(cin_referrals$time_period) & geo_breakdown %in% input$geographic_breakdown) 
+    stat <- format(cin_referrals %>% filter(time_period == max(cin_referrals$time_period) & geo_breakdown %in% input$geographic_breakdown_o1) 
                    %>% select(Re_referrals_percent), nsmall = 1)
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_referrals$time_period),")", "</p>")
   })
@@ -1425,7 +1425,7 @@ server <- function(input, output, session) {
   # CIN referral plot
   output$plot_cin_referral <- plotly::renderPlotly({
     ggplotly(
-      plot_cin_referrals(input$geographic_level, input$geographic_breakdown) %>%
+      plot_cin_referrals(input$geographic_breakdown_o1, input$select_geography_o1) %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -1435,7 +1435,7 @@ server <- function(input, output, session) {
   output$table_cin_referral  <- renderDataTable({
     datatable(
       cin_referrals %>%
-        filter(geo_breakdown %in% input$geographic_breakdown) %>%
+        filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
         select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
       colnames = c("Time Period", "Geographical Breakdown",  "Number of referrals in the year", "Number of Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months of a previous referral (%)"),
       options = list(
