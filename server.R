@@ -1147,6 +1147,7 @@ server <- function(input, output, session) {
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cla_rates$time_period),")", "</p>")
   })
   
+  # CLA rate Plot
   output$plot_cla_rate <- plotly::renderPlotly({
     validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
              need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
@@ -1194,6 +1195,7 @@ server <- function(input, output, session) {
       layout(yaxis = list(range = c(0, max_rate)))
   })
   
+  # CLA rate TABLE
   output$table_cla_rate <- renderDataTable({
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
@@ -1237,6 +1239,7 @@ server <- function(input, output, session) {
     )
   })
   
+  # CLA rate regional plot
   output$plot_cla_rate_reg <- plotly::renderPlotly({
     ggplotly(
       plot_cla_rate_reg() %>%
@@ -1245,6 +1248,7 @@ server <- function(input, output, session) {
     )
   })
   
+  # CLA rate regional table
   output$table_cla_rate_reg <- renderDataTable({
     datatable(
       cla_rates %>% filter(geographic_level == 'Regional', time_period == max(cla_rates$time_period), population_count == "Children starting to be looked after each year") %>% select(
@@ -1260,6 +1264,7 @@ server <- function(input, output, session) {
     )
   })
   
+  # CLA rate LA plot
   output$plot_cla_rate_la <- plotly::renderPlotly({
     ggplotly(
       plot_cla_rate_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
@@ -1268,6 +1273,7 @@ server <- function(input, output, session) {
     )
   })
   
+  # CLA rate La table
   output$table_cla_rate_la <- renderDataTable({
     if (input$select_geography_o1 == "Regional") {
       if (input$geographic_breakdown_o1 == "London") {
@@ -1305,15 +1311,12 @@ server <- function(input, output, session) {
     )
   })
   
-  
-  # CIN rate headline
+    # CIN rate headline
   output$cin_rate_headline_txt <- renderText({
    stat <- format(cin_rates %>% filter(time_period == max(cin_rates$time_period) & geo_breakdown %in% input$geographic_breakdown_o1) 
                  %>% select(CIN_rate), nsmall = 1)
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_rates$time_period),")", "</p>")
   })
-  
-
   
   #cin rate plot by region
   output$plot_cin_rate_reg <- plotly::renderPlotly({
@@ -1323,8 +1326,6 @@ server <- function(input, output, session) {
       height = 420
     )
   })
-  
-  
   
   
   #cin rate table by region
@@ -1381,7 +1382,6 @@ server <- function(input, output, session) {
     )
   })
   
-  
   #cin rate chart by LA
   output$plot_cin_rates_la <- plotly::renderPlotly({
     ggplotly(
@@ -1391,7 +1391,6 @@ server <- function(input, output, session) {
     )
   })
   
-  
   # CIN referral headline
   output$cin_referral_headline_txt <- renderText({
     stat <- format(cin_referrals %>% filter(time_period == max(cin_referrals$time_period) & geo_breakdown %in% input$geographic_breakdown_o1) 
@@ -1399,32 +1398,7 @@ server <- function(input, output, session) {
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_referrals$time_period),")", "</p>")
   })
   
-  
- #  # CIN referral plot
- #  output$plot_cin_referral <- plotly::renderPlotly({
- #    ggplotly(
- #      plot_cin_referrals(input$geographic_breakdown_o1, input$select_geography_o1) %>%
- #        config(displayModeBar = F),
- #      height = 420
- #    )
- #  })
- # 
- # # CIN referral table alternative
- #  output$table_cin_referral  <- renderDataTable({
- #    datatable(
- #      cin_referrals %>%
- #        filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
- #        select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
- #      colnames = c("Time Period", "Geographical Breakdown",  "Number of referrals in the year", "Number of Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months of a previous referral (%)"),
- #      options = list(
- #        scrollx = FALSE,
- #        paging = TRUE
- #      )
- #    )
- #  })
-
-  
-  
+    # CIN rate plot
   output$plot_cin_rate <- plotly::renderPlotly({
     validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
              need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
@@ -1470,6 +1444,7 @@ server <- function(input, output, session) {
       layout(yaxis = list(range = c(0, max_rate)))
   })
   
+  #CIN rate table
   output$table_cin_rate <- renderDataTable({
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
@@ -1512,8 +1487,7 @@ server <- function(input, output, session) {
     )
   })
   
-  
-  ##CIN referral plot
+    ##CIN referral plot
   output$plot_cin_referral <- plotly::renderPlotly({
     validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
              need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
@@ -1550,7 +1524,6 @@ server <- function(input, output, session) {
       height = 420
     )
   })
-  
   
   #CIN referral table
   output$table_cin_referral <- renderDataTable({
@@ -1594,16 +1567,6 @@ server <- function(input, output, session) {
       )
     )
   })
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   # Don't touch the code below -----------------------
