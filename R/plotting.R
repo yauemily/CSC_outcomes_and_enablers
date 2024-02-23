@@ -462,9 +462,9 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
       time_period, geo_breakdown,
-      CIN_rate
+      vacancy_rate_fte_perc
     )
-  ggplot(vacancy_data, aes(`time_period`, `CIN_rate`, color = geo_breakdown)) +
+  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
     geom_line() +
     ylab("Vacancy rate (FTE) (%)") +
     xlab("Time Period") +
@@ -499,14 +499,14 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
   if (selected_geo_lvl == "Local authority") {
     vacancy_data <- workforce_data %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, CIN_rate) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate), # Order by caseload_fte
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
   } else if (selected_geo_lvl == "National") {
     vacancy_data <- workforce_data %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, CIN_rate) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate), # Order by caseload_fte
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
              is_selected = "Not Selected")
   } else if (selected_geo_lvl == "Regional") {
     
@@ -525,13 +525,13 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
     
     vacancy_data <- workforce_data %>%
       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, CIN_rate) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate), # Order by caseload_fte
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
              is_selected = "Selected")
   }
   
   
-  p <- ggplot(vacancy_data, aes(`geo_breakdown`, `CIN_rate`, fill = `is_selected`)) +
+  p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
     ylab("Vacancy Rate (FTE) %") +
     xlab("") +
@@ -693,9 +693,9 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(
       time_period, geo_breakdown,
-      CIN_rate
+      vacancy_rate_fte_perc
     )
-  ggplot(vacancy_data, aes(`time_period`, `CIN_rate`, color = geo_breakdown)) +
+  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
     geom_line() +
     ylab("Vacancy rate (FTE) (%)") +
     xlab("Time Period") +
@@ -720,10 +720,10 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
 plot_vacancy_reg <- function(){
   vacancy_reg_data <- workforce_data %>%
     filter(geographic_level == "Regional", time_period == max(time_period)) %>%
-    select(time_period, geo_breakdown, CIN_rate) %>%
-    mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate)) # Order by turnover rate
+    select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc)) # Order by turnover rate
   
-  ggplot( vacancy_reg_data  , aes(`geo_breakdown`, `CIN_rate`, fill = factor(time_period))) +
+  ggplot( vacancy_reg_data  , aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
     ylab("Vacancy Rate (FTE) %") +
     xlab("Region") +
@@ -759,14 +759,14 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
   if (selected_geo_lvl == "Local authority") {
     vacancy_data <- workforce_data %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, CIN_rate) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate), # Order by vacancy rate
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
   } else if (selected_geo_lvl == "National") {
     vacancy_data <- workforce_data %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, CIN_rate) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate), # Order by vacancy rate
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
              is_selected = "Not Selected")
   } else if (selected_geo_lvl == "Regional") {
     
@@ -785,13 +785,13 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
     
     vacancy_data <- workforce_data %>%
       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, CIN_rate) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -CIN_rate), # Order by vacancy rate
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
              is_selected = "Selected")
   }
   
   
-  p <- ggplot(vacancy_data, aes(`geo_breakdown`, `CIN_rate`, fill = `is_selected`)) +
+  p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
     ylab("Vacancy Rate (FTE) %") +
     xlab("") +
