@@ -89,11 +89,13 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
   filtered_data <- dataset %>%
     #filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
-    select(time_period, geo_breakdown, `yvalue`)
+    select(time_period, geo_breakdown, `yvalue`) %>%
+    mutate(`Time period` = as.character(`time_period`)) %>%
+   rename(`Breakdown` = `geo_breakdown`)
   
-  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
-    geom_line() +
-    ylab(yaxis_title)+
+    ggplot(filtered_data, aes(x = `Time period`, y=!!sym(yvalue), color = `Breakdown`))+
+    geom_path(group = 1) +
+       ylab(yaxis_title)+
     xlab("Time Period") +
     theme_classic() +
     theme(
@@ -114,10 +116,12 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
 # function for time series with a custom y-axis scale
 plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, yaxis_title, ylim_upper){
   filtered_data <- dataset %>%
-    select(time_period, geo_breakdown, `yvalue`)
+    select(time_period, geo_breakdown, `yvalue`) %>%
+    mutate(`Time period` = as.character(`time_period`)) %>%
+    rename(`Breakdown` = `geo_breakdown`)
   
-  ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
-    geom_line() +
+  ggplot(filtered_data, aes(x = `Time period`, y=!!sym(yvalue), color = `Breakdown`))+
+    geom_path(group = 1) +
     ylab(yaxis_title)+
     xlab("Time Period") +
     theme_classic() +
@@ -1369,33 +1373,5 @@ plot_cin_rates_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = 
 
 
 # Outcome 1 - Access to support getting help charts ----
-#CIN referrals -------
-plot_cin_referrals <- function(geo_lvl, geo_break){
-  Cin_referrals_data <- cin_referrals %>%
-    filter(geo_breakdown %in% geo_break) %>%
-    select(
-      time_period, geo_breakdown,
-      Re_referrals_percent
-    )
-  ggplot(Cin_referrals_data , aes(`time_period`, `Re_referrals_percent`, color = geo_breakdown))+
-    geom_line() +
-    ylab("Re-referrals within 12 months (%)")+
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-    )
-}
-
 
 

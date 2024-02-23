@@ -1400,28 +1400,28 @@ server <- function(input, output, session) {
   })
   
   
-  # CIN referral plot
-  output$plot_cin_referral <- plotly::renderPlotly({
-    ggplotly(
-      plot_cin_referrals(input$geographic_breakdown_o1, input$select_geography_o1) %>%
-        config(displayModeBar = F),
-      height = 420
-    )
-  })
-
- # CIN referral table alternative
-  output$table_cin_referral  <- renderDataTable({
-    datatable(
-      cin_referrals %>%
-        filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
-        select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
-      colnames = c("Time Period", "Geographical Breakdown",  "Number of referrals in the year", "Number of Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months of a previous referral (%)"),
-      options = list(
-        scrollx = FALSE,
-        paging = TRUE
-      )
-    )
-  })
+ #  # CIN referral plot
+ #  output$plot_cin_referral <- plotly::renderPlotly({
+ #    ggplotly(
+ #      plot_cin_referrals(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+ #        config(displayModeBar = F),
+ #      height = 420
+ #    )
+ #  })
+ # 
+ # # CIN referral table alternative
+ #  output$table_cin_referral  <- renderDataTable({
+ #    datatable(
+ #      cin_referrals %>%
+ #        filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
+ #        select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
+ #      colnames = c("Time Period", "Geographical Breakdown",  "Number of referrals in the year", "Number of Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months of a previous referral (%)"),
+ #      options = list(
+ #        scrollx = FALSE,
+ #        paging = TRUE
+ #      )
+ #    )
+ #  })
 
   
   
@@ -1513,8 +1513,87 @@ server <- function(input, output, session) {
   })
   
   
+  ##CIN referral plot
+  output$plot_cin_referral <- plotly::renderPlotly({
+    validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
+             need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
+    #not both
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_referrals %>%
+        filter(geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_referrals %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') 
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cin_referrals %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) 
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cin_referrals %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))
+    }
+    
+    ggplotly(
+      plotly_time_series(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'Re_referrals_percent', 'Re-referrals (%)')%>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
   
   
+  #CIN referral table
+  output$table_cin_referral <- renderDataTable({
+    #neither checkboxes
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data <- cin_referrals %>% filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
+        select(time_period, geo_breakdown,Referrals, Re_referrals, Re_referrals_percent)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_referrals %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') %>%
+        select(time_period, geo_breakdown,Referrals, Re_referrals, Re_referrals_percent)
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cin_referrals %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) %>%
+        select(time_period, geo_breakdown,Referrals, Re_referrals, Re_referrals_percent)
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cin_referrals %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))%>%
+        select(time_period, geo_breakdown,Referrals, Re_referrals, Re_referrals_percent)
+    }
+    
+    datatable(
+      filtered_data %>% 
+        select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
+      colnames = c("Time Period", "Geographical Breakdown", "Referrals within the year", "Re-referrals within 12 months", "Re-referrals (%)"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
   
   
   
