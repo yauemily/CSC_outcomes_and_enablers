@@ -1365,7 +1365,7 @@ server <- function(input, output, session) {
         arrange(desc(CIN_rate))
       
     } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
-      data <- cin_rates %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
+      data <- cin_rates %>% filter(geographic_level == 'Local authority', time_period == max(cin_rates$time_period)) %>% select(
         time_period, geo_breakdown,
         CIN_rate
       ) %>%
@@ -1560,7 +1560,7 @@ server <- function(input, output, session) {
     datatable(
       filtered_data %>% 
         select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
-      colnames = c("Time Period", "Geographical Breakdown", "Referrals within the year", "Re-referrals within 12 months", "Re-referrals (%)"),
+      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year", "Re-referrals within 12 months of a previous referral", "Re-referrals (%)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1573,11 +1573,10 @@ server <- function(input, output, session) {
     datatable(
       cin_referrals %>% filter(geographic_level == 'Regional', time_period == max(cin_referrals$time_period)) %>% select(
         time_period, geo_breakdown,
-        Referrals, referrals_not_including_re_referrals, referrals_not_including_re_referrals_perc, Re_referrals, Re_referrals_percent
+        Referrals, Re_referrals, Re_referrals_percent
       ) %>%
         arrange(desc(Re_referrals_percent)),
       colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year",
-                   "Referrals in the year not including re-referrals within 12 months", "Referrals not including re-referrals (%)", 
                    "Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months (%)" ),
       options = list(
         scrollx = FALSE,
@@ -1604,20 +1603,19 @@ server <- function(input, output, session) {
       data <- cin_referrals %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
         select(time_period, geo_breakdown,
-               Referrals, referrals_not_including_re_referrals, referrals_not_including_re_referrals_perc, Re_referrals, Re_referrals_percent)  %>%
+               Referrals, Re_referrals, Re_referrals_percent)  %>%
         arrange(desc(Re_referrals_percent))
       
     } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
-      data <- cin_referrals  %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
+      data <- cin_referrals  %>% filter(geographic_level == 'Local authority', time_period == max(cin_referrals$time_period)) %>% select(
         time_period, geo_breakdown,
-        Referrals, referrals_not_including_re_referrals, referrals_not_including_re_referrals_perc, Re_referrals, Re_referrals_percent) %>%
+        Referrals, Re_referrals, Re_referrals_percent) %>%
         arrange(desc(Re_referrals_percent))
     }
     
     datatable(
       data,
       colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year",
-                   "Referrals in the year not including re-referrals within 12 months", "Referrals not including re-referrals (%)", 
                    "Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months (%)"),
       options = list(
         scrollx = FALSE,
@@ -1627,6 +1625,23 @@ server <- function(input, output, session) {
   })
   
   
+  #cin referral plot by region
+  output$plot_cin_referral_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_referral_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  #cin referral chart by LA
+  output$plot_cin_referral_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_referral_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
   
   
   
