@@ -1313,29 +1313,7 @@ server <- function(input, output, session) {
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_rates$time_period),")", "</p>")
   })
   
-  # CIN plot
-  # output$plot_cin_rate <- plotly::renderPlotly({
-  #   ggplotly(
-  #     plot_cin_rate(input$geographic_breakdown_o1, input$select_geography_o1) %>%
-  #       config(displayModeBar = F),
-  #     height = 420
-  #   )
-  # })
-  
-  #CIN table alternative
-  output$table_cin_rate <- renderDataTable({
-    datatable(
-      cin_rates %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown_o1) %>% 
-        select(time_period, geo_breakdown, CIN_rate),
-      colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
-      options = list(
-        scrollx = FALSE,
-        paging = TRUE
-      )
-    )
-  })
-  
+
   
   #cin rate plot by region
   output$plot_cin_rate_reg <- plotly::renderPlotly({
@@ -1492,7 +1470,47 @@ server <- function(input, output, session) {
       layout(yaxis = list(range = c(0, max_rate)))
   })
   
-  
+  output$table_cin_rate <- renderDataTable({
+    #neither checkboxes
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data <- cin_rates %>% filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
+        select(time_period, geo_breakdown,CIN_number,CIN_rate)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_rates %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') %>%
+        select(time_period, geo_breakdown,CIN_number,CIN_rate)
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cin_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) %>%
+        select(time_period, geo_breakdown,CIN_number,CIN_rate)
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cin_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))%>%
+        select(time_period, geo_breakdown,CIN_number,CIN_rate)
+    }
+    
+    datatable(
+      filtered_data %>% 
+              select(time_period, geo_breakdown, CIN_number,CIN_rate),
+      colnames = c("Time Period", "Geographical Breakdown", "CIN at 31 March", "CIN Rate Per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
   
   
   

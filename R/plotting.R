@@ -1251,32 +1251,7 @@ plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
 
 # Outcome 1 - Access to support getting help charts ----
 # CIN rates -------
-# plot_cin_rate <- function(geo_lvl, geo_break){
-#   Cin_data <- cin_rates %>%
-#     filter(geo_breakdown %in% geo_break) %>%
-#     select(
-#       time_period, geo_breakdown,
-#       CIN_rate
-#     )
-#   ggplot(Cin_data, aes(`time_period`, `CIN_rate`, color = geo_breakdown))+
-#     geom_line() +
-#     ylab("CIN rates per 10,000")+
-#     xlab("Time Period") +
-#     theme_classic() +
-#     theme(
-#       text = element_text(size = 12),
-#       axis.title.x = element_text(margin = margin(t = 12)),
-#       axis.title.y = element_text(margin = margin(r = 12)),
-#       axis.line = element_line(size = 1.0)
-#     ) +
-#     scale_y_continuous(limits = c(0, 2000))+
-#     labs(color='Breakdown')+
-#     scale_color_manual(
-#       "Breakdown",
-#       #breaks = unique(c("England", inputArea)),
-#       values = gss_colour_pallette
-#     )
-# }
+
 #cin rate chart by region
 plot_cin_rate_reg <- function(){
   cin_reg_data <- cin_rates %>%
@@ -1394,15 +1369,15 @@ plot_cin_rates_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = 
 
 
 # Outcome 1 - Access to support getting help charts ----
-# CIN referrals -------
+#CIN referrals -------
 plot_cin_referrals <- function(geo_lvl, geo_break){
-  Cin__referrals_data <- cin_referrals %>%
+  Cin_referrals_data <- cin_referrals %>%
     filter(geo_breakdown %in% geo_break) %>%
     select(
       time_period, geo_breakdown,
       Re_referrals_percent
     )
-  ggplot(Cin__referrals_data , aes(`time_period`, `Re_referrals_percent`, color = geo_breakdown))+
+  ggplot(Cin_referrals_data , aes(`time_period`, `Re_referrals_percent`, color = geo_breakdown))+
     geom_line() +
     ylab("Re-referrals within 12 months (%)")+
     xlab("Time Period") +
@@ -1421,8 +1396,6 @@ plot_cin_referrals <- function(geo_lvl, geo_break){
       values = gss_colour_pallette
     )
 }
-
-
 
 
 
