@@ -1568,6 +1568,69 @@ server <- function(input, output, session) {
     )
   })
   
+  #cin referral table by region
+  output$table_cin_referral_reg <- renderDataTable({
+    datatable(
+      cin_referrals %>% filter(geographic_level == 'Regional', time_period == max(cin_referrals$time_period)) %>% select(
+        time_period, geo_breakdown,
+        Referrals, referrals_not_including_re_referrals, referrals_not_including_re_referrals_perc, Re_referrals, Re_referrals_percent
+      ) %>%
+        arrange(desc(Re_referrals_percent)),
+      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year",
+                   "Referrals in the year not including re-referrals within 12 months", "Referrals not including re-referrals (%)", 
+                   "Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months (%)" ),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  #cin referral table by LA
+  output$table_cin_referral_la <- renderDataTable({
+    if (input$select_geography_o1 == "Regional") {
+      if (input$geographic_breakdown_o1 == "London") {
+        # Include both Inner London and Outer London
+        location <- location_data %>%
+          filter(region_name %in% c("Inner London", "Outer London")) %>%
+          pull(la_name)
+      } else {
+        # Get the la_name values within the selected region_name
+        location <- location_data %>%
+          filter(region_name == input$geographic_breakdown_o1) %>%
+          pull(la_name)
+      }
+      
+      data <- cin_referrals %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+        select(time_period, geo_breakdown,
+               Referrals, referrals_not_including_re_referrals, referrals_not_including_re_referrals_perc, Re_referrals, Re_referrals_percent)  %>%
+        arrange(desc(Re_referrals_percent))
+      
+    } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
+      data <- cin_referrals  %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
+        time_period, geo_breakdown,
+        Referrals, referrals_not_including_re_referrals, referrals_not_including_re_referrals_perc, Re_referrals, Re_referrals_percent) %>%
+        arrange(desc(Re_referrals_percent))
+    }
+    
+    datatable(
+      data,
+      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year",
+                   "Referrals in the year not including re-referrals within 12 months", "Referrals not including re-referrals (%)", 
+                   "Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months (%)"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  
+  
+  
+  
+  
   
   # Don't touch the code below -----------------------
 
@@ -1616,14 +1679,4 @@ server <- function(input, output, session) {
     stopApp()
   })
 }
-
-
-
-
-
-
-
-
-
-
 
