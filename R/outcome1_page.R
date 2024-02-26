@@ -182,6 +182,16 @@ outcome1_tab <- function(){
                 h2("CLA Rates by UASC Status"),
                 br(),
                 plotlyOutput("plot_uasc"),
+                
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_uasc",
+                  label = "View chart as a table",
+                  help_text = (
+                    dataTableOutput("table_uasc")
+                  )
+                )
               ),
             ),
             tabPanel(

@@ -1313,6 +1313,21 @@ server <- function(input, output, session) {
     )
   })
   
+  output$table_uasc <- renderDataTable({
+    datatable(
+      combined_cla_data %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown_o1, 
+               characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children"),
+               population_count == "Children starting to be looked after each year") %>% 
+        select(time_period, geo_breakdown, placement_per_10000, characteristic),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE,
+        target = 'column'
+      )
+    )
+  })
+  
   # Don't touch the code below -----------------------
 
   observeEvent(input$go, {

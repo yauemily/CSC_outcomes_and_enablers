@@ -1247,9 +1247,9 @@ plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   return(p)
 }
 
-plot_uasc <- function(geo_breakdown, geographic_level){
+plot_uasc <- function(geo_break, geo_lvl){
   uasc_data <- uasc_data %>%
-    filter(geo_breakdown %in% geo_breakdown) %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
     select(time_period, geo_breakdown, placement_per_10000, characteristic)
 
   
@@ -1260,6 +1260,9 @@ plot_uasc <- function(geo_breakdown, geographic_level){
   
   # Round the max_rate to the nearest 50
   max_rate <- ceiling(max_rate / 50) * 50
+  
+  uasc_data <- uasc_data %>%
+    complete(time_period, geo_breakdown, fill = list(placement_per_10000 = 0))
   
   ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic))) +
     geom_bar(stat = "identity") +
@@ -1273,6 +1276,7 @@ plot_uasc <- function(geo_breakdown, geographic_level){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
+    scale_x_continuous(breaks = seq(min(uasc_data$time_period), max(uasc_data$time_period), by = 1)) +
     scale_y_continuous(limits = c(0, max(max_rate)))+
     scale_fill_manual(
       "Characteristic",
