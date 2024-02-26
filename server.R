@@ -1336,7 +1336,7 @@ server <- function(input, output, session) {
       height = 420
     )
   })
-  
+
   
   #cin rate table by region
   output$table_cin_rates_reg <- renderDataTable({
@@ -1353,7 +1353,9 @@ server <- function(input, output, session) {
       )
     )
   })
-  
+
+
+
   #cin rate table by LA
   output$table_cin_rates_la <- renderDataTable({
     if (input$select_geography_o1 == "Regional") {
@@ -1653,9 +1655,28 @@ server <- function(input, output, session) {
     )
   })
   
+  output$plot_uasc <- plotly::renderPlotly({
+    ggplotly(
+      plot_uasc(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
   
-  
-  
+  output$table_uasc <- renderDataTable({
+    datatable(
+      combined_cla_data %>% 
+        filter(geo_breakdown %in% input$geographic_breakdown_o1, 
+               characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children"),
+               population_count == "Children starting to be looked after each year") %>% 
+        select(time_period, geo_breakdown, placement_per_10000, characteristic),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE,
+        target = 'column'
+      )
+    )
+  })
   
   # Don't touch the code below -----------------------
 
