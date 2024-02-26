@@ -19,7 +19,7 @@ outcome1_tab <- function(){
               selectizeInput(
                 inputId = "select_geography_o1",
                 label = "Select a geographical level:",
-                choices = distinct(dropdown_choices['geographic_level']),
+                choices = unique(dropdown_choices %>% pull('geographic_level')),
                 selected = NULL,
                 multiple = FALSE,
                 options = NULL
