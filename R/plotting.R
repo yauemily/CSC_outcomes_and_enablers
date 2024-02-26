@@ -873,32 +873,32 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
 # }
 
 
-plot_caseload_rate <- function(geo_lvl, geo_break) {
-  vacancy_data <- workforce_data %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
-    select(
-      time_period, geo_breakdown,
-      caseload_fte
-    )
-  ggplot(vacancy_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown)) +
-    geom_line() +
-    ylab("Average Caseload (FTE)") +
-    xlab("Time Period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 35))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-    )
-}
+# plot_caseload_rate <- function(geo_lvl, geo_break) {
+#   vacancy_data <- workforce_data %>%
+#     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
+#     select(
+#       time_period, geo_breakdown,
+#       caseload_fte
+#     )
+#   ggplot(vacancy_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown)) +
+#     geom_line() +
+#     ylab("Average Caseload (FTE)") +
+#     xlab("Time Period") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.x = element_text(margin = margin(t = 12)),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 35))+
+#     labs(color='Breakdown')+
+#     scale_color_manual(
+#       "Breakdown",
+#       #breaks = unique(c("England", inputArea)),
+#       values = gss_colour_pallette
+#     )
+# }
 
 #bar charts test
 plot_caseloads_reg <- function(){
@@ -906,6 +906,12 @@ plot_caseloads_reg <- function(){
     filter(geographic_level == "Regional", time_period == max(time_period)) %>%
     select(time_period, geo_breakdown, caseload_fte) %>%
     mutate(geo_breakdown = reorder(geo_breakdown, -caseload_fte)) # Order by caseload_fte
+  
+  # Set the max y-axis scale
+  max_rate <- max(workforce_data$caseload_fte, na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
   
   ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
@@ -919,7 +925,7 @@ plot_caseloads_reg <- function(){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 30))+
+    scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
       "Time Period",
       #breaks = unique(c("England", inputArea)),
@@ -974,6 +980,13 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   }
   
   
+  # Set the max y-axis scale
+  max_rate <- max(workforce_data$caseload_fte, na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  
   p <- ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
     ylab("Average Caseload (FTE)") +
@@ -984,7 +997,7 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 30))+
+    scale_y_continuous(limits = c(0, max_rate ))+
     scale_fill_manual(
       "LA Selection",
       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
