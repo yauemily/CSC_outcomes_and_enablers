@@ -449,6 +449,11 @@ read_cla_placement_data <- function(file = "data/la_children_who_started_to_be_l
       geographic_level == "Regional" ~ region_name,
       geographic_level == "Local authority" ~ la_name
     )) %>%
+    mutate(percentage = case_when(
+      percentage == "z" ~ NA,
+      percentage == "x"  ~ NA,
+      TRUE ~ as.numeric(percentage)))   %>%
+    filter(!is.na(percentage)) %>%
     select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, cla_group, characteristic, number, percentage) %>% distinct()
   
   return(cla_placement_data)
@@ -476,5 +481,22 @@ merge_cla_dataframes <- function() {
   merged_data = merge(cla_rates, cla_placements, by.x=c('geo_breakdown', 'time_period', 'geographic_level', 'region_code', 'region_name', 'new_la_code', 'la_name'), 
                                                  by.y=c('geo_breakdown', 'time_period', 'geographic_level', 'region_code', 'region_name', 'new_la_code', 'la_name'))
   
+  merged_data <- merged_data %>%
+    mutate(placement_per_10000 = round((as.numeric(placements_number)/as.numeric(population_estimate)) * 10000, 0))
+  
+  
   return(merged_data)
+}
+
+test_uasc <- function() {
+  
+  combined_cla_data <- merge_cla_dataframes()
+  
+  uasc_data <- combined_cla_data %>%
+    filter(characteristic %in% c("Unaccompanied asylum-seeking children", 
+                                 "Non-unaccompanied asylum-seeking children"),
+           population_count == "Children starting to be looked after each year")
+  
+
+  return(uasc_data)
 }

@@ -1305,6 +1305,14 @@ server <- function(input, output, session) {
     )
   })
   
+  output$plot_uasc <- plotly::renderPlotly({
+    ggplotly(
+      plot_uasc(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
   # Don't touch the code below -----------------------
 
   observeEvent(input$go, {

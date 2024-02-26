@@ -178,6 +178,11 @@ outcome1_tab <- function(){
                   dataTableOutput("table_cla_rate_la")
                 )
               ),
+              fluidRow(
+                h2("CLA Rates by UASC Status"),
+                br(),
+                plotlyOutput("plot_uasc"),
+              ),
             ),
             tabPanel(
               "Access to support and getting help",
