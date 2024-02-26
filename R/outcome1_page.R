@@ -17,7 +17,7 @@ outcome1_tab <- function(){
             column(
               width = 6,
               selectizeInput(
-                inputId = "select_geography",
+                inputId = "select_geography_o1",
                 label = "Select a geographical level:",
                 choices = distinct(dropdown_choices['geographic_level']),
                 selected = NULL,
@@ -27,8 +27,8 @@ outcome1_tab <- function(){
             ),
             column(
               width = 6,
-              conditionalPanel(condition = "input.select_geography != 'National'",selectizeInput(
-                inputId = "geographic_breakdown",
+              conditionalPanel(condition = "input.select_geography_o1 != 'National'",selectizeInput(
+                inputId = "geographic_breakdown_o1",
                 label = "Select a breakdown: ",
                 choices = NULL,
                 selected = NULL,
@@ -39,15 +39,59 @@ outcome1_tab <- function(){
               )),
             )
           ),
+          gov_row(
+            conditionalPanel(condition = "input.select_geography_o1 != 'National'",
+                             column(
+                               width = 3,
+                               checkbox_Input(
+                                 inputId = "national_comparison_checkbox_o1",
+                                 cb_labels = "Compare with National",
+                                 checkboxIds = "Yes_national",
+                                 label = "",
+                                 hint_label = NULL,
+                                 small = TRUE
+                               )
+                             )),
+            conditionalPanel(
+              condition = "(input.select_geography_o1 == 'Local authority')",
+              column(
+                width = 3,
+                checkbox_Input(
+                  inputId = "region_comparison_checkbox_o1",
+                  cb_labels = "Compare with Region",
+                  checkboxIds = "Yes_region",
+                  label = "",
+                  hint_label = NULL,
+                  small = TRUE
+                )
+              ),
+            )
+          )
         )
       ),
       br(),
       gov_row(
-        p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2") ),
+        br(),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 != 'Richmond upon Thames' && input.geographic_breakdown_o1 != 'West Northamptonshire')",
+          p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2") )),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'Richmond upon Thames')",
+          p("Please select ", strong("Kingston upon Thames"), " to view jointly reported statistics for Kingston upon Thames and Richmond upon Thames.") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'Kingston upon Thames')",
+          p("Kingston upon Thames and Richmond upon Thames submit a joint workforce return each year and their data is reported together against Kingston upon Thames.") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'North Northamptonshire')",
+          p("North Northamptonshire and West Northamptonshire submitted a joint workforce return in 2021 and onwards, and their data is reported together against North Northamptonshire. ") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'West Northamptonshire')",
+          p("Please select ", strong("North Northamptonshire"), ", or Northamptonshire for pre-2021 data, to view jointly reported statistics for North Northamptonshire and West Northamptonshire. ") ),
+        conditionalPanel(
+          condition = "(input.geographic_breakdown_o1 == 'Northamptonshire')",
+          p("To view 2021 and onwards data select ", strong("North Northamptonshire"), ". Northamptonshire local authority was replaced with two new unitary authorities, North Northamptonshire and West Northamptonshire, in April 2021.") ),
       ),
       gov_row(
-        br(),
-        h2("Confirmation Sentence"),
         br(),
         div(
           tabsetPanel(
@@ -79,7 +123,7 @@ outcome1_tab <- function(){
                     
                     insert_text(inputId = "social_work_turnover_definition", text = paste(
                       "<b>","Children looked after (CLA) rate", "</b><br>",
-                      "The CLA rate is calculated as the number of children that are looked after per 10000 people in the general population."
+                      "The CLA rate is calculated as the number of children that are looked after per 10,000 children in the general population."
                     )),
                     # p("plots go here"),
                     plotlyOutput("plot_cla_rate"),
@@ -105,14 +149,203 @@ outcome1_tab <- function(){
                   )
                 )
               ),
-
+              fluidRow(
+                h2("CLA Rates by Region"),
+                p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                br(),
+                plotlyOutput("plot_cla_rate_reg"),
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_cla_rate_reg",
+                  label = "View chart as a table",
+                  help_text = (
+                    dataTableOutput("table_cla_rate_reg")
+                  )
+                )
+              ),
+              h2("CLA Rates by Local Authority"),
+              p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+              p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
+              br(),
+              plotlyOutput("plot_cla_rate_la"),
+              br(),
+              br(),
+              details(
+                inputId = "tbl_cla_rate_la",
+                label = "View chart as a table",
+                help_text = (
+                  dataTableOutput("table_cla_rate_la")
+                )
+              ),
             ),
             tabPanel(
               "Access to support and getting help",
               fluidRow(
-                p("testing")
-              )
+                br(),
+                column(
+                  width = 6,
+                  value_box(
+                    title = "Children In Need Rate Per 10,000 Children",
+                    value = htmlOutput("cin_rate_headline_txt")
+                  )
+                ),
+                               column(
+                  width = 6,
+                  value_box(
+                    title = "Re-referrals within 12 months of a previous referral",
+                    value = htmlOutput("cin_referral_headline_txt")
+                  )
+                ),
+                br(),
+              ),
+              column(
+                width = 12,
+                # CIN Rates per 10000 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                gov_row(
+                  h2("Rate of Child in Need (CIN)"),
+                  
+                  p("Helping children to stay together with their families means ensuring the right support is in place at earlier stages of intervention. 
+                    Looking at the flow of children who become a CIN will show children being supported by the wider system. Combined with family stability indicators, this will reflect a broad view of flow into and through the children’s social care system."), 
+                  # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
+                  
+                  insert_text(inputId = "CIN_definition", text = paste(
+                    "<b>","Children in Need (CIN) rate", "</b><br>",
+                    "Rate of children in need at 31 March, per 10,000 children in the population."
+                  )),
+                  # p("plots go here"),
+                  plotlyOutput("plot_cin_rate"),
+                  br(),
+                  # Expandable for the table alternative
+                  details(
+                    inputId = "table_cin_rate",
+                    label = "View chart as a table",
+                    help_text = (
+                      dataTableOutput("table_cin_rate")
+                    )
+                  ),
+                  #expandable for the additional info links
+                  details(
+                    inputId = "CIN_info",
+                    label = "Additional information:",
+                    help_text = (
+                      tags$ul(
+                        tags$li("Rate of children as at 31 March 2023 assessed as needing help and protection as a result of risks to their devlopment or health."),
+                        tags$li("Rates per 10,000 children are calculated based on ONS", a(href = "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/annualmidyearpopulationestimates/mid2021","mid-year population estimates."),  "for children aged 0 to 17 years. The rates for 2022 and 2023 are based on 2021 population estimates which in turn are based on 2021 Census data."),
+                        tags$li("The rates for 2023 have been calculated based on 2021 population estimates as 2022 estimates were not available at the time of publication. Therefore, some caution is needed when interpreting the 2023 rates, either in isolation or in comparison with other years. The 2023 rates will be revised as part of the next 2024 publication."),
+                        tags$li("Revised population estimates for 2012 to 2020 based on 2021 Census data, to calculate revised 2013 to 2021 rates, were not available at the time of publication. Therefore, some caution is needed when interpreting these rates, either in isolation or in comparison with other years. The 2013 to 2021 rates will be revised as part of the next 2024 publication."),
+                        tags$br(),
+                        p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/characteristics-of-children-in-need/data-guidance", "Children in need data guidance."),
+                          tags$br(),
+                          "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/characteristics-of-children-in-need-methodology", "Children in need methodology."))
+                      )
+                    )
+                  ),
+                  fluidRow(
+                    h2("Children In Need Rates by Region"),
+                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                    br(),
+                    plotlyOutput("plot_cin_rate_reg"),
+                  ),
+                  fluidRow(
+                    details(
+                      inputId = "tbl_cin_rates_reg",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_cin_rates_reg")
+                      )
+                    )
+                  ),
+                  h2("CIN Rates by Local Authority"),
+                  p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                  p(sprintf("The graph represents data from %s.", max(cin_rates$time_period))),
+                  br(),
+                  plotlyOutput("plot_cin_rates_la"),
+                  br(),
+                  br(),
+                  details(
+                    inputId = "tbl_cin_rates_la",
+                    label = "View chart as a table",
+                    help_text = (
+                      dataTableOutput("table_cin_rates_la")
+                    )
+                  ),
+                )
+              ),
+              column(
+                width = 12,
+                # CIN referrals ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                gov_row(
+                  h2("Repeat referrals (within 12 months)"),
+                  
+                  p("If children are being referred to services repeatedly, this suggests that they and their families may not be receiving 
+                   the support necessary to allow them to thrive  independently as a family unit. Multiple referrals can be inefficient and 
+                   cause additional upset and trauma for the child and family, therefore reducing the rate of repeat referrals will result in better outcomes."), 
+                  # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
+                  
+                  insert_text(inputId = "CIN_referrals_definition", text = paste(
+                    "<b>","Re-referrals within 12 months", "</b><br>",
+                    "Percentage of re-referrals within 12 months of a previous referral in the year to 31 March."
+                  )),
+                  # p("plots go here"),
+                  plotlyOutput("plot_cin_referral"),
+                  br(),
+                  # Expandable for the table alternative
+                  details(
+                    inputId = "table_cin_referral",
+                    label = "View chart as a table",
+                    help_text = (
+                      dataTableOutput("table_cin_referral")
+                    )
+                  ),
+                  details(
+                    inputId = "CIN_referral_info",
+                    label = "Additional information:",
+                    help_text = (
+                      tags$ul(
+                        tags$li("If a child has more than one referral in a reporting year, then each referral is counted."),
+                        tags$li("Data for the years ending 31 March 2021 and 2022 is not available for Hackney local authority, therefore 2020 data for Hackney has been included in 2021 and 2022 national totals, and regional totals for inner London and London. Refer to the methodology section for more information."),
+                        tags$br(),
+                        p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/characteristics-of-children-in-need/data-guidance", "Children in need data guidance."),
+                          tags$br(),
+                          "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/characteristics-of-children-in-need-methodology", "Children in need methodology."))
+                      )
+                    )
+                  ),
+                  fluidRow(
+                    h2("Re-referrals by Region"),
+                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                    br(),
+                    plotlyOutput("plot_cin_referral_reg"),
+                  ),
+                  fluidRow(
+                    details(
+                      inputId = "tbl_cin_referral_reg",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_cin_referral_reg")
+                      )
+                    )
+                  ),
+                  h2("Re-referrals by Local Authority"),
+                  p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                  p(sprintf("The graph represents data from %s.", max(cin_referrals$time_period))),
+                  br(),
+                  plotlyOutput("plot_cin_referral_la"),
+                  br(),
+                  br(),
+                  details(
+                    inputId = "tbl_cin_referral_la",
+                    label = "View chart as a table",
+                    help_text = (
+                      dataTableOutput("table_cin_referral_la")
+                    )
+                  ),
+                  
+                )
+              ),
             ),
+            
             tabPanel(
               "Child wellbeing and development",
               fluidRow(

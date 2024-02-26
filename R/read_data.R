@@ -427,6 +427,12 @@ read_cla_rate_data <- function(file = "data/cla_number_and_rate_per_10k_children
       geographic_level == "Regional" ~ region_name,
       geographic_level == "Local authority" ~ la_name
     )) %>%
+      mutate(rate_per_10000 = case_when(
+        rate_per_10000 == "z" ~ NA,
+        rate_per_10000 == "x"  ~ NA,
+        TRUE ~ as.numeric(rate_per_10000)))   %>%
+    filter(!is.na(rate_per_10000)) %>%
+    
     select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, population_count, population_estimate, number, rate_per_10000) %>% distinct()
   
   
@@ -434,7 +440,6 @@ read_cla_rate_data <- function(file = "data/cla_number_and_rate_per_10k_children
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# CLA rate per 10k children data
 read_cla_placement_data <- function(file = "data/la_children_who_started_to_be_looked_after_during_the_year.csv"){
   cla_placement_data <- read.csv(file)
   cla_placement_data <- colClean(cla_placement_data)%>%
@@ -472,3 +477,75 @@ merge_cla_dataframes <- function() {
   
   return(merged_data)
 }
+
+# CIN rate per 10k children data
+read_cin_rate_data <- function(file = "data/b1_children_in_need_2013_to_2023.csv"){
+  cin_rate_data <- read.csv(file)
+  cin_rate_data <- colClean(cin_rate_data)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+      mutate(At31_episodes = case_when(
+        At31_episodes == "Z" ~ NA,
+        At31_episodes == "x"  ~ NA,
+        At31_episodes == "c"  ~ NA,
+      TRUE ~ as.numeric(At31_episodes)))   %>%
+    mutate(At31_episodes_rate = case_when(
+      At31_episodes_rate == "Z" ~ NA,
+      At31_episodes_rate == "x"  ~ NA,
+      At31_episodes_rate == "c"  ~ NA,
+      TRUE ~ as.numeric(At31_episodes_rate)))   %>%
+        select(geographic_level, geo_breakdown, time_period, region_code, region_name, new_la_code, la_name, At31_episodes, At31_episodes_rate) %>% distinct() %>%
+    rename(CIN_rate = At31_episodes_rate, CIN_number =  At31_episodes)
+  
+  
+  return(cin_rate_data)
+}
+
+#CIN referrals data
+read_cin_referral_data <- function(file = "data/c1_children_in_need_referrals_and_rereferrals_2013_to_2023.csv"){
+  cin_referral_data <- read.csv(file)
+  cin_referral_data <- colClean(cin_referral_data)%>%
+    mutate(geo_breakdown = case_when(
+      geographic_level == "National" ~ "National",#NA_character_,
+      geographic_level == "Regional" ~ region_name,
+      geographic_level == "Local authority" ~ la_name
+    )) %>%
+    mutate(Referrals = case_when(
+      Referrals == "Z" ~ NA,
+      Referrals == "x"  ~ NA,
+      Referrals == "c"  ~ NA,
+      TRUE ~ as.numeric(Referrals)))   %>%
+    mutate(Re_referrals = case_when(
+      Re_referrals == "Z" ~ NA,
+      Re_referrals == "x"  ~ NA,
+      Re_referrals == "c"  ~ NA,
+      TRUE ~ as.numeric(Re_referrals)))   %>%
+    mutate(Re_referrals_percent = case_when(
+      Re_referrals_percent == "Z" ~ NA,
+      Re_referrals_percent == "x"  ~ NA,
+      Re_referrals_percent == "c"  ~ NA,
+      TRUE ~ as.numeric(Re_referrals_percent)))   %>%
+    select(time_period, geographic_level, geo_breakdown, region_code, region_name, new_la_code, la_name, Referrals, Re_referrals, Re_referrals_percent) %>% distinct()
+
+
+  # Calculate the number of referrals not including re-referrals
+  referrals <- cin_referral_data %>%
+    group_by(time_period, geographic_level, geo_breakdown,region_code, region_name, new_la_code, la_name) %>%
+    summarise(referrals_not_including_re_referrals_perc = round((Referrals - Re_referrals)/Referrals * 100,1),
+              referrals_not_including_re_referrals = Referrals - Re_referrals,
+              .groups = "drop")
+
+ # Join the referall back to the original dataframe
+   cin_referral_data <-  merge(referrals, cin_referral_data) %>%
+     arrange(desc(time_period))
+  
+  
+  return(cin_referral_data)
+}
+
+
+
+

@@ -124,6 +124,10 @@ cla_rates <- read_cla_rate_data()
 cla_placements <- read_cla_placement_data()
 combined_cla_data <- merge_cla_dataframes()
 
+#Read in the CIN  data
+cin_rates <- read_cin_rate_data()
+cin_referrals <- read_cin_referral_data()
+
 #Dropdowns
 choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National")%>% distinct()
 choices_LA <- workforce_data %>% filter(geographic_level == "Local authority") %>% select()
