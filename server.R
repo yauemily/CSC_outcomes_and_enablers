@@ -807,12 +807,20 @@ server <- function(input, output, session) {
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name)|geographic_level == 'National'))
     }
     
-    ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'caseload_fte', 'Average Caseload (FTE)')%>%
-        config(displayModeBar = F),
-      height = 420
-    )
-  })
+  # Set the max y-axis scale
+  max_rate <- max(workforce_data$caseload_fte, na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'caseload_fte', 'Average Caseload (FTE)', max_rate) %>%
+    config(displayModeBar = F)
+  
+  
+  ggplotly(p, height = 420) %>%
+    layout(yaxis = list(range = c(0, max_rate)))
+})
+  
   
   
   output$table_caseload <- renderDataTable({
