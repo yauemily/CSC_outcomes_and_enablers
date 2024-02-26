@@ -1147,6 +1147,7 @@ server <- function(input, output, session) {
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cla_rates$time_period),")", "</p>")
   })
   
+  # CLA rate Plot
   output$plot_cla_rate <- plotly::renderPlotly({
     validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
              need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
@@ -1194,6 +1195,7 @@ server <- function(input, output, session) {
       layout(yaxis = list(range = c(0, max_rate)))
   })
   
+  # CLA rate TABLE
   output$table_cla_rate <- renderDataTable({
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
@@ -1237,6 +1239,7 @@ server <- function(input, output, session) {
     )
   })
   
+  # CLA rate regional plot
   output$plot_cla_rate_reg <- plotly::renderPlotly({
     ggplotly(
       plot_cla_rate_reg() %>%
@@ -1245,6 +1248,7 @@ server <- function(input, output, session) {
     )
   })
   
+  # CLA rate regional table
   output$table_cla_rate_reg <- renderDataTable({
     datatable(
       cla_rates %>% filter(geographic_level == 'Regional', time_period == max(cla_rates$time_period), population_count == "Children starting to be looked after each year") %>% select(
@@ -1260,6 +1264,7 @@ server <- function(input, output, session) {
     )
   })
   
+  # CLA rate LA plot
   output$plot_cla_rate_la <- plotly::renderPlotly({
     ggplotly(
       plot_cla_rate_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
@@ -1268,6 +1273,7 @@ server <- function(input, output, session) {
     )
   })
   
+  # CLA rate La table
   output$table_cla_rate_la <- renderDataTable({
     if (input$select_geography_o1 == "Regional") {
       if (input$geographic_breakdown_o1 == "London") {
@@ -1304,6 +1310,342 @@ server <- function(input, output, session) {
       )
     )
   })
+  
+    # CIN rate headline
+  output$cin_rate_headline_txt <- renderText({
+   stat <- format(cin_rates %>% filter(time_period == max(cin_rates$time_period) & geo_breakdown %in% input$geographic_breakdown_o1) 
+                 %>% select(CIN_rate), nsmall = 1)
+    paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_rates$time_period),")", "</p>")
+  })
+  
+  #cin rate plot by region
+  output$plot_cin_rate_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_rate_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  
+  #cin rate table by region
+  output$table_cin_rates_reg <- renderDataTable({
+    datatable(
+      cin_rates %>% filter(geographic_level == 'Regional', time_period == max(cin_rates$time_period)) %>% select(
+        time_period, geo_breakdown,
+        CIN_rate
+      ) %>%
+        arrange(desc(CIN_rate)),
+      colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  #cin rate table by LA
+  output$table_cin_rates_la <- renderDataTable({
+    if (input$select_geography_o1 == "Regional") {
+      if (input$geographic_breakdown_o1 == "London") {
+        # Include both Inner London and Outer London
+        location <- location_data %>%
+          filter(region_name %in% c("Inner London", "Outer London")) %>%
+          pull(la_name)
+      } else {
+        # Get the la_name values within the selected region_name
+        location <- location_data %>%
+          filter(region_name == input$geographic_breakdown_o1) %>%
+          pull(la_name)
+      }
+      
+      data <- cin_rates %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+        select(time_period, geo_breakdown, CIN_rate)  %>%
+        arrange(desc(CIN_rate))
+      
+    } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
+      data <- cin_rates %>% filter(geographic_level == 'Local authority', time_period == max(cin_rates$time_period)) %>% select(
+        time_period, geo_breakdown,
+        CIN_rate
+      ) %>%
+        arrange(desc(CIN_rate))
+    }
+    
+    datatable(
+      data,
+      colnames = c("Time Period", "Geographical Breakdown", "CIN rates per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  #cin rate chart by LA
+  output$plot_cin_rates_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_rates_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  # CIN referral headline
+  output$cin_referral_headline_txt <- renderText({
+    stat <- format(cin_referrals %>% filter(time_period == max(cin_referrals$time_period) & geo_breakdown %in% input$geographic_breakdown_o1) 
+                   %>% select(Re_referrals_percent), nsmall = 1)
+    paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cin_referrals$time_period),")", "</p>")
+  })
+  
+    # CIN rate plot
+  output$plot_cin_rate <- plotly::renderPlotly({
+    validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
+             need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
+    #not both
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_rates %>%
+        filter(geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_rates %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') 
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cin_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) 
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cin_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))
+    }
+    
+ 
+    # Set the max y-axis scale
+    max_rate <- max(cin_rates$CIN_rate, na.rm = TRUE)
+    
+    # Round the max_rate to the nearest 50
+    max_rate <- ceiling(max_rate / 50) * 50
+    
+    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'CIN_rate', 'CIN Rate Per 10,000 Children', max_rate) %>%
+      config(displayModeBar = F)
+    
+    
+    ggplotly(p, height = 420) %>%
+      layout(yaxis = list(range = c(0, max_rate)))
+  })
+  
+  #CIN rate table
+  output$table_cin_rate <- renderDataTable({
+    #neither checkboxes
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data <- cin_rates %>% filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
+        select(time_period, geo_breakdown,CIN_number,CIN_rate)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_rates %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') %>%
+        select(time_period, geo_breakdown,CIN_number,CIN_rate)
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cin_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) %>%
+        select(time_period, geo_breakdown,CIN_number,CIN_rate)
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cin_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))%>%
+        select(time_period, geo_breakdown,CIN_number,CIN_rate)
+    }
+    
+    datatable(
+      filtered_data %>% 
+              select(time_period, geo_breakdown, CIN_number,CIN_rate),
+      colnames = c("Time Period", "Geographical Breakdown", "CIN at 31 March", "CIN Rate Per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+    ##CIN referral plot
+  output$plot_cin_referral <- plotly::renderPlotly({
+    validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
+             need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
+    #not both
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_referrals %>%
+        filter(geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_referrals %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') 
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cin_referrals %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) 
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cin_referrals %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))
+    }
+    
+    ggplotly(
+      plotly_time_series(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'Re_referrals_percent', 'Re-referrals (%)')%>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  #CIN referral table
+  output$table_cin_referral <- renderDataTable({
+    #neither checkboxes
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data <- cin_referrals %>% filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
+        select(time_period, geo_breakdown,Referrals, Re_referrals, Re_referrals_percent)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cin_referrals %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') %>%
+        select(time_period, geo_breakdown,Referrals, Re_referrals, Re_referrals_percent)
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cin_referrals %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) %>%
+        select(time_period, geo_breakdown,Referrals, Re_referrals, Re_referrals_percent)
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cin_referrals %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))%>%
+        select(time_period, geo_breakdown,Referrals, Re_referrals, Re_referrals_percent)
+    }
+    
+    datatable(
+      filtered_data %>% 
+        select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
+      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year", "Re-referrals within 12 months of a previous referral", "Re-referrals (%)"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  #cin referral table by region
+  output$table_cin_referral_reg <- renderDataTable({
+    datatable(
+      cin_referrals %>% filter(geographic_level == 'Regional', time_period == max(cin_referrals$time_period)) %>% select(
+        time_period, geo_breakdown,
+        Referrals, Re_referrals, Re_referrals_percent
+      ) %>%
+        arrange(desc(Re_referrals_percent)),
+      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year",
+                   "Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months (%)" ),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  #cin referral table by LA
+  output$table_cin_referral_la <- renderDataTable({
+    if (input$select_geography_o1 == "Regional") {
+      if (input$geographic_breakdown_o1 == "London") {
+        # Include both Inner London and Outer London
+        location <- location_data %>%
+          filter(region_name %in% c("Inner London", "Outer London")) %>%
+          pull(la_name)
+      } else {
+        # Get the la_name values within the selected region_name
+        location <- location_data %>%
+          filter(region_name == input$geographic_breakdown_o1) %>%
+          pull(la_name)
+      }
+      
+      data <- cin_referrals %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+        select(time_period, geo_breakdown,
+               Referrals, Re_referrals, Re_referrals_percent)  %>%
+        arrange(desc(Re_referrals_percent))
+      
+    } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
+      data <- cin_referrals  %>% filter(geographic_level == 'Local authority', time_period == max(cin_referrals$time_period)) %>% select(
+        time_period, geo_breakdown,
+        Referrals, Re_referrals, Re_referrals_percent) %>%
+        arrange(desc(Re_referrals_percent))
+    }
+    
+    datatable(
+      data,
+      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year",
+                   "Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months (%)"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  
+  #cin referral plot by region
+  output$plot_cin_referral_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_referral_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  #cin referral chart by LA
+  output$plot_cin_referral_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_cin_referral_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  
+  
+  
   
   # Don't touch the code below -----------------------
 
@@ -1352,3 +1694,4 @@ server <- function(input, output, session) {
     stopApp()
   })
 }
+
