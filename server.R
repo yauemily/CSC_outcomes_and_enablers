@@ -356,6 +356,7 @@ server <- function(input, output, session) {
   output$plot_turnover_reg <- plotly::renderPlotly({
     ggplotly(
       plot_turnover_reg() %>%
+      #by_region_bar_plot(workforce_data, 'turnover_rate_fte_perc','Turnover Rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )

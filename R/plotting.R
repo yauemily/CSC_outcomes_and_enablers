@@ -130,20 +130,19 @@ by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_
   #     filter((la_name != '')) %>%
   #     unique()
   # }
-  
-  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+  #location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
   
   if (selected_geo_lvl == "Local authority") {
-    turnover_reg_data <- workforce_data %>%
+    turnover_reg_data <- dataset %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, turnover_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -turnover_rate_fte_perc),
+      select(time_period, geo_breakdown, `yvalue`) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`),
              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
   } else if (selected_geo_lvl == "National") {
-    turnover_reg_data <- workforce_data %>%
+    turnover_reg_data <- dataset %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, turnover_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -turnover_rate_fte_perc),
+      select(time_period, geo_breakdown, `yvalue`) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`),
              is_selected = "Not Selected")
   } else if (selected_geo_lvl == "Regional") {
     
@@ -160,17 +159,21 @@ by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_
         pull(la_name)
     }
     
-    turnover_reg_data <- workforce_data %>%
+    turnover_reg_data <- dataset %>%
       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, turnover_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -turnover_rate_fte_perc),
-             is_selected = "Selected")
+      select(time_period, geo_breakdown, `yvalue`) %>%
+      mutate(`Time period` = as.character(`time_period`)) %>%
+      rename(`Breakdown` = `geo_breakdown`) %>%
+      #rename_at(yvalue, ~ str_to_title(str_replace_all(.,  "_", " ")))
+      mutate(`Breakdown` = reorder(`Breakdown`, -`yvalue`),
+             is_selected = "Selected")%>%
+      rename_at(yvalue, ~ str_to_title(str_replace_all(.,  "_", " ")))
   }
   
   
-  p <- ggplot(turnover_reg_data, aes(`geo_breakdown`, `turnover_rate_fte_perc`, fill = `is_selected`)) +
+  p <- ggplot(turnover_reg_data, aes(`geo_breakdown`, y = !!sym(str_to_title(str_replace_all(yvalue,"_"," "))), fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Turnover Rate (FTE) %") +
+    ylab(yaxis_title) +
     xlab("") +
     theme_classic() +
     theme(
