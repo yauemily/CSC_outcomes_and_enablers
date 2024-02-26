@@ -89,6 +89,12 @@ enabler2_tab <- function() {
         conditionalPanel(
           condition = "(input.geographic_breakdown_e2 == 'Northamptonshire')",
           p("To view 2021 and onwards data select ", strong("North Northamptonshire"), ". Northamptonshire local authority was replaced with two new unitary authorities, North Northamptonshire and West Northamptonshire, in April 2021.") ),
+        conditionalPanel(
+        condition = "(input.geographic_breakdown_e2 == 'Poole')",
+        p("To view 2019 and onwards data select ", strong("Bournemouth, Christchurch and Poole"),". Bournemouth, Christchurch and Poole local authority was formed in April 2019.") ),
+      conditionalPanel(
+        condition = "(input.geographic_breakdown_e2 == 'Bournemouth')",
+        p("To view 2019 and onwards data select ", strong("Bournemouth, Christchurch and Poole"),". Bournemouth, Christchurch and Poole local authority was formed in April 2019.") ),
         #p(htmlOutput("enabler2_choice_text2")),
         br(),
         div(

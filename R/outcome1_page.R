@@ -72,25 +72,17 @@ outcome1_tab <- function(){
       br(),
       gov_row(
         br(),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 != 'Richmond upon Thames' && input.geographic_breakdown_o1 != 'West Northamptonshire')",
-          p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2") )),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 == 'Richmond upon Thames')",
-          p("Please select ", strong("Kingston upon Thames"), " to view jointly reported statistics for Kingston upon Thames and Richmond upon Thames.") ),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 == 'Kingston upon Thames')",
-          p("Kingston upon Thames and Richmond upon Thames submit a joint workforce return each year and their data is reported together against Kingston upon Thames.") ),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 == 'North Northamptonshire')",
-          p("North Northamptonshire and West Northamptonshire submitted a joint workforce return in 2021 and onwards, and their data is reported together against North Northamptonshire. ") ),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 == 'West Northamptonshire')",
-          p("Please select ", strong("North Northamptonshire"), ", or Northamptonshire for pre-2021 data, to view jointly reported statistics for North Northamptonshire and West Northamptonshire. ") ),
-        conditionalPanel(
+        p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2")),
+       conditionalPanel(
           condition = "(input.geographic_breakdown_o1 == 'Northamptonshire')",
-          p("To view 2021 and onwards data select ", strong("North Northamptonshire"), ". Northamptonshire local authority was replaced with two new unitary authorities, North Northamptonshire and West Northamptonshire, in April 2021.") ),
-      ),
+          p("To view 2021 and onwards data select ", strong("North Northamptonshire"),"or", strong("West Northamptonshire"),". Northamptonshire local authority was replaced with two new unitary authorities, North Northamptonshire and West Northamptonshire, in April 2021.") ),
+       conditionalPanel(
+         condition = "(input.geographic_breakdown_o1 == 'Poole')",
+         p("To view 2020 and onwards data select ", strong("Bournemouth, Christchurch and Poole"),". Bournemouth, Christchurch and Poole local authority was formed in April 2019.") ),
+       conditionalPanel(
+         condition = "(input.geographic_breakdown_o1 == 'Bournemouth')",
+         p("To view 2020 and onwards data select ", strong("Bournemouth, Christchurch and Poole"),". Bournemouth, Christchurch and Poole local authority was formed in April 2019.") ),
+                   ),
       gov_row(
         br(),
         div(
