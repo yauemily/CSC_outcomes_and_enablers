@@ -107,7 +107,7 @@ outcome1_tab <- function(){
                   width = 12,
                   # CLA Rates per 10000 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
-                    h2("Rate of new entrants to care, with a breakdown by whether new entrants to care are Unaccompanied AsylumSeeking Children (UASC)"),
+                    h2("Rate of new entrants to care, with a breakdown by whether new entrants to care are Unaccompanied Asylum Seeking Children (UASC)"),
                     
                     p("This measures the flow of those children moving into care. Where UASC are placed within an authority, 
                       this will represent an unavoidable increase in numbers of children entering the system. This breakdown is provided for context."), 
@@ -184,6 +184,12 @@ outcome1_tab <- function(){
                     dataTableOutput("table_uasc")
                   )
                 )
+              ),
+              fluidRow(
+                h2("CLA Rates by UASC Status per Region"),
+                p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                br(),
+                plotlyOutput("plot_uasc_reg"),
               ),
             ),
             tabPanel(

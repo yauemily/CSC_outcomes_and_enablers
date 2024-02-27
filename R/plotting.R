@@ -1282,7 +1282,7 @@ plot_uasc <- function(geo_break, geo_lvl){
   # Round the max_rate to the nearest 50
   max_rate <- ceiling(max_rate / 50) * 50
   
-  ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic))) +
+  ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
     geom_bar(stat = "identity") +
     ylab("Placements Per 10,000 Children") +
     xlab("Time Period") +
@@ -1297,7 +1297,44 @@ plot_uasc <- function(geo_break, geo_lvl){
     scale_x_continuous(breaks = seq(min(uasc_data$time_period), max(uasc_data$time_period), by = 1)) +
     scale_y_continuous(limits = c(0, max(max_rate)))+
     scale_fill_manual(
-      "Characteristic",
+      "UASC Status",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
+}
+
+#bar chart by region
+plot_uasc_reg <- function(){
+  uasc_data <- combined_cla_data %>%
+    filter(geographic_level == "Regional"
+           & characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children") &
+             population_count == "Children starting to be looked after each year" & time_period == max(time_period)) %>%
+    select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -placement_per_10000))
+  
+  # Set the max y-axis scale
+  max_rate <- max(combined_cla_data$placement_per_10000[combined_cla_data$population_count == "Children starting to be looked after each year" &
+                                                          combined_cla_data$characteristic %in% c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")],
+                  na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  ggplot(uasc_data , aes(`geo_breakdown`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
+    geom_bar(stat = "identity") +
+    ylab("Placements Per 10,000 Children") +
+    xlab("Region") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, max_rate))+
+    scale_fill_manual(
+      "UASC Status",
       #breaks = unique(c("England", inputArea)),
       values = gss_colour_pallette
     )

@@ -1203,6 +1203,7 @@ server <- function(input, output, session) {
     
     ggplotly(p, height = 420) %>%
       layout(yaxis = list(range = c(0, max_rate)))
+    
   })
   
   # CLA rate TABLE
@@ -1674,6 +1675,29 @@ server <- function(input, output, session) {
         scrollx = FALSE,
         paging = TRUE,
         target = 'column'
+      )
+    )
+  })
+  
+  output$plot_uasc_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_uasc_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  output$table_cin_rates_reg <- renderDataTable({
+    datatable(
+      cin_rates %>% filter(geographic_level == 'Regional', time_period == max(cin_rates$time_period)) %>% select(
+        time_period, geo_breakdown,
+        CIN_rate
+      ) %>%
+        arrange(desc(CIN_rate)),
+      colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
       )
     )
   })
