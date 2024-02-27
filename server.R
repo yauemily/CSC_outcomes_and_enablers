@@ -1686,6 +1686,21 @@ server <- function(input, output, session) {
     )
   })
   
+  output$table_cin_rates_reg <- renderDataTable({
+    datatable(
+      cin_rates %>% filter(geographic_level == 'Regional', time_period == max(cin_rates$time_period)) %>% select(
+        time_period, geo_breakdown,
+        CIN_rate
+      ) %>%
+        arrange(desc(CIN_rate)),
+      colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
   # Don't touch the code below -----------------------
 
   observeEvent(input$go, {
