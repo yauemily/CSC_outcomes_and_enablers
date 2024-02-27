@@ -96,8 +96,15 @@ outcome1_tab <- function(){
                 column(
                   width = 4,
                   value_box(
-                    title = "CLA Rate Per 10,000",
+                    title = "Children in Care Rate Per 10,000 Children",
                     value = htmlOutput("cla_rate_headline_txt")
+                  )
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Children in Care Rate by UASC Status Per 10,000 Children",
+                    value = htmlOutput("uasc_rate_headline_txt")
                   )
                 ),
                 br(),

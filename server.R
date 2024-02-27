@@ -1152,9 +1152,21 @@ server <- function(input, output, session) {
   
   # CLA rate headline
   output$cla_rate_headline_txt <- renderText({
-    stat <- format(cla_rates %>% filter(time_period == max(cla_rates$time_period) & geo_breakdown %in% input$geographic_breakdown_o1 & population_count == "Children starting to be looked after each year") 
+    stat <- format(cla_rates %>% filter(time_period == max(cla_rates$time_period) 
+                                        & geo_breakdown %in% input$geographic_breakdown_o1 
+                                        & population_count == "Children starting to be looked after each year") 
                    %>% select(rate_per_10000), nsmall = 0)
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cla_rates$time_period),")", "</p>")
+  })
+  
+  # UASC rate headline
+  output$uasc_rate_headline_txt <- renderText({
+    stat <- format(combined_cla_data %>% filter(time_period == max(combined_cla_data$time_period) 
+                                                & geo_breakdown %in% input$geographic_breakdown_o1 
+                                                & population_count == "Children starting to be looked after each year"
+                                                & characteristic == "Unaccompanied asylum-seeking children") 
+                   %>% select(placement_per_10000), nsmall = 0)
+    paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(combined_cla_data$time_period),")", "</p>")
   })
   
   # CLA rate Plot
