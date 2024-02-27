@@ -305,7 +305,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      testing_plot_function(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )

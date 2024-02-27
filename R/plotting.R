@@ -103,12 +103,12 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
       axis.line = element_line(size = 1.0)
     ) +
     scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')#+
-  #scale_color_manual(
-  #  "Breakdown",
+    labs(color='Breakdown')+
+  scale_color_manual(
+    "Breakdown",
   #breaks = unique(c("England", inputArea)),
-  #  values = gss_colour_pallette
-  #)
+    values = gss_colour_pallette
+  )
 }
 
 # function for time series but with a national comparison

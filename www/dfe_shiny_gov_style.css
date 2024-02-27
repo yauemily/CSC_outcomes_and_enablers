@@ -335,6 +335,7 @@ template. 80% works well here to reduce white space on the right hand side.*/
   --bs-card-color: #1d70b8!important;
   --bs-card-spacer-y: 0em;
   --bs-card-spacer-x: 0em;
+  
 }
 
 .bslib-value-box.default {
