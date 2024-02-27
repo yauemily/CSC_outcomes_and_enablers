@@ -108,14 +108,14 @@ enabler2_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Turnover Rate (FTE)",
+                    title = "Turnover rate (FTE)",
                     value = htmlOutput("s_w_headline_txt")
                   )
                 ),
                 column(
                   width = 4,
                   value_box(
-                    title = "Agency Worker Rate (FTE)",
+                    title = "Agency worker rate (FTE)",
                     value = htmlOutput("agency_rate_txt")
                     #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
                   )
@@ -123,7 +123,7 @@ enabler2_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Vacancy Rate (FTE)",
+                    title = "Vacancy rate (FTE)",
                     value = htmlOutput("vacancy_rate_txt")
                     #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(vacancy_rate_fte_perc),"%")
                   )
@@ -135,7 +135,7 @@ enabler2_tab <- function() {
                   width = 12,
                   # Social Worker Turnover ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
-                    h2("Social Worker Turnover"),
+                    h2("Social worker turnover"),
                     
                     p("Prioritising a stable workforce allows children, young people and families to maintain consistent relationships with practitioners."), 
                      # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
@@ -168,7 +168,7 @@ enabler2_tab <- function() {
                       )
                     ),
                     fluidRow(
-                      h2("Turnover Rates by Region"),
+                      h2("Turnover rates by region"),
                       p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                       br(),
                       plotlyOutput("plot_turnover_reg"),
@@ -182,7 +182,7 @@ enabler2_tab <- function() {
                         )
                       )
                     ),
-                    h2("Turnover Rates by Local Authority"),
+                    h2("Turnover rates by local authority"),
                     p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
                     p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
                     br(),
@@ -201,7 +201,7 @@ enabler2_tab <- function() {
                   
                   # Agency Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
-                    h2("Agency Rates"),
+                    h2("Agency rates"),
                     p("Prioritising a stable and permanent workforce allows children, young people and families to maintain consistent relationships with practitioners.
                            Agency workers should only be used as per the national agency rules from Autumn 2024."),
                     
@@ -239,7 +239,7 @@ enabler2_tab <- function() {
                       )
                     ), 
                     fluidRow(
-                      h2("Agency Rates by Region"),
+                      h2("Agency rates by region"),
                       p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                       br(),
                       plotlyOutput("plot_agency_reg"),
@@ -253,7 +253,7 @@ enabler2_tab <- function() {
                         )
                     ),
                     ),
-                    h2("Agency Rates by Local Authority"),
+                    h2("Agency rates by local authority"),
                     p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
                     p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
                     br(),
@@ -271,7 +271,7 @@ enabler2_tab <- function() {
                   
                   # Vacancy Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
-                    h2("Vacancy Rates"),
+                    h2("Vacancy rates"),
                     p("A workforce strategy should develop and maintain an effective workforce. With a well-supported workforce vacancy rates should remain low."),
                     # insert_text(inputId = "vacancy_rates_rationale", text = paste(
                     #   "A workforce strategy should develop and maintain an effective workforce.
@@ -305,7 +305,7 @@ enabler2_tab <- function() {
                       )
                     ),
                     fluidRow(
-                      h2("Vacancy Rates by Region"),
+                      h2("Vacancy rates by region"),
                       p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                       br(),
                       plotlyOutput("plot_vacancy_reg"),
@@ -319,7 +319,7 @@ enabler2_tab <- function() {
                         )
                       )
                     ),
-                    h2("Vacancy Rates by Local Authority"),
+                    h2("Vacancy rates by local authority"),
                     p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
                     p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
                     br(),
@@ -345,7 +345,7 @@ enabler2_tab <- function() {
                 column(
                   width = 4,
                   value_box(
-                    title = "Average Caseload (FTE)",
+                    title = "Average caseload (FTE)",
                     value = htmlOutput("caseload_txt")
                       #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
                   ),
@@ -355,7 +355,7 @@ enabler2_tab <- function() {
                 column(
                   width = 12,
                    gov_row(
-                     h2("Social Worker Caseloads"),
+                     h2("Social worker caseloads"),
                   #   #br(),
                     p("Ensuring that practitioners have an appropriate caseload supports recruitment and 
                          retention and allows practitioners to deliver impactful services."),
@@ -391,7 +391,7 @@ enabler2_tab <- function() {
                     )
                   ),
                   fluidRow(
-                    h2("Social Worker Caseloads by Region"),
+                    h2("Social worker caseloads by region"),
                     p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                     br(),
                     plotlyOutput("plot_caseload_reg"),
@@ -406,7 +406,7 @@ enabler2_tab <- function() {
                     )
                   ),
                   fluidRow(
-                    h2("Social Worker Caseloads by Local Authority"),
+                    h2("Social worker caseloads by local authority"),
                     p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
                     p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
                     br(),
@@ -442,7 +442,7 @@ enabler2_tab <- function() {
                 column(
                   width = 6,
                   value_box(
-                    title = "Social Workers from Ethnic Minority Backgrounds",
+                    title = "Social workers from ethnic minority backgrounds",
                     value = htmlOutput("non_white_txt")
                   )
                 )
