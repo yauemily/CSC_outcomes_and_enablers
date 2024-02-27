@@ -1687,14 +1687,14 @@ server <- function(input, output, session) {
     )
   })
   
-  output$table_cin_rates_reg <- renderDataTable({
+  output$table_uasc_reg <- renderDataTable({
     datatable(
-      cin_rates %>% filter(geographic_level == 'Regional', time_period == max(cin_rates$time_period)) %>% select(
-        time_period, geo_breakdown,
-        CIN_rate
-      ) %>%
-        arrange(desc(CIN_rate)),
-      colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
+      combined_cla_data %>% filter(geographic_level == 'Regional', characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children"),
+                           population_count == "Children starting to be looked after each year",
+                           time_period == max(time_period)) %>% 
+        select(time_period, geo_breakdown, placement_per_10000, characteristic),
+        #arrange(desc(placement_per_10000)),
+      colnames = c("Time Period", "Geographical Breakdown", "CLA Rate Per 10,000 by UASC Status", "UASC Status"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
