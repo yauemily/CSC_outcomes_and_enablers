@@ -114,7 +114,7 @@ outcome1_tab <- function(){
                     # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
                     
                     insert_text(inputId = "social_work_turnover_definition", text = paste(
-                      "<b>","Children looked after (CLA) rate", "</b><br>",
+                      "<b>","Children who started to be looked after rate", "</b><br>",
                       "The CLA rate is calculated as the number of children that are looked after per 10,000 children in the general population."
                     )),
                     # p("plots go here"),
@@ -142,7 +142,7 @@ outcome1_tab <- function(){
                 )
               ),
               fluidRow(
-                h2("CLA Rates by Region"),
+                h2("CLA Starting During the Year Rates by Region"),
                 p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                 br(),
                 plotlyOutput("plot_cla_rate_reg"),
@@ -156,7 +156,7 @@ outcome1_tab <- function(){
                   )
                 )
               ),
-              h2("CLA Rates by Local Authority"),
+              h2("CLA Starting During the Year Rates by Local Authority"),
               p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
               p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
               br(),
@@ -171,7 +171,7 @@ outcome1_tab <- function(){
                 )
               ),
               fluidRow(
-                h2("CLA Rates by UASC Status"),
+                h2("CLA Starting During the Year Rates by UASC Status"),
                 br(),
                 plotlyOutput("plot_uasc"),
                 
@@ -186,7 +186,7 @@ outcome1_tab <- function(){
                 )
               ),
               fluidRow(
-                h2("CLA Rates by UASC Status per Region"),
+                h2("CLA Starting During the Year Rates by UASC Status per Region"),
                 p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                 p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
                 br(),
