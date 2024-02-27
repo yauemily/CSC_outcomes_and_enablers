@@ -1203,6 +1203,7 @@ server <- function(input, output, session) {
     
     ggplotly(p, height = 420) %>%
       layout(yaxis = list(range = c(0, max_rate)))
+    
   })
   
   # CLA rate TABLE
