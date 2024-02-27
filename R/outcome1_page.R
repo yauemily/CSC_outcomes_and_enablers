@@ -185,6 +185,12 @@ outcome1_tab <- function(){
                   )
                 )
               ),
+              fluidRow(
+                h2("CLA Rates by UASC Status per Region"),
+                p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                br(),
+                plotlyOutput("plot_uasc_reg"),
+              ),
             ),
             tabPanel(
               "Access to support and getting help",

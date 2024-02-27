@@ -1678,6 +1678,14 @@ server <- function(input, output, session) {
     )
   })
   
+  output$plot_uasc_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_uasc_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
   # Don't touch the code below -----------------------
 
   observeEvent(input$go, {
