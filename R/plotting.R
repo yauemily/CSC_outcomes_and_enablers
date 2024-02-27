@@ -1282,7 +1282,7 @@ plot_uasc <- function(geo_break, geo_lvl){
   # Round the max_rate to the nearest 50
   max_rate <- ceiling(max_rate / 50) * 50
   
-  ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic))) +
+  ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
     geom_bar(stat = "identity") +
     ylab("Placements Per 10,000 Children") +
     xlab("Time Period") +
@@ -1320,7 +1320,7 @@ plot_uasc_reg <- function(){
   # Round the max_rate to the nearest 50
   max_rate <- ceiling(max_rate / 50) * 50
   
-  ggplot(uasc_data , aes(`geo_breakdown`, `placement_per_10000`, fill = factor(characteristic))) +
+  ggplot(uasc_data , aes(`geo_breakdown`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
     geom_bar(stat = "identity") +
     ylab("Placements Per 10,000 Children") +
     xlab("Region") +
