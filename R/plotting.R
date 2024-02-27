@@ -1299,7 +1299,7 @@ plot_uasc <- function(geo_break, geo_lvl){
     scale_fill_manual(
       "UASC Status",
       #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
+      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
     )
 }
 
@@ -1336,7 +1336,7 @@ plot_uasc_reg <- function(){
     scale_fill_manual(
       "UASC Status",
       #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
+      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
     )
 }
 
