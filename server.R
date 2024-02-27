@@ -355,8 +355,8 @@ server <- function(input, output, session) {
   #turnover rate by region plot----
   output$plot_turnover_reg <- plotly::renderPlotly({
     ggplotly(
-      plot_turnover_reg() %>%
-      #by_region_bar_plot(workforce_data, 'turnover_rate_fte_perc','Turnover Rate (FTE) %')%>%
+      #plot_turnover_reg() %>%
+      by_region_bar_plot(workforce_data, 'turnover_rate_fte_perc','Turnover Rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -379,9 +379,17 @@ server <- function(input, output, session) {
   })
   
   # Turnover Rate by LA plot ----
+  # output$plot_turnover_la <- plotly::renderPlotly({
+  #   ggplotly(
+  #     plot_turnover_la(input$geographic_breakdown_e2, input$select_geography_e2) %>%
+  #       config(displayModeBar = F),
+  #     height = 420
+  #   )
+  # })
+  
   output$plot_turnover_la <- plotly::renderPlotly({
     ggplotly(
-      plot_turnover_la(input$geographic_breakdown_e2, input$select_geography_e2) %>%
+      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %') %>%
         config(displayModeBar = F),
       height = 420
     )

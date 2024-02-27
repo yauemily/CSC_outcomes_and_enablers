@@ -123,27 +123,22 @@ plotly_time_series_custom_scale <- function(dataset,level,breakdown, yvalue, yax
 
 by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_lvl = NULL, yvalue, yaxis_title){
   
-  # GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
-  #   FACT_location <- read.csv(file)
-  #   FACT_location <- FACT_location%>%
-  #     select(region_name, la_name) %>%
-  #     filter((la_name != '')) %>%
-  #     unique()
-  # }
-  #location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
-  
   if (selected_geo_lvl == "Local authority") {
     turnover_reg_data <- dataset %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, `yvalue`) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`),
-             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+      mutate(geo_breakdown = reorder(geo_breakdown, -(!!sym(`yvalue`))),
+             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))%>%
+      rename(`Breakdown` = `geo_breakdown`, `Selection` = `is_selected`) %>%
+      rename_at(yvalue,  ~str_to_title(str_replace_all(., "_", " ")))
   } else if (selected_geo_lvl == "National") {
     turnover_reg_data <- dataset %>%
       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, `yvalue`) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`),
-             is_selected = "Not Selected")
+      mutate(geo_breakdown = reorder(geo_breakdown, -(!!sym(`yvalue`))),
+             is_selected = "Not Selected")%>%
+      rename(`Breakdown` = `geo_breakdown`, `Selection` = `is_selected`) %>%
+      rename_at(yvalue,  ~str_to_title(str_replace_all(., "_", " ")))
   } else if (selected_geo_lvl == "Regional") {
     
     # Check if the selected region is London
@@ -152,28 +147,28 @@ by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_
       location <- location_data %>%
         filter(region_name %in% c("Inner London", "Outer London")) %>%
         pull(la_name)
+ 
     } else {
       # Get the la_name values within the selected region_name
       location <- location_data %>%
         filter(region_name == selected_geo_breakdown) %>%
         pull(la_name)
+      
     }
     
     turnover_reg_data <- dataset %>%
       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
       select(time_period, geo_breakdown, `yvalue`) %>%
-      mutate(`Time period` = as.character(`time_period`)) %>%
-      rename(`Breakdown` = `geo_breakdown`) %>%
-      #rename_at(yvalue, ~ str_to_title(str_replace_all(.,  "_", " ")))
-      mutate(`Breakdown` = reorder(`Breakdown`, -`yvalue`),
-             is_selected = "Selected")%>%
-      rename_at(yvalue, ~ str_to_title(str_replace_all(.,  "_", " ")))
+      mutate(geo_breakdown = reorder(geo_breakdown, -(!!sym(`yvalue`))),
+             is_selected = "Selected") %>%
+      rename(`Breakdown` = `geo_breakdown`, `Selection` = `is_selected`) %>%
+      rename_at(yvalue,  ~str_to_title(str_replace_all(., "_", " ")))
   }
   
   
-  p <- ggplot(turnover_reg_data, aes(`geo_breakdown`, y = !!sym(str_to_title(str_replace_all(yvalue,"_"," "))), fill = `is_selected`)) +
+  p <- ggplot(turnover_reg_data, aes(x = Breakdown, y = !!sym(str_to_title(str_replace_all(yvalue,"_"," "))), fill = `Selection`)) +
     geom_col(position = position_dodge()) +
-    ylab(yaxis_title) +
+    ylab("Turnover Rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -204,9 +199,11 @@ by_region_bar_plot <- function(dataset, yvalue, yaxis_title){
   turnover_reg_data <- dataset %>%
     filter(geographic_level == "Regional", time_period == max(time_period)) %>%
     select(time_period, geo_breakdown, `yvalue`) %>%
-    mutate(geo_breakdown = reorder(geo_breakdown, -`yvalue`)) # Order by turnover rate
+    mutate(geo_breakdown = reorder(geo_breakdown, -(!!sym(`yvalue`))))%>% # Order by turnover rate
+    rename(`Breakdown` = `geo_breakdown`) %>%
+    rename_at(yvalue,  ~str_to_title(str_replace_all(., "_", " ")))
   
-  ggplot(turnover_reg_data , aes(x = `geo_breakdown`, y=!!sym(yvalue), fill = factor(time_period))) +
+  ggplot(turnover_reg_data , aes(x = `Breakdown`, y=!!sym(str_to_title(str_replace_all(yvalue,"_"," "))), fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
     ylab(yaxis_title)+
     #ylab("Turnover Rate (FTE) %") +
