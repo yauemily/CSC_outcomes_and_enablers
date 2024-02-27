@@ -1209,7 +1209,7 @@ server <- function(input, output, session) {
     # Round the max_rate to the nearest 50
     max_rate <- ceiling(max_rate / 50) * 50
     
-    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'rate_per_10000', 'CLA Rate Per 10,000 Children', max_rate) %>%
+    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'rate_per_10000', 'Children in Care Rate Per 10,000', max_rate) %>%
       config(displayModeBar = F)
     
     
@@ -1254,7 +1254,7 @@ server <- function(input, output, session) {
       filtered_data %>% 
         filter(population_count == "Children starting to be looked after each year") %>% 
         select(time_period, geo_breakdown, rate_per_10000),
-      colnames = c("Time Period", "Geographical Breakdown", "CLA Rate Per 10000"),
+      colnames = c("Time Period", "Geographical Breakdown", "Children in Care Rate Per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1279,7 +1279,7 @@ server <- function(input, output, session) {
         rate_per_10000
       ) %>%
         arrange(desc(rate_per_10000)),
-      colnames = c("Time Period", "Geographical Breakdown", "CLA Rate Per 10,000 Children"),
+      colnames = c("Time Period", "Geographical Breakdown", "Children in Care Rate Per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1326,7 +1326,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "CLA Rate Per 10,000 Children"),
+      colnames = c("Time Period", "Geographical Breakdown", "Children in Care Rate Per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1683,6 +1683,7 @@ server <- function(input, output, session) {
                characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children"),
                population_count == "Children starting to be looked after each year") %>% 
         select(time_period, geo_breakdown, placement_per_10000, characteristic),
+      colnames = c("Time Period", "Geographical Breakdown", "Children in Care Rate Per 10,000 by UASC Status", "UASC Status"),
       options = list(
         scrollx = FALSE,
         paging = TRUE,
@@ -1705,8 +1706,7 @@ server <- function(input, output, session) {
                            population_count == "Children starting to be looked after each year",
                            time_period == max(time_period)) %>% 
         select(time_period, geo_breakdown, placement_per_10000, characteristic),
-        #arrange(desc(placement_per_10000)),
-      colnames = c("Time Period", "Geographical Breakdown", "CLA Rate Per 10,000 by UASC Status", "UASC Status"),
+      colnames = c("Time Period", "Geographical Breakdown", "Children in Care Rate Per 10,000 by UASC Status", "UASC Status"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
