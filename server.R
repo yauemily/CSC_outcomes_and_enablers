@@ -1169,6 +1169,16 @@ server <- function(input, output, session) {
     paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(combined_cla_data$time_period),")", "</p>")
   })
   
+  # CLA March rate headline
+  output$cla_march_rate_headline_txt <- renderText({
+    stat <- format(cla_rates %>% filter(time_period == max(cla_rates$time_period) 
+                                        & geo_breakdown %in% input$geographic_breakdown_o1 
+                                        & population_count == "Children looked after at 31 March each year") 
+                   %>% select(rate_per_10000), nsmall = 0)
+    paste0(stat,"<br>","<p style='font-size:16px; font-weight:500;'>","(",max(cla_rates$time_period),")", "</p>")
+  })
+  
+  
   # CLA rate Plot
   output$plot_cla_rate <- plotly::renderPlotly({
     validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
