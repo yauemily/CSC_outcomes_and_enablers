@@ -1170,7 +1170,7 @@ plot_cla_rate_reg <- function(){
   
   ggplot( cla_reg_data , aes(`geo_breakdown`, `rate_per_10000`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Rate of children starting in care, per 10,000") +
+    ylab("Rate per 10,000 children") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -1322,7 +1322,7 @@ plot_uasc_reg <- function(){
   
   ggplot(uasc_data , aes(`geo_breakdown`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
     geom_bar(stat = "identity") +
-    ylab("Rate of children starting in care, per 10,000") +
+    ylab("Rate per 10,000 children") +
     xlab("Region") +
     theme_classic() +
     theme(
