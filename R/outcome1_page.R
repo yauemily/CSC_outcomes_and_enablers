@@ -142,16 +142,6 @@ outcome1_tab <- function(){
                         dataTableOutput("table_cla_rate")
                       )
                     ),
-                    #expandable for the additional info links
-                    details(
-                      inputId = "turnover_info",
-                      label = "Additional information:",
-                      help_text = (
-                        p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                          tags$br(),
-                          "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
-                      )
-                    ),
                   )
                 )
               ),
