@@ -240,15 +240,15 @@ outcome1_tab <- function(){
                 width = 12,
                 # CIN Rates per 10000 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 gov_row(
-                  h2("Rate of Child in Need (CIN)"),
+                  h2("Rate of Child In Need (CIN)"),
                   
                   p("Helping children to stay together with their families means ensuring the right support is in place at earlier stages of intervention. 
                     Looking at the flow of children who become a CIN will show children being supported by the wider system. Combined with family stability indicators, this will reflect a broad view of flow into and through the children’s social care system."), 
                   # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
                   
                   insert_text(inputId = "CIN_definition", text = paste(
-                    "<b>","Children in Need (CIN) rate", "</b><br>",
-                    "Rate of children in need at 31 March, per 10,000 children in the population."
+                    "<b>","Children In Need (CIN) rate", "</b><br>",
+                    "Rate of Children In Need at 31 March, per 10,000 children in the population."
                   )),
                   # p("plots go here"),
                   plotlyOutput("plot_cin_rate"),
