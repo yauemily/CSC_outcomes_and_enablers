@@ -96,7 +96,7 @@ outcome1_tab <- function(){
                 column(
                   width = 4,
                   value_box(
-                    title = "Rate of children starting in care per 10,000 children",
+                    title = "Rate of children starting in care, per 10,000 children",
                     value = htmlOutput("cla_rate_headline_txt")
                   )
                 ),
@@ -110,7 +110,7 @@ outcome1_tab <- function(){
                 column(
                   width = 4,
                   value_box(
-                    title = "Rate of children in care on 31 March per 10,000 children",
+                    title = "Rate of children in care on 31 March, per 10,000 children",
                     value = htmlOutput("cla_march_rate_headline_txt")
                   )
                 ),
