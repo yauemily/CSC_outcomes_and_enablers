@@ -92,12 +92,12 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
     select(time_period, geo_breakdown, `yvalue`) %>%
     mutate(`Time period` = as.character(`time_period`)) %>%
    rename(`Breakdown` = `geo_breakdown`) %>%
-    rename_at(yvalue, ~ str_to_title(str_replace_all(.,  "_", " "))) 
+    rename_at(yvalue, ~ str_to_sentence(str_replace_all(.,  "_", " "))) 
   
-    ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_title(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
+    ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_sentence(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
     geom_path(group = 1) +
        ylab(yaxis_title)+
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -118,14 +118,14 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
 plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, yaxis_title, ylim_upper){
   filtered_data <- dataset %>%
     select(time_period, geo_breakdown, `yvalue`) %>%
-    mutate(`Time Period` = as.character(`time_period`)) %>%
+    mutate(`Time period` = as.character(`time_period`)) %>%
     rename(`Breakdown` = `geo_breakdown`) %>%
-      rename_at(yvalue, ~ str_to_title(str_replace_all(.,  "_", " "))) 
+      rename_at(yvalue, ~ str_to_sentence(str_replace_all(.,  "_", " "))) 
   
-  ggplot(filtered_data, aes(x = `Time Period`, y=!!sym(str_to_title(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
+  ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_sentence(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
     geom_path(group = 1) +
     ylab(yaxis_title)+
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -150,7 +150,7 @@ t_series_nat_comp_plot <- function(dataset, level, breakdown, yvalue, yaxis_titl
   ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
     geom_line() +
     ylab(yaxis_title)+
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -180,7 +180,7 @@ t_series_region_la_plot <- function(dataset, level, breakdown, yvalue, yaxis_tit
   ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
     geom_line() +
     ylab(yaxis_title)+
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -210,7 +210,7 @@ t_series_dual_comp_plot <- function(dataset, level, breakdown, yvalue, yaxis_tit
   ggplot(filtered_data, aes(x = `time_period`, y=!!sym(yvalue), color = geo_breakdown))+
     geom_line() +
     ylab(yaxis_title)+
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -266,8 +266,8 @@ plot_social_worker_turnover <- function(geo_lvl, geo_break){
     )
   ggplot(social_worker_data, aes(`time_period`, `turnover_rate_fte_perc`, color = geo_breakdown))+
     geom_line() +
-    ylab("Social worker Turnover rate (FTE) (%)")+
-    xlab("Time Period") +
+    ylab("Social worker turnover rate (FTE) (%)")+
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -293,7 +293,7 @@ plot_turnover_reg <- function(){
   
   ggplot( turnover_reg_data , aes(`geo_breakdown`, `turnover_rate_fte_perc`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Turnover Rate (FTE) %") +
+    ylab("Turnover rate (FTE) %") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -305,7 +305,7 @@ plot_turnover_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, 100))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -360,7 +360,7 @@ plot_turnover_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   
   p <- ggplot(turnover_reg_data, aes(`geo_breakdown`, `turnover_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Turnover Rate (FTE) %") +
+    ylab("Turnover rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -469,7 +469,7 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
   ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
     geom_line() +
     ylab("Vacancy rate (FTE) (%)") +
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -535,7 +535,7 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
   
   p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Vacancy Rate (FTE) %") +
+    ylab("Vacancy rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -571,7 +571,7 @@ plt_agency_rates <- function(geo_lvl, geo_break){
   ggplot(agency_rates_data, aes(`time_period`, `agency_worker_rate_fte_perc`, color = geo_breakdown))+
     geom_line() +
     ylab("Agency worker rate (FTE) (%)")+
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -597,7 +597,7 @@ plot_agency_reg <- function(){
   
   ggplot( agency_reg_data , aes(`geo_breakdown`, `agency_worker_rate_fte_perc`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Agency Worker Rate (FTE) %") +
+    ylab("Agency worker rate (FTE) %") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -609,7 +609,7 @@ plot_agency_reg <- function(){
         ) +
         scale_y_continuous(limits = c(0, 100))+
         scale_fill_manual(
-          "Time Period",
+          "Time period",
           #breaks = unique(c("England", inputArea)),
           values = '#12436D'#gss_colour_pallette
         )
@@ -665,7 +665,7 @@ plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl 
   
   p <- ggplot(agency_rates_data, aes(`geo_breakdown`, `agency_worker_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Agency Worker Rate (FTE) %") +
+    ylab("Agency worker rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -700,7 +700,7 @@ plot_vacancy_rate <- function(geo_lvl, geo_break) {
   ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
     geom_line() +
     ylab("Vacancy rate (FTE) (%)") +
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -727,7 +727,7 @@ plot_vacancy_reg <- function(){
   
   ggplot( vacancy_reg_data  , aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Vacancy Rate (FTE) %") +
+    ylab("Vacancy rate (FTE) %") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -739,7 +739,7 @@ plot_vacancy_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, 100))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -795,7 +795,7 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
   
   p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Vacancy Rate (FTE) %") +
+    ylab("Vacancy rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -915,7 +915,7 @@ plot_caseloads_reg <- function(){
   
   ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Average Caseload (FTE)") +
+    ylab("Average caseload (FTE)") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -927,7 +927,7 @@ plot_caseloads_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -1182,7 +1182,7 @@ plot_cla_rate_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -1285,7 +1285,7 @@ plot_uasc <- function(geo_break, geo_lvl){
   ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
     geom_bar(stat = "identity") +
     ylab("Rate of children starting in care, per 10,000") +
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -1297,7 +1297,7 @@ plot_uasc <- function(geo_break, geo_lvl){
     scale_x_continuous(breaks = seq(min(uasc_data$time_period), max(uasc_data$time_period), by = 1)) +
     scale_y_continuous(limits = c(0, max(max_rate)))+
     scale_fill_manual(
-      "UASC Status",
+      "UASC status",
       #breaks = unique(c("England", inputArea)),
       values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
     )
@@ -1372,7 +1372,7 @@ plot_cin_rate_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -1486,7 +1486,7 @@ plot_cin_referral_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, 100))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )

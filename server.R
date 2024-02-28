@@ -304,7 +304,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte_perc', 'Turnover rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -343,7 +343,7 @@ server <- function(input, output, session) {
   }
     datatable(
       filtered_data,
-      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Turnover rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -368,7 +368,7 @@ server <- function(input, output, session) {
         turnover_rate_fte_perc
       ) %>%
         arrange(desc(turnover_rate_fte_perc)),
-      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Turnover rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -413,7 +413,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Turnover Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Turnover rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -459,7 +459,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'agency_worker_rate_fte_perc', 'Agency Worker Rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -511,7 +511,7 @@ server <- function(input, output, session) {
     }
     datatable(
       filtered_data,
-      colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Agency worker rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -536,7 +536,7 @@ server <- function(input, output, session) {
         agency_worker_rate_fte_perc
       ) %>%
         arrange(desc(agency_worker_rate_fte_perc)),
-      colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Agency worker rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -583,7 +583,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Agency worker rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -628,7 +628,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'vacancy_rate_fte_perc', 'Vacancy Rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'vacancy_rate_fte_perc', 'Vacancy rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -680,7 +680,7 @@ server <- function(input, output, session) {
     }
     datatable(
       filtered_data,
-      colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Vacancy rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -725,7 +725,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Vacancy rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -751,7 +751,7 @@ server <- function(input, output, session) {
         vacancy_rate_fte_perc
       ) %>%
         arrange(desc(vacancy_rate_fte_perc)),
-      colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate (FTE) %"),
+      colnames = c("Time period", "Geographical breakdown", "Vacancy rate (FTE) %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -814,7 +814,7 @@ server <- function(input, output, session) {
   # Round the max_rate to the nearest 50
   max_rate <- ceiling(max_rate / 50) * 50
   
-  p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'caseload_fte', 'Average Caseload (FTE)', max_rate) %>%
+  p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'caseload_fte', 'Average caseload (FTE)', max_rate) %>%
     config(displayModeBar = F)
   
   
@@ -856,7 +856,7 @@ server <- function(input, output, session) {
     }
     datatable(
       filtered_data,
-      colnames = c("Time Period", "Geographical Breakdown", "Average Caseload (FTE)"),
+      colnames = c("Time period", "Geographical breakdown", "Average caseload (FTE)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -902,7 +902,7 @@ server <- function(input, output, session) {
         caseload_fte
       ) %>%
         arrange(desc(caseload_fte)),
-      colnames = c("Time Period", "Geographical Breakdown", "Average Caseload (FTE)"),
+      colnames = c("Time period", "Geographical breakdown", "Average caseload (FTE)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -939,7 +939,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Average Caseload (FTE)"),
+      colnames = c("Time period", "Geographical breakdown", "Average caseload (FTE)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1023,7 +1023,7 @@ server <- function(input, output, session) {
       workforce_eth %>% 
         filter(geo_breakdown %in% input$geographic_breakdown_e2, OrgRole == 'All children and family social workers') %>% 
         select(time_period, geo_breakdown, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
-      colnames = c("Time Period", "Geographical Breakdown", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
+      colnames = c("Time period", "Geographical breakdown", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1070,8 +1070,8 @@ server <- function(input, output, session) {
         names_to = c(".value", "Ethnicity"), # Assign names to new columns
         names_pattern = "(.*)_(.*)Percentage" # Specify pattern to extract values from column names
       ),
-    colnames = c("Geographic Level", "Geographical Breakdown", 
-                 "Ethnicity Group", "Population Percentage (%)", "Workforce Percentage (%)"),
+    colnames = c("Geographic level", "Geographical breakdown", 
+                 "Ethnicity group", "Population percentage (%)", "Workforce percentage (%)"),
     options = list(
       scrollx = FALSE,
       paging = TRUE
@@ -1094,7 +1094,7 @@ server <- function(input, output, session) {
       workforce_eth_seniority[, cols] %>% 
         filter(geo_breakdown %in% input$geographic_breakdown_e2, seniority != 'All children and family social workers', time_period == max(workforce_eth_seniority$time_period)) %>% 
         select(time_period,geographic_level, geo_breakdown, seniority, known_headcount, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
-      colnames = c("Time Period","Geographic Level", "Geographical Breakdown", "Seniority Level", "Headcount with known ethnicity", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
+      colnames = c("Time period","Geographic level", "Geographical breakdown", "Seniority level", "Headcount with known ethnicity", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE,
@@ -1264,7 +1264,7 @@ server <- function(input, output, session) {
       filtered_data %>% 
         filter(population_count == "Children starting to be looked after each year") %>% 
         select(time_period, geo_breakdown, rate_per_10000),
-      colnames = c("Time Period", "Geographical Breakdown", "Rate of children starting in care, per 10,000"),
+      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care, per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1289,7 +1289,7 @@ server <- function(input, output, session) {
         rate_per_10000
       ) %>%
         arrange(desc(rate_per_10000)),
-      colnames = c("Time Period", "Geographical Breakdown", "Rate of children starting in care, per 10,000"),
+      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care, per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1336,7 +1336,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Rate of children starting in care, per 10,000"),
+      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care, per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1369,7 +1369,7 @@ server <- function(input, output, session) {
         CIN_rate
       ) %>%
         arrange(desc(CIN_rate)),
-      colnames = c("Time Period", "Geographical Breakdown", "CIN Rate Per 10,000"),
+      colnames = c("Time period", "Geographical breakdown", "CIN rate per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1409,7 +1409,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "CIN rates per 10,000"),
+      colnames = c("Time period", "Geographical breakdown", "CIN rates per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1471,7 +1471,7 @@ server <- function(input, output, session) {
     # Round the max_rate to the nearest 50
     max_rate <- ceiling(max_rate / 50) * 50
     
-    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'CIN_rate', 'CIN Rate Per 10,000 Children', max_rate) %>%
+    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'CIN_rate', 'CIN rate per 10,000 Children', max_rate) %>%
       config(displayModeBar = F)
     
     
@@ -1514,7 +1514,7 @@ server <- function(input, output, session) {
     datatable(
       filtered_data %>% 
               select(time_period, geo_breakdown, CIN_number,CIN_rate),
-      colnames = c("Time Period", "Geographical Breakdown", "CIN at 31 March", "CIN Rate Per 10,000"),
+      colnames = c("Time period", "Geographical breakdown", "CIN at 31 March", "CIN rate per 10,000"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1595,7 +1595,7 @@ server <- function(input, output, session) {
     datatable(
       filtered_data %>% 
         select(time_period, geo_breakdown, Referrals, Re_referrals, Re_referrals_percent),
-      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year", "Re-referrals within 12 months of a previous referral", "Re-referrals (%)"),
+      colnames = c("Time period", "Geographical breakdown", "Referrals in the year", "Re-referrals within 12 months of a previous referral", "Re-referrals (%)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1611,7 +1611,7 @@ server <- function(input, output, session) {
         Referrals, Re_referrals, Re_referrals_percent
       ) %>%
         arrange(desc(Re_referrals_percent)),
-      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year",
+      colnames = c("Time period", "Geographical breakdown", "Referrals in the year",
                    "Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months (%)" ),
       options = list(
         scrollx = FALSE,
@@ -1650,7 +1650,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time Period", "Geographical Breakdown", "Referrals in the year",
+      colnames = c("Time period", "Geographical breakdown", "Referrals in the year",
                    "Re-referrals within 12 months of a previous referral", "Re-referrals within 12 months (%)"),
       options = list(
         scrollx = FALSE,
@@ -1694,7 +1694,7 @@ server <- function(input, output, session) {
                population_count == "Children starting to be looked after each year") %>% 
         select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
         arrange(desc(time_period)),
-      colnames = c("Time Period", "Geographical Breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC Status"),
+      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC status"),
       options = list(
         scrollx = FALSE,
         paging = TRUE,
@@ -1717,7 +1717,7 @@ server <- function(input, output, session) {
                            population_count == "Children starting to be looked after each year",
                            time_period == max(time_period)) %>% 
         select(time_period, geo_breakdown, placement_per_10000, characteristic),
-      colnames = c("Time Period", "Geographical Breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC Status"),
+      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC status"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
