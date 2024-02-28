@@ -223,7 +223,7 @@ outcome1_tab <- function(){
                 column(
                   width = 6,
                   value_box(
-                    title = "Children In Need Rate Per 10,000 Children",
+                    title = "Children In Need rate per 10,000 children",
                     value = htmlOutput("cin_rate_headline_txt")
                   )
                 ),
