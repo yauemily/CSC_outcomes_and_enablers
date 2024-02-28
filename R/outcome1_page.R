@@ -96,21 +96,21 @@ outcome1_tab <- function(){
                 column(
                   width = 4,
                   value_box(
-                    title = "Children in care rate per 10,000 children, starting during the year",
+                    title = "Rate of children starting in care per 10,000 children",
                     value = htmlOutput("cla_rate_headline_txt")
                   )
                 ),
                 column(
                   width = 4,
                   value_box(
-                    title = "Children in care rate by UASC status per 10,000 children",
+                    title = "Rate of children starting in care who were UASC, per 10,000 children",
                     value = htmlOutput("uasc_rate_headline_txt")
                   )
                 ),
                 column(
                   width = 4,
                   value_box(
-                    title = "Children in care rate per 10,000 children, as of 31 March",
+                    title = "Rate of children in care on 31 March per 10,000 children",
                     value = htmlOutput("cla_march_rate_headline_txt")
                   )
                 ),
@@ -170,7 +170,7 @@ outcome1_tab <- function(){
                   )
                 )
               ),
-              h2("Rate of children starting in care during the year by local authority"),
+              h2("Rate of children starting in care by local authority"),
               p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
               p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
               br(),
@@ -185,7 +185,7 @@ outcome1_tab <- function(){
                 )
               ),
               fluidRow(
-                h2("Children starting in care during the year rates by UASC status"),
+                h2("Rate of children starting in care who were UASC"),
                 br(),
                 plotlyOutput("plot_uasc"),
                 
@@ -200,7 +200,7 @@ outcome1_tab <- function(){
                 )
               ),
               fluidRow(
-                h2("Rate of children starting in care during the year by region with UASC status"),
+                h2("Rate of children starting in care by region who were UASC"),
                 p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                 p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
                 br(),
