@@ -19,7 +19,7 @@ outcome1_tab <- function(){
               selectizeInput(
                 inputId = "select_geography_o1",
                 label = "Select a geographical level:",
-                choices = distinct(dropdown_choices['geographic_level']),
+                choices = unique(dropdown_choices %>% pull('geographic_level')),
                 selected = NULL,
                 multiple = FALSE,
                 options = NULL
@@ -72,25 +72,17 @@ outcome1_tab <- function(){
       br(),
       gov_row(
         br(),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 != 'Richmond upon Thames' && input.geographic_breakdown_o1 != 'West Northamptonshire')",
-          p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2") )),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 == 'Richmond upon Thames')",
-          p("Please select ", strong("Kingston upon Thames"), " to view jointly reported statistics for Kingston upon Thames and Richmond upon Thames.") ),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 == 'Kingston upon Thames')",
-          p("Kingston upon Thames and Richmond upon Thames submit a joint workforce return each year and their data is reported together against Kingston upon Thames.") ),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 == 'North Northamptonshire')",
-          p("North Northamptonshire and West Northamptonshire submitted a joint workforce return in 2021 and onwards, and their data is reported together against North Northamptonshire. ") ),
-        conditionalPanel(
-          condition = "(input.geographic_breakdown_o1 == 'West Northamptonshire')",
-          p("Please select ", strong("North Northamptonshire"), ", or Northamptonshire for pre-2021 data, to view jointly reported statistics for North Northamptonshire and West Northamptonshire. ") ),
-        conditionalPanel(
+        p(htmlOutput("outcome1_choice_text1"),htmlOutput("outcome1_choice_text2")),
+       conditionalPanel(
           condition = "(input.geographic_breakdown_o1 == 'Northamptonshire')",
-          p("To view 2021 and onwards data select ", strong("North Northamptonshire"), ". Northamptonshire local authority was replaced with two new unitary authorities, North Northamptonshire and West Northamptonshire, in April 2021.") ),
-      ),
+          p("To view 2021 and onwards data select ", strong("North Northamptonshire"),"or", strong("West Northamptonshire"),". Northamptonshire local authority was replaced with two new unitary authorities, North Northamptonshire and West Northamptonshire, in April 2021.") ),
+       conditionalPanel(
+         condition = "(input.geographic_breakdown_o1 == 'Poole')",
+         p("To view 2020 and onwards data select ", strong("Bournemouth, Christchurch and Poole"),". Bournemouth, Christchurch and Poole local authority was formed in April 2019.") ),
+       conditionalPanel(
+         condition = "(input.geographic_breakdown_o1 == 'Bournemouth')",
+         p("To view 2020 and onwards data select ", strong("Bournemouth, Christchurch and Poole"),". Bournemouth, Christchurch and Poole local authority was formed in April 2019.") ),
+                   ),
       gov_row(
         br(),
         div(
@@ -104,8 +96,22 @@ outcome1_tab <- function(){
                 column(
                   width = 4,
                   value_box(
-                    title = "CLA Rate Per 10,000",
+                    title = "Rate of children starting in care, per 10,000 children",
                     value = htmlOutput("cla_rate_headline_txt")
+                  )
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Rate of children starting in care who were UASC, per 10,000 children",
+                    value = htmlOutput("uasc_rate_headline_txt")
+                  )
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Rate of children in care on 31 March, per 10,000 children",
+                    value = htmlOutput("cla_march_rate_headline_txt")
                   )
                 ),
                 br(),
@@ -115,15 +121,15 @@ outcome1_tab <- function(){
                   width = 12,
                   # CLA Rates per 10000 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   gov_row(
-                    h2("Rate of new entrants to care, with a breakdown by whether new entrants to care are Unaccompanied AsylumSeeking Children (UASC)"),
+                    h2("Rate of new entrants to care, with a breakdown by whether new entrants to care are Unaccompanied Asylum Seeking Children (UASC)"),
                     
                     p("This measures the flow of those children moving into care. Where UASC are placed within an authority, 
                       this will represent an unavoidable increase in numbers of children entering the system. This breakdown is provided for context."), 
                     # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
                     
                     insert_text(inputId = "social_work_turnover_definition", text = paste(
-                      "<b>","Children looked after (CLA) rate", "</b><br>",
-                      "The CLA rate is calculated as the number of children that are looked after per 10,000 children in the general population."
+                      "<b>","Rate of children who started to be looked after", "</b><br>",
+                      "The children in care rate is calculated as the number of children in care per 10,000 children in the general population."
                     )),
                     # p("plots go here"),
                     plotlyOutput("plot_cla_rate"),
@@ -136,21 +142,11 @@ outcome1_tab <- function(){
                         dataTableOutput("table_cla_rate")
                       )
                     ),
-                    #expandable for the additional info links
-                    details(
-                      inputId = "turnover_info",
-                      label = "Additional information:",
-                      help_text = (
-                        p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                          tags$br(),
-                          "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
-                      )
-                    ),
                   )
                 )
               ),
               fluidRow(
-                h2("CLA Rates by Region"),
+                h2("Rate of children starting in care during the year by region"),
                 p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                 br(),
                 plotlyOutput("plot_cla_rate_reg"),
@@ -164,7 +160,7 @@ outcome1_tab <- function(){
                   )
                 )
               ),
-              h2("CLA Rates by Local Authority"),
+              h2("Rate of children starting in care by local authority"),
               p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
               p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
               br(),
@@ -178,6 +174,37 @@ outcome1_tab <- function(){
                   dataTableOutput("table_cla_rate_la")
                 )
               ),
+              fluidRow(
+                h2("Rate of children starting in care who were UASC"),
+                br(),
+                plotlyOutput("plot_uasc"),
+                
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_uasc",
+                  label = "View chart as a table",
+                  help_text = (
+                    dataTableOutput("table_uasc")
+                  )
+                )
+              ),
+              fluidRow(
+                h2("Rate of children starting in care by region who were UASC"),
+                p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
+                br(),
+                plotlyOutput("plot_uasc_reg"),
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_uasc_reg",
+                  label = "View chart as a table",
+                  help_text = (
+                    dataTableOutput("table_uasc_reg")
+                  )
+                )
+              ),
             ),
             tabPanel(
               "Access to support and getting help",
@@ -186,7 +213,7 @@ outcome1_tab <- function(){
                 column(
                   width = 6,
                   value_box(
-                    title = "Children In Need Rate Per 10,000 Children",
+                    title = "Children In Need rate per 10,000 children",
                     value = htmlOutput("cin_rate_headline_txt")
                   )
                 ),
@@ -203,15 +230,15 @@ outcome1_tab <- function(){
                 width = 12,
                 # CIN Rates per 10000 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 gov_row(
-                  h2("Rate of Child in Need (CIN)"),
+                  h2("Rate of Child In Need (CIN)"),
                   
                   p("Helping children to stay together with their families means ensuring the right support is in place at earlier stages of intervention. 
                     Looking at the flow of children who become a CIN will show children being supported by the wider system. Combined with family stability indicators, this will reflect a broad view of flow into and through the children’s social care system."), 
                   # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
                   
                   insert_text(inputId = "CIN_definition", text = paste(
-                    "<b>","Children in Need (CIN) rate", "</b><br>",
-                    "Rate of children in need at 31 March, per 10,000 children in the population."
+                    "<b>","Children In Need (CIN) rate", "</b><br>",
+                    "Rate of Children In Need at 31 March, per 10,000 children in the population."
                   )),
                   # p("plots go here"),
                   plotlyOutput("plot_cin_rate"),
@@ -242,7 +269,7 @@ outcome1_tab <- function(){
                     )
                   ),
                   fluidRow(
-                    h2("Children In Need Rates by Region"),
+                    h2("Children In Need rates by region"),
                     p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                     br(),
                     plotlyOutput("plot_cin_rate_reg"),
@@ -256,7 +283,7 @@ outcome1_tab <- function(){
                       )
                     )
                   ),
-                  h2("CIN Rates by Local Authority"),
+                  h2("CIN rates by local authority"),
                   p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
                   p(sprintf("The graph represents data from %s.", max(cin_rates$time_period))),
                   br(),
@@ -313,7 +340,7 @@ outcome1_tab <- function(){
                     )
                   ),
                   fluidRow(
-                    h2("Re-referrals by Region"),
+                    h2("Re-referrals by region"),
                     p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                     br(),
                     plotlyOutput("plot_cin_referral_reg"),
@@ -327,7 +354,7 @@ outcome1_tab <- function(){
                       )
                     )
                   ),
-                  h2("Re-referrals by Local Authority"),
+                  h2("Re-referrals by local authority"),
                   p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
                   p(sprintf("The graph represents data from %s.", max(cin_referrals$time_period))),
                   br(),

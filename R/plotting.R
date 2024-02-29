@@ -68,12 +68,12 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
     select(time_period, geo_breakdown, `yvalue`) %>%
     mutate(`Time period` = as.character(`time_period`)) %>%
    rename(`Breakdown` = `geo_breakdown`) %>%
-    rename_at(yvalue, ~ str_to_title(str_replace_all(.,  "_", " "))) 
+    rename_at(yvalue, ~ str_to_sentence(str_replace_all(.,  "_", " "))) 
   
-    ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_title(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
+    ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_sentence(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
     geom_path(group = 1) +
        ylab(yaxis_title)+
-    xlab("Time Period") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -90,18 +90,17 @@ plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
   )
 }
 
-plotly_time_series_custom_scale <- function(dataset,level,breakdown, yvalue, yaxis_title , ylim_upper){
+plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, yaxis_title , ylim_upper){
   filtered_data <- dataset %>%
     select(time_period, geo_breakdown, `yvalue`) %>%
-    mutate(`Time Period` = as.character(`time_period`)) %>%
+    mutate(`Time period` = as.character(`time_period`)) %>%
     rename(`Breakdown` = `geo_breakdown`) %>%
     rename_at(yvalue, ~str_to_title(str_replace_all(., "_", "")))
   
-  ggplot(filtered_data, aes(x = `Time Period`, y=!!sym(str_to_title(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
+  ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_sentence(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
     geom_path(group = 1) +
     ylab(yaxis_title)+
-    #ylab("Turnover Rate (FTE) %") +
-    xlab("") +
+    xlab("Time period") +
     theme_classic() +
     theme(
       text = element_text(size = 12),
@@ -224,10 +223,35 @@ by_region_bar_plot <- function(dataset, yvalue, yaxis_title){
     )
 }
 
-
-
 # Enabler 1 - Workforce charts ----
 # Social Worker Turnover -------
+# plot_social_worker_turnover <- function(geo_lvl, geo_break){
+#   social_worker_data <- workforce_data %>%
+#     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
+#     select(
+#       time_period, geo_breakdown,
+#       turnover_rate_fte_perc
+#     )
+#   ggplot(social_worker_data, aes(`time_period`, `turnover_rate_fte_perc`, color = geo_breakdown))+
+#     geom_line() +
+#     ylab("Social worker turnover rate (FTE) (%)")+
+#     xlab("Time period") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.x = element_text(margin = margin(t = 12)),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 100))+
+#     labs(color='Breakdown')+
+#     scale_color_manual(
+#       "Breakdown",
+#       #breaks = unique(c("England", inputArea)),
+#       values = gss_colour_pallette
+#     )
+# }
+
 
 #bar chart by region
 plot_turnover_reg <- function(){
@@ -238,7 +262,7 @@ plot_turnover_reg <- function(){
   
   ggplot( turnover_reg_data , aes(`geo_breakdown`, `turnover_rate_fte_perc`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Turnover Rate (FTE) %") +
+    ylab("Turnover rate (FTE) %") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -250,7 +274,7 @@ plot_turnover_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, 100))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -305,7 +329,7 @@ plot_turnover_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   
   p <- ggplot(turnover_reg_data, aes(`geo_breakdown`, `turnover_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Turnover Rate (FTE) %") +
+    ylab("Turnover rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -403,109 +427,135 @@ plot_turnover_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
 #   return(p)
 # }
 
-# Vacancy Rate Duplicate delete later-----
-# 
-# plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
-#   
-#   GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
-#     FACT_location <- read.csv(file)
-#     FACT_location <- FACT_location%>%
-#       select(region_name, la_name) %>%
-#       filter((la_name != '')) %>%
-#       unique()
-#   }
-#   
-#   location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
-#   
-#   if (selected_geo_lvl == "Local authority") {
-#     vacancy_data <- workforce_data %>%
-#       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
-#              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
-#   } else if (selected_geo_lvl == "National") {
-#     vacancy_data <- workforce_data %>%
-#       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
-#              is_selected = "Not Selected")
-#   } else if (selected_geo_lvl == "Regional") {
-#     
-#     # Check if the selected region is London
-#     if (selected_geo_breakdown == "London") {
-#       # Include both Inner London and Outer London
-#       location <- location_data %>%
-#         filter(region_name %in% c("Inner London", "Outer London")) %>%
-#         pull(la_name)
-#     } else {
-#       # Get the la_name values within the selected region_name
-#       location <- location_data %>%
-#         filter(region_name == selected_geo_breakdown) %>%
-#         pull(la_name)
-#     }
-#     
-#     vacancy_data <- workforce_data %>%
-#       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
-#              is_selected = "Selected")
-#   }
-#   
-#   
-#   p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
-#     geom_col(position = position_dodge()) +
-#     ylab("Vacancy Rate (FTE) %") +
-#     xlab("") +
-#     theme_classic() +
-#     theme(
-#       text = element_text(size = 12),
-#       axis.title.y = element_text(margin = margin(r = 12)),
-#       axis.line = element_line(size = 1.0)
-#     ) +
-#     scale_y_continuous(limits = c(0, 100))+
-#     scale_fill_manual(
-#       "LA Selection",
-#       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
-#     )
-#   
-#   # Conditionally set the x-axis labels and ticks
-#   if (selected_geo_lvl == "Regional") {
-#     p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
-#   } else {
-#     p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-#   }
-#   
-#   return(p)
-# }
+# Vacancy Rate over time ----
+plot_vacancy_rate <- function(geo_lvl, geo_break) {
+  vacancy_data <- workforce_data %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
+    select(
+      time_period, geo_breakdown,
+      vacancy_rate_fte_perc
+    )
+  ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
+    geom_line() +
+    ylab("Vacancy rate (FTE) (%)") +
+    xlab("Time period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.x = element_text(margin = margin(t = 12)),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    labs(color='Breakdown')+
+    scale_color_manual(
+      "Breakdown",
+      #breaks = unique(c("England", inputArea)),
+      values = gss_colour_pallette
+    )
+}
+
+plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
+  
+  GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+    FACT_location <- read.csv(file)
+    FACT_location <- FACT_location%>%
+      select(region_name, la_name) %>%
+      filter((la_name != '')) %>%
+      unique()
+  }
+  
+  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+  
+  if (selected_geo_lvl == "Local authority") {
+    vacancy_data <- workforce_data %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+  } else if (selected_geo_lvl == "National") {
+    vacancy_data <- workforce_data %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+             is_selected = "Not Selected")
+  } else if (selected_geo_lvl == "Regional") {
+    
+    # Check if the selected region is London
+    if (selected_geo_breakdown == "London") {
+      # Include both Inner London and Outer London
+      location <- location_data %>%
+        filter(region_name %in% c("Inner London", "Outer London")) %>%
+        pull(la_name)
+    } else {
+      # Get the la_name values within the selected region_name
+      location <- location_data %>%
+        filter(region_name == selected_geo_breakdown) %>%
+        pull(la_name)
+    }
+    
+    vacancy_data <- workforce_data %>%
+      filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by caseload_fte
+             is_selected = "Selected")
+  }
+  
+  
+  p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
+    geom_col(position = position_dodge()) +
+    ylab("Vacancy rate (FTE) %") +
+    xlab("") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "LA Selection",
+      values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
+    )
+  
+  # Conditionally set the x-axis labels and ticks
+  if (selected_geo_lvl == "Regional") {
+    p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
+  } else {
+    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  }
+  
+  return(p)
+}
+
+plot_vacancy_reg <- function(){
+  vacancy_reg_data <- workforce_data %>%
+    filter(geographic_level == "Regional", time_period == max(time_period)) %>%
+    select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc)) # Order by turnover rate
+  
+  ggplot( vacancy_reg_data  , aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = factor(time_period))) +
+    geom_col(position = position_dodge()) +
+    ylab("Vacancy rate (FTE) %") +
+    xlab("Region") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, 100))+
+    scale_fill_manual(
+      "Time period",
+      #breaks = unique(c("England", inputArea)),
+      values = '#12436D'#gss_colour_pallette
+    )
+}
 
 
-# Agency Rates ----
-# plt_agency_rates <- function(geo_lvl, geo_break){
-#   agency_rates_data <- workforce_data %>%
-#     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
-#     select(
-#       time_period, geo_breakdown,
-#       agency_worker_rate_fte_perc
-#     )
-#   ggplot(agency_rates_data, aes(`time_period`, `agency_worker_rate_fte_perc`, color = geo_breakdown))+
-#     geom_line() +
-#     ylab("Agency worker rate (FTE) (%)")+
-#     xlab("Time Period") +
-#     theme_classic() +
-#     theme(
-#       text = element_text(size = 12),
-#       axis.title.x = element_text(margin = margin(t = 12)),
-#       axis.title.y = element_text(margin = margin(r = 12)),
-#       axis.line = element_line(size = 1.0)
-#     ) +
-#     scale_y_continuous(limits = c(0, 100))+
-#     labs(color='Breakdown')+
-#     scale_color_manual(
-#       "Breakdown",
-#       #breaks = unique(c("England", inputArea)),
-#       values = gss_colour_pallette
-#     )
-# }
+# Agency rate ----
 
 #bar chart by region
 plot_agency_reg <- function(){
@@ -516,7 +566,7 @@ plot_agency_reg <- function(){
   
   ggplot( agency_reg_data , aes(`geo_breakdown`, `agency_worker_rate_fte_perc`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Agency Worker Rate (FTE) %") +
+    ylab("Agency worker rate (FTE) %") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -528,7 +578,7 @@ plot_agency_reg <- function(){
         ) +
         scale_y_continuous(limits = c(0, 100))+
         scale_fill_manual(
-          "Time Period",
+          "Time period",
           #breaks = unique(c("England", inputArea)),
           values = '#12436D'#gss_colour_pallette
         )
@@ -584,110 +634,7 @@ plot_agency_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl 
   
   p <- ggplot(agency_rates_data, aes(`geo_breakdown`, `agency_worker_rate_fte_perc`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Agency Worker Rate (FTE) %") +
-    xlab("") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    scale_fill_manual(
-      "LA Selection",
-      values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
-    )
-  
-  # Conditionally set the x-axis labels and ticks
-  if (selected_geo_lvl == "Regional") {
-    p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
-  } else {
-    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-  }
-  
-  return(p)
-}
-
-# Vacancy Rate -----
-
-#bar chart by region
-plot_vacancy_reg <- function(){
-  vacancy_reg_data <- workforce_data %>%
-    filter(geographic_level == "Regional", time_period == max(time_period)) %>%
-    select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-    mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc)) # Order by turnover rate
-  
-  ggplot( vacancy_reg_data  , aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = factor(time_period))) +
-    geom_col(position = position_dodge()) +
-    ylab("Vacancy Rate (FTE) %") +
-    xlab("Region") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.text.x = element_text(angle = 300),
-      axis.title.x = element_blank(),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    scale_fill_manual(
-      "Time Period",
-      #breaks = unique(c("England", inputArea)),
-      values = '#12436D'#gss_colour_pallette
-    )
-}
-
-
-plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
-  
-  GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
-    FACT_location <- read.csv(file)
-    FACT_location <- FACT_location%>%
-      select(region_name, la_name) %>%
-      filter((la_name != '')) %>%
-      unique()
-  }
-  
-  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
-  
-  if (selected_geo_lvl == "Local authority") {
-    vacancy_data <- workforce_data %>%
-      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
-             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
-  } else if (selected_geo_lvl == "National") {
-    vacancy_data <- workforce_data %>%
-      filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
-             is_selected = "Not Selected")
-  } else if (selected_geo_lvl == "Regional") {
-    
-    # Check if the selected region is London
-    if (selected_geo_breakdown == "London") {
-      # Include both Inner London and Outer London
-      location <- location_data %>%
-        filter(region_name %in% c("Inner London", "Outer London")) %>%
-        pull(la_name)
-    } else {
-      # Get the la_name values within the selected region_name
-      location <- location_data %>%
-        filter(region_name == selected_geo_breakdown) %>%
-        pull(la_name)
-    }
-    
-    vacancy_data <- workforce_data %>%
-      filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-      select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
-      mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
-             is_selected = "Selected")
-  }
-  
-  
-  p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
-    geom_col(position = position_dodge()) +
-    ylab("Vacancy Rate (FTE) %") +
+    ylab("Agency worker rate (FTE) %") +
     xlab("") +
     theme_classic() +
     theme(
@@ -712,18 +659,19 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
 }
 
 
-# Worker Caseloads ----
-# plot_caseload_rate <- function(geo_lvl, geo_break) {
+# Vacancy Rate
+# Vacancy Rate over time
+# plot_vacancy_rate <- function(geo_lvl, geo_break) {
 #   vacancy_data <- workforce_data %>%
 #     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break) %>%
 #     select(
 #       time_period, geo_breakdown,
-#       caseload_fte
+#       vacancy_rate_fte_perc
 #     )
-#   ggplot(vacancy_data, aes(`time_period`, `caseload_fte`, color = geo_breakdown)) +
+#   ggplot(vacancy_data, aes(`time_period`, `vacancy_rate_fte_perc`, color = geo_breakdown)) +
 #     geom_line() +
-#     ylab("Average Caseload (FTE)") +
-#     xlab("Time Period") +
+#     ylab("Vacancy rate (FTE) (%)") +
+#     xlab("Time period") +
 #     theme_classic() +
 #     theme(
 #       text = element_text(size = 12),
@@ -731,7 +679,7 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
 #       axis.title.y = element_text(margin = margin(r = 12)),
 #       axis.line = element_line(size = 1.0)
 #     ) +
-#     scale_y_continuous(limits = c(0, 35))+
+#     scale_y_continuous(limits = c(0, 100))+
 #     labs(color='Breakdown')+
 #     scale_color_manual(
 #       "Breakdown",
@@ -739,6 +687,82 @@ plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl
 #       values = gss_colour_pallette
 #     )
 # }
+#bar chart by region
+# plot_vacancy_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
+#   
+#   GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+#     FACT_location <- read.csv(file)
+#     FACT_location <- FACT_location%>%
+#       select(region_name, la_name) %>%
+#       filter((la_name != '')) %>%
+#       unique()
+#   }
+#   
+#   location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+#   
+#   if (selected_geo_lvl == "Local authority") {
+#     vacancy_data <- workforce_data %>%
+#       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
+#              is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+#   } else if (selected_geo_lvl == "National") {
+#     vacancy_data <- workforce_data %>%
+#       filter(geographic_level == "Local authority", time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
+#              is_selected = "Not Selected")
+#   } else if (selected_geo_lvl == "Regional") {
+#     
+#     # Check if the selected region is London
+#     if (selected_geo_breakdown == "London") {
+#       # Include both Inner London and Outer London
+#       location <- location_data %>%
+#         filter(region_name %in% c("Inner London", "Outer London")) %>%
+#         pull(la_name)
+#     } else {
+#       # Get the la_name values within the selected region_name
+#       location <- location_data %>%
+#         filter(region_name == selected_geo_breakdown) %>%
+#         pull(la_name)
+#     }
+#     
+#     vacancy_data <- workforce_data %>%
+#       filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+#       select(time_period, geo_breakdown, vacancy_rate_fte_perc) %>%
+#       mutate(geo_breakdown = reorder(geo_breakdown, -vacancy_rate_fte_perc), # Order by vacancy rate
+#              is_selected = "Selected")
+#   }
+#   
+#   
+#   p <- ggplot(vacancy_data, aes(`geo_breakdown`, `vacancy_rate_fte_perc`, fill = `is_selected`)) +
+#     geom_col(position = position_dodge()) +
+#     ylab("Vacancy rate (FTE) %") +
+#     xlab("") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 100))+
+#     scale_fill_manual(
+#       "LA Selection",
+#       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
+#     )
+#   
+#   # Conditionally set the x-axis labels and ticks
+#   if (selected_geo_lvl == "Regional") {
+#     p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
+#   } else {
+#     p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+#   }
+#   
+#   return(p)
+# }
+
+
+# Worker Caseloads ----
 
 #bar charts test
 plot_caseloads_reg <- function(){
@@ -747,9 +771,15 @@ plot_caseloads_reg <- function(){
     select(time_period, geo_breakdown, caseload_fte) %>%
     mutate(geo_breakdown = reorder(geo_breakdown, -caseload_fte)) # Order by caseload_fte
   
+  # Set the max y-axis scale
+  max_rate <- max(workforce_data$caseload_fte, na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
   ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("Average Caseload (FTE)") +
+    ylab("Average caseload (FTE)") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -759,9 +789,9 @@ plot_caseloads_reg <- function(){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 30))+
+    scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -814,6 +844,13 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   }
   
   
+  # Set the max y-axis scale
+  max_rate <- max(workforce_data$caseload_fte, na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  
   p <- ggplot(caseload_data, aes(`geo_breakdown`, `caseload_fte`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
     ylab("Average Caseload (FTE)") +
@@ -824,7 +861,7 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 30))+
+    scale_y_continuous(limits = c(0, max_rate ))+
     scale_fill_manual(
       "LA Selection",
       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
@@ -998,7 +1035,7 @@ plot_cla_rate_reg <- function(){
   
   ggplot( cla_reg_data , aes(`geo_breakdown`, `rate_per_10000`, fill = factor(time_period))) +
     geom_col(position = position_dodge()) +
-    ylab("CLA Rate Per 10,000 Children") +
+    ylab("Rate per 10,000 children") +
     xlab("Region") +
     theme_classic() +
     theme(
@@ -1010,7 +1047,7 @@ plot_cla_rate_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -1070,7 +1107,7 @@ plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   
   p <- ggplot(cla_data, aes(`geo_breakdown`, `rate_per_10000`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("CLA Rate Per 10,000 Children") +
+    ylab("Rate of children starting in care, per 10,000") +
     xlab("") +
     theme_classic() +
     theme(
@@ -1092,6 +1129,80 @@ plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   }
   
   return(p)
+}
+
+plot_uasc <- function(geo_break, geo_lvl){
+  uasc_data <- combined_cla_data %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break
+           & characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children") &
+           population_count == "Children starting to be looked after each year") %>%
+    select(time_period, geo_breakdown, placement_per_10000, characteristic)
+
+  
+  # Set the max y-axis scale
+  max_rate <- max(combined_cla_data$placement_per_10000[combined_cla_data$population_count == "Children starting to be looked after each year" &
+                  combined_cla_data$characteristic %in% c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")],
+                  na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
+    geom_bar(stat = "identity") +
+    ylab("Rate of children starting in care, per 10,000") +
+    xlab("Time period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_x_continuous(breaks = seq(min(uasc_data$time_period), max(uasc_data$time_period), by = 1)) +
+    scale_y_continuous(limits = c(0, max(max_rate)))+
+    scale_fill_manual(
+      "UASC status",
+      #breaks = unique(c("England", inputArea)),
+      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
+    )
+}
+
+#bar chart by region
+plot_uasc_reg <- function(){
+  uasc_data <- combined_cla_data %>%
+    filter(geographic_level == "Regional"
+           & characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children") &
+             population_count == "Children starting to be looked after each year" & time_period == max(time_period)) %>%
+    select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -placement_per_10000))
+  
+  # Set the max y-axis scale
+  max_rate <- max(combined_cla_data$placement_per_10000[combined_cla_data$population_count == "Children starting to be looked after each year" &
+                                                          combined_cla_data$characteristic %in% c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")],
+                  na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  ggplot(uasc_data , aes(`geo_breakdown`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
+    geom_bar(stat = "identity") +
+    ylab("Rate per 10,000 children") +
+    xlab("Region") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, max_rate))+
+    scale_fill_manual(
+      "UASC Status",
+      #breaks = unique(c("England", inputArea)),
+      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
+    )
 }
 
 
@@ -1126,7 +1237,7 @@ plot_cin_rate_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, max_rate))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
@@ -1240,7 +1351,7 @@ plot_cin_referral_reg <- function(){
     ) +
     scale_y_continuous(limits = c(0, 100))+
     scale_fill_manual(
-      "Time Period",
+      "Time period",
       #breaks = unique(c("England", inputArea)),
       values = '#12436D'#gss_colour_pallette
     )
