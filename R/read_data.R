@@ -84,7 +84,7 @@ GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
 #For filters to work nicely, we want to have two levels of grouping: geographic level (national, regional, LA) 
 #and level breakdown (region names and la names)
 
-read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+read_workforce_data <- function(file = "data/csww_indicators_2017_to_2023.csv"){
   workforce_data <- read.csv(file)
   workforce_data <- colClean(workforce_data)%>%
     mutate(geo_breakdown = case_when(
@@ -92,9 +92,9 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
       geographic_level == "Regional" ~ region_name,
       geographic_level == "Local authority" ~ la_name
     )) %>%
-    select(geographic_level, geo_breakdown,turnover_rate_fte_perc,time_period,"time_period","turnover_rate_fte_perc", "absence_rate_fte_perc",
-           "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
-           "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte") %>% distinct()
+    select(geographic_level, geo_breakdown,turnover_rate_fte,time_period,"time_period","turnover_rate_fte", "absence_rate_fte",
+           "agency_rate_fte", "agency_cover_rate_fte", "vacancy_rate_fte", "vacancy_agency_cover_rate_fte",
+           "turnover_rate_headcount", "agency_rate_headcount", "caseload_fte") %>% distinct()
   
   workforce_data <- convert_perc_cols_to_numeric(workforce_data)
   
@@ -111,16 +111,16 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce characteristics data
-read_workforce_char_data <- function(file = "data/csww_workforce_characteristics_2017_to_2022.csv") {
-  workforce_characteristics <- read.csv(file)
-  # Select only the columns we want
-  workforce_char_data <- colClean(workforce_characteristics) 
-  workforce_char_data <- workforce_char_data %>% filter(characteristic_type != "Total") %>% select(
-    "time_period", "geographic_level", "region_name", "characteristic", "characteristic_type", "percentage"
-  )
-  workforce_char_data <- convert_perc_cols_to_numeric(workforce_char_data)
-  return(workforce_char_data)
-}
+# read_workforce_char_data <- function(file = "data/csww_workforce_characteristics_2017_to_2022.csv") {
+#   workforce_characteristics <- read.csv(file)
+#   # Select only the columns we want
+#   workforce_char_data <- colClean(workforce_characteristics) 
+#   workforce_char_data <- workforce_char_data %>% filter(characteristic_type != "Total") %>% select(
+#     "time_period", "geographic_level", "region_name", "characteristic", "characteristic_type", "percentage"
+#   )
+#   workforce_char_data <- convert_perc_cols_to_numeric(workforce_char_data)
+#   return(workforce_char_data)
+# }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce ethnicity data

@@ -267,7 +267,7 @@ server <- function(input, output, session) {
   
   #social worker rate plot and table -----
   output$s_w_headline_txt <- renderText({
-    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(turnover_rate_fte_perc), nsmall = 1)
+    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(turnover_rate_fte), nsmall = 1)
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
   })
   
@@ -304,7 +304,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte_perc', 'Turnover rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte', 'Turnover rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -315,13 +315,13 @@ server <- function(input, output, session) {
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
     filtered_data <- workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown_e2) %>%
-      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+      select(time_period, geo_breakdown,turnover_rate_fte)
 
     #national only
   }else if(!is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
     filtered_data<-workforce_data %>%
       filter((geographic_level %in% input$select_geography_e2 & geo_breakdown %in% input$geographic_breakdown_e2)|geographic_level == 'National') %>%
-      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+      select(time_period, geo_breakdown,turnover_rate_fte)
 
     #regional only
   }else if(is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -330,7 +330,7 @@ server <- function(input, output, session) {
 
     filtered_data<-workforce_data %>%
       filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name))) %>%
-      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+      select(time_period, geo_breakdown,turnover_rate_fte)
 
     #both selected
   }else if(!is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -339,7 +339,7 @@ server <- function(input, output, session) {
 
     filtered_data<- workforce_data %>%
       filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name)|geographic_level == 'National'))%>%
-      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+      select(time_period, geo_breakdown,turnover_rate_fte)
   }
     datatable(
       filtered_data,
@@ -365,9 +365,9 @@ server <- function(input, output, session) {
     datatable(
       workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        turnover_rate_fte_perc
+        turnover_rate_fte
       ) %>%
-        arrange(desc(turnover_rate_fte_perc)),
+        arrange(desc(turnover_rate_fte)),
       colnames = c("Time period", "Geographical breakdown", "Turnover rate (FTE) %"),
       options = list(
         scrollx = FALSE,
@@ -400,15 +400,15 @@ server <- function(input, output, session) {
       
       data <- workforce_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-        select(time_period, geo_breakdown, turnover_rate_fte_perc)  %>%
-        arrange(desc(turnover_rate_fte_perc))
+        select(time_period, geo_breakdown, turnover_rate_fte)  %>%
+        arrange(desc(turnover_rate_fte))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
       data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        turnover_rate_fte_perc
+        turnover_rate_fte
       ) %>%
-        arrange(desc(turnover_rate_fte_perc))
+        arrange(desc(turnover_rate_fte))
     }
     
     datatable(
@@ -423,7 +423,7 @@ server <- function(input, output, session) {
   
   #agency worker rate plot ----
   output$agency_rate_txt <- renderText({
-    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(agency_worker_rate_fte_perc), nsmall = 1)
+    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(agency_rate_fte), nsmall = 1)
     paste0(stat,"%","<br>", "<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
     })
   
@@ -459,7 +459,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'agency_rate_fte', 'Agency worker rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -469,7 +469,7 @@ server <- function(input, output, session) {
   #   datatable(
   #     workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
   #       time_period, geo_breakdown,
-  #       agency_worker_rate_fte_perc
+  #       agency_rate_fte
   #     ),
   #     colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
   #     options = list(
@@ -483,13 +483,13 @@ server <- function(input, output, session) {
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
       filtered_data <- workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown_e2) %>%
-        select(time_period, geo_breakdown,agency_worker_rate_fte_perc)
+        select(time_period, geo_breakdown,agency_rate_fte)
       
       #national only
     }else if(!is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
       filtered_data<-workforce_data %>%
         filter((geographic_level %in% input$select_geography_e2 & geo_breakdown %in% input$geographic_breakdown_e2)|geographic_level == 'National') %>%
-        select(time_period, geo_breakdown,agency_worker_rate_fte_perc)
+        select(time_period, geo_breakdown,agency_rate_fte)
       
       #regional only
     }else if(is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -498,7 +498,7 @@ server <- function(input, output, session) {
       
       filtered_data<-workforce_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name))) %>%
-        select(time_period, geo_breakdown,agency_worker_rate_fte_perc)
+        select(time_period, geo_breakdown,agency_rate_fte)
       
       #both selected
     }else if(!is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -507,7 +507,7 @@ server <- function(input, output, session) {
       
       filtered_data<- workforce_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name)|geographic_level == 'National'))%>%
-        select(time_period, geo_breakdown,agency_worker_rate_fte_perc)
+        select(time_period, geo_breakdown,agency_rate_fte)
     }
     datatable(
       filtered_data,
@@ -533,9 +533,9 @@ server <- function(input, output, session) {
     datatable(
       workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        agency_worker_rate_fte_perc
+        agency_rate_fte
       ) %>%
-        arrange(desc(agency_worker_rate_fte_perc)),
+        arrange(desc(agency_rate_fte)),
       colnames = c("Time period", "Geographical breakdown", "Agency worker rate (FTE) %"),
       options = list(
         scrollx = FALSE,
@@ -570,15 +570,15 @@ server <- function(input, output, session) {
       
       data <- workforce_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-        select(time_period, geo_breakdown, agency_worker_rate_fte_perc)  %>%
-        arrange(desc(agency_worker_rate_fte_perc))
+        select(time_period, geo_breakdown, agency_rate_fte)  %>%
+        arrange(desc(agency_rate_fte))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
       data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        agency_worker_rate_fte_perc
+        agency_rate_fte
       ) %>%
-        arrange(desc(agency_worker_rate_fte_perc))
+        arrange(desc(agency_rate_fte))
     }
     
     datatable(
@@ -593,7 +593,7 @@ server <- function(input, output, session) {
   
   # Vacancy Rate plot and table -----
   output$vacancy_rate_txt <- renderText({
-    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%",
+    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(vacancy_rate_fte), nsmall = 1), "%",
            "<br>","<p style='font-size:16px; font-weight:500;'>", "(",max(workforce_data$time_period),")", "</p>")
   })
   
@@ -628,7 +628,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'vacancy_rate_fte_perc', 'Vacancy rate (FTE) %')%>%
+      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'vacancy_rate_fte', 'Vacancy rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -638,7 +638,7 @@ server <- function(input, output, session) {
   #   datatable(
   #     workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
   #       time_period, geo_breakdown,
-  #       vacancy_rate_fte_perc
+  #       vacancy_rate_fte
   #     ),
   #     colnames = c("Time Period", "Geographical Breakdown", "Vacancy Rate (FTE) %"),
   #     options = list(
@@ -652,13 +652,13 @@ server <- function(input, output, session) {
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
       filtered_data <- workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown_e2) %>%
-        select(time_period, geo_breakdown,vacancy_rate_fte_perc)
+        select(time_period, geo_breakdown,vacancy_rate_fte)
       
       #national only
     }else if(!is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
       filtered_data<-workforce_data %>%
         filter((geographic_level %in% input$select_geography_e2 & geo_breakdown %in% input$geographic_breakdown_e2)|geographic_level == 'National') %>%
-        select(time_period, geo_breakdown,vacancy_rate_fte_perc)
+        select(time_period, geo_breakdown,vacancy_rate_fte)
       
       #regional only
     }else if(is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -667,7 +667,7 @@ server <- function(input, output, session) {
       
       filtered_data<-workforce_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name))) %>%
-        select(time_period, geo_breakdown,vacancy_rate_fte_perc)
+        select(time_period, geo_breakdown,vacancy_rate_fte)
       
       #both selected
     }else if(!is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -676,7 +676,7 @@ server <- function(input, output, session) {
       
       filtered_data<- workforce_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name)|geographic_level == 'National'))%>%
-        select(time_period, geo_breakdown,vacancy_rate_fte_perc)
+        select(time_period, geo_breakdown,vacancy_rate_fte)
     }
     datatable(
       filtered_data,
@@ -712,15 +712,15 @@ server <- function(input, output, session) {
       
       data <- workforce_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-        select(time_period, geo_breakdown, vacancy_rate_fte_perc)  %>%
-        arrange(desc(vacancy_rate_fte_perc))
+        select(time_period, geo_breakdown, vacancy_rate_fte)  %>%
+        arrange(desc(vacancy_rate_fte))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
       data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        vacancy_rate_fte_perc
+        vacancy_rate_fte
       ) %>%
-        arrange(desc(vacancy_rate_fte_perc))
+        arrange(desc(vacancy_rate_fte))
     }
     
     datatable(
@@ -748,9 +748,9 @@ server <- function(input, output, session) {
     datatable(
       workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        vacancy_rate_fte_perc
+        vacancy_rate_fte
       ) %>%
-        arrange(desc(vacancy_rate_fte_perc)),
+        arrange(desc(vacancy_rate_fte)),
       colnames = c("Time period", "Geographical breakdown", "Vacancy rate (FTE) %"),
       options = list(
         scrollx = FALSE,
