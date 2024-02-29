@@ -232,7 +232,7 @@ server <- function(input, output, session) {
     )
   }
   )
-  # Confirmation sentence -------
+  # Confirmation sentence E2 -------
   #This function gets the selected region to put into the confirmation text below
   region <- reactive({
     location_data %>%
@@ -265,10 +265,9 @@ server <- function(input, output, session) {
     }
   })
 
-  #Social Worker Turnover Rate-----
   
   # Social worker turnover rate headline box
-  #social worker rate plot and table -----
+  #Turnover rate plot and table -----
   output$s_w_headline_txt <- renderText({
     stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(turnover_rate_fte_perc), nsmall = 1)
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
@@ -380,14 +379,6 @@ server <- function(input, output, session) {
   })
   
   # Turnover Rate by LA plot ----
-  # output$plot_turnover_la <- plotly::renderPlotly({
-  #   ggplotly(
-  #     plot_turnover_la(input$geographic_breakdown_e2, input$select_geography_e2) %>%
-  #       config(displayModeBar = F),
-  #     height = 420
-  #   )
-  # })
-  
   output$plot_turnover_la <- plotly::renderPlotly({
     ggplotly(
       by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %') %>%
@@ -434,15 +425,14 @@ server <- function(input, output, session) {
     )
   })
   
-  #agency worker rate plot ----
   
-  #Headine box for agency rate
+  #Headine box for agency rate ----
   output$agency_rate_txt <- renderText({
     stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(agency_worker_rate_fte_perc), nsmall = 1)
     paste0(stat,"%","<br>", "<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
     })
   
-  #Agency worker rate benchmarking plot
+  #Agency worker rate plot ----
   output$plot_agency_worker <- plotly::renderPlotly({
     validate(need(!is.null(input$select_geography_e2), 'Select a geography level.'),
              need(!is.null(input$geographic_breakdown_e2),'Select a breakdown.'))

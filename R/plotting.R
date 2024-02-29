@@ -95,7 +95,7 @@ plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, y
     select(time_period, geo_breakdown, `yvalue`) %>%
     mutate(`Time period` = as.character(`time_period`)) %>%
     rename(`Breakdown` = `geo_breakdown`) %>%
-    rename_at(yvalue, ~str_to_title(str_replace_all(., "_", "")))
+    rename_at(yvalue, ~str_to_sentence(str_replace_all(., "_", " ")))
   
   ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_sentence(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
     geom_path(group = 1) +
