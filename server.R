@@ -1753,7 +1753,7 @@ server <- function(input, output, session) {
     } else if (input$select_geography_o2 == "Regional") {
       paste0("You have selected ", tags$b(input$select_geography_o2), " level statistics for ", tags$b(input$geographic_breakdown_o2), ".")
     } else if (input$select_geography_o2 == "Local authority") {
-      paste0("You have selected ", tags$b(input$select_geography_o2), " level statistics for ", tags$b(input$geographic_breakdown_o2), ", in ", region_for_la_o1(), ".")
+      paste0("You have selected ", tags$b(input$select_geography_o2), " level statistics for ", tags$b(input$geographic_breakdown_o2), ", in ", region_for_la_o2(), ".")
     }
   })
   
