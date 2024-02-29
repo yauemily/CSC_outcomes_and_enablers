@@ -1725,6 +1725,53 @@ server <- function(input, output, session) {
     )
   })
   
+  #Outcome 2 -----
+  # Geographic breakdown o1 (list of either LA names or Region names)
+  observeEvent(eventExpr={input$select_geography_o2},{
+    choices = sort(unique(dropdown_choices[dropdown_choices$geographic_level == input$select_geography_o2, "geo_breakdown"]),decreasing = FALSE)
+    
+    updateSelectizeInput(
+      session = session,
+      inputId = "geographic_breakdown_o2",
+      selected = choices[1],
+      choices = choices,
+      
+    )
+  }
+  )
+  
+  region_for_la_o2 <- reactive({
+    selected_la <- input$geographic_breakdown_o2
+    location_data %>%
+      filter(la_name == selected_la) %>%
+      pull(region_name)
+  })
+  
+  output$outcome2_choice_text1 <- renderText({
+    if (input$select_geography_o2 == "National") {
+      paste0("You have selected ", tags$b(input$select_geography_o2), " level statistics on ", tags$b("England"), ".")
+    } else if (input$select_geography_o2 == "Regional") {
+      paste0("You have selected ", tags$b(input$select_geography_o2), " level statistics for ", tags$b(input$geographic_breakdown_o2), ".")
+    } else if (input$select_geography_o2 == "Local authority") {
+      paste0("You have selected ", tags$b(input$select_geography_o2), " level statistics for ", tags$b(input$geographic_breakdown_o2), ", in ", region_for_la_o1(), ".")
+    }
+  })
+  
+  output$outcome2_choice_text2 <- renderText({
+    #Checking to see if they picked national average comparison
+    if (!is.null(input$national_comparison_checkbox_o2) && is.null(input$region_comparison_checkbox_o2)) {
+      paste0("You have also selected to compare with the ", tags$b("National Average."))
+      # If they picked regional comparison
+    } else if (is.null(input$national_comparison_checkbox_o2) && !is.null(input$region_comparison_checkbox_o2)) {
+      paste0("You have also selected to compare with the ", tags$b("Regional average."))
+      #Picked both national and regional comparison
+    } else if (!is.null(input$national_comparison_checkbox_o2) && !is.null(input$region_comparison_checkbox_o2)) {
+      paste0("You have also selected to compare with the ", tags$b("National average"), " and the ", tags$b("Regional average."))
+    }
+  })
+  
+  
+  
   # Don't touch the code below -----------------------
 
   observeEvent(input$go, {
