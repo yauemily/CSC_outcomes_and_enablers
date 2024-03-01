@@ -124,7 +124,7 @@ read_workforce_data <- function(file = "data/csww_indicators_2017_to_2023.csv"){
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce ethnicity data
-read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicity_2019_to_2022.csv") {
+read_workforce_eth_data <- function(file = "data/csww_role_by_characteristics_inpost_2019_to_2023.csv") {
   workforce_ethnicity_data <- read.csv(file)
   # Select only columns we want
   #workforce_eth_data <- colCleanPerc(workforce_ethnicity_data)
@@ -135,9 +135,10 @@ read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicit
       geographic_level == "Local authority" ~ la_name
   )) %>%
   select(
-    geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, "time_period", "geographic_level", "region_name", "OrgRole", "white_perc", "mixed_perc", "asian_perc", 
-    "black_perc", "other_perc", known_headcount, white, mixed, asian, black, other
-  )
+    geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, 
+    "time_period", "geographic_level", "region_name", "role", breakdown_topic,	breakdown,
+    inpost_FTE,	inpost_FTE_percentage,	inpost_headcount,	inpost_headcount_percentage
+      )
   
   workforce_ethnicity_data$new_la_code[workforce_ethnicity_data$new_la_code == ""] <- NA
   workforce_ethnicity_data$region_code[workforce_ethnicity_data$region_code == ""] <- NA
@@ -145,10 +146,10 @@ read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicit
   
   workforce_ethnicity_data <- workforce_ethnicity_data %>%
   mutate(seniority = case_when(
-     OrgRole == "Case holder" ~ "Case holder",
-     OrgRole == "Qualified without cases" ~ "Qualified without cases",
-     OrgRole == "Senior practitioner" ~ "Senior practitioner",
-    OrgRole %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
+     role == "Case holder" ~ "Case holder",
+     role == "Qualified without cases" ~ "Qualified without cases",
+     role == "Senior practitioner" ~ "Senior practitioner",
+    role %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
     ))
   
   workforce_ethnicity_data <- convert_perc_cols_to_numeric(workforce_ethnicity_data)
@@ -398,12 +399,12 @@ merge_eth_dataframes <- function() {
   workforce_eth <- subset(workforce_eth, time_period == latest_year)
   
   # Rename the columns to make it clear which dataset they come from
-  workforce_eth <- rename(workforce_eth, 
-                          Workforce_WhitePercentage = white_perc,
-                          Workforce_BlackPercentage = black_perc,
-                          Workforce_MixedPercentage = mixed_perc,
-                          Workforce_AsianPercentage = asian_perc,
-                          Workforce_OtherPercentage = other_perc)
+#  workforce_eth <- rename(workforce_eth, 
+                      #    Workforce_WhitePercentage = white_perc,
+                       #   Workforce_BlackPercentage = black_perc,
+                       #   Workforce_MixedPercentage = mixed_perc,
+                       #   Workforce_AsianPercentage = asian_perc,
+                        #  Workforce_OtherPercentage = other_perc)
   
   population_eth <- rename(population_eth, 
                            Population_WhitePercentage = White,

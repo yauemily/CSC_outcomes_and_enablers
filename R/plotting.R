@@ -1016,8 +1016,9 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
 
 
 plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
-  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$OrgRole == 'All children and family social workers', 
-                                  c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc")
+  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$role == 'Total', 
+                                  c("time_period", "geo_breakdown", breakdown_topic,	breakdown,
+                                    inpost_FTE,	inpost_FTE_percentage,)
                                   ]
   
   ethnicity_data_long <- reshape(ethnicity_data,
