@@ -953,7 +953,7 @@ server <- function(input, output, session) {
   #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
   #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
   #                                          & role == "Total" & breakdown == "White") %>% 
-  #                   select(inpost_FTE_percentage), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  #                   select(inpost_headcount_percentage), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
   # })
   
   output$non_white_txt <- renderText({
@@ -961,48 +961,12 @@ server <- function(input, output, session) {
                                           & geo_breakdown %in% input$geographic_breakdown_e2 
                                           & role == "Total"
                                           & breakdown == "White") %>% 
-      select(inpost_FTE_percentage)
+      select(inpost_headcount_percentage)
     non_white_stat = 100 - as.numeric(white_stat)
     paste0(format(non_white_stat, nsmall = 1), "%", "<br>","<p style='font-size:16px; font-weight:500;'>", "(", max(workforce_eth$time_period) ,")", "</p>")
   })
   
-  
-  # output$asian_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(asian_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  # 
-  # output$black_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(black_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  # 
-  # output$mixed_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(mixed_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  # 
-  # output$other_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(other_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  # 
-  # output$white_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(white_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  
-  
+
   output$plot_ethnicity_rate <- plotly::renderPlotly({
     ggplotly(
       plot_ethnicity_rate(input$geographic_breakdown_e2, input$geographic_level) %>%
@@ -1022,9 +986,10 @@ server <- function(input, output, session) {
   output$table_ethnicity_rate <- renderDataTable({
     datatable(
       workforce_eth %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown_e2, OrgRole == 'All children and family social workers') %>% 
-        select(time_period, geo_breakdown, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
-      colnames = c("Time period", "Geographical breakdown", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
+        filter(geo_breakdown %in% input$geographic_breakdown_e2, 
+               role == 'Total', breakdown_topic == 'Ethnicity major' ) %>% 
+        select(time_period, geo_breakdown, breakdown, inpost_headcount,	inpost_headcount_percentage),
+      colnames = c("Time period", "Geographical breakdown", "Ethnicity", "Headcount",	"Headcount (%)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE

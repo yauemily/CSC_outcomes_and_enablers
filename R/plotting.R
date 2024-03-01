@@ -1016,25 +1016,29 @@ plot_caseload_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
 
 
 plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
-  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown & workforce_eth$role == 'Total', 
-                                  c("time_period", "geo_breakdown", breakdown_topic,	breakdown,
-                                    inpost_FTE,	inpost_FTE_percentage,)
+  ethnicity_data <- workforce_eth[workforce_eth$geo_breakdown %in% geo_breakdown 
+                                  & workforce_eth$role == 'Total'
+                                  & workforce_eth$breakdown_topic == 'Ethnicity major'
+                                  & workforce_eth$breakdown != 'Known'
+                                  & workforce_eth$time_period >= (max(workforce_eth$time_period)-3), 
+                                  c("time_period", "geo_breakdown", "breakdown_topic",	"breakdown",
+                                	"inpost_headcount_percentage")
                                   ]
   
-  ethnicity_data_long <- reshape(ethnicity_data,
-                                 direction = "long",
-                                 varying = list(names(ethnicity_data)[3:7]),
-                                 v.names = "percentage",
-                                 timevar = "ethnicity",
-                                 times = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
-                                 new.row.names = 1:1E6)
+  # ethnicity_data_long <- reshape(ethnicity_data,
+  #                                direction = "long",
+  #                                varying = list(names(ethnicity_data)[3:7]),
+  #                                v.names = "percentage",
+  #                                timevar = "ethnicity",
+  #                                times = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
+  #                                new.row.names = 1:1E6)
   
   # Ensure 'percentage' is numeric
-  ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
+  ethnicity_data$percentage <- as.numeric(ethnicity_data$inpost_headcount_percentage)
   
-  custom_x_order <- c("white_perc", "black_perc", "asian_perc", "mixed_perc", "other_perc")
+  custom_x_order <- c("White", "Mixed / Multiple ethnic groups", "Asian / Asian British", "Black / African / Caribbean / Black British", "Other ethnic group")
   
-  p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(time_period))) +
+  p <- ggplot(ethnicity_data, aes(x = breakdown, y = percentage, fill = factor(time_period))) +
     geom_bar(stat = "identity", position = position_dodge()) +
     ylab("Percentage") +
     xlab("Ethnicity") +
@@ -1053,7 +1057,7 @@ plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
     ) +
     scale_x_discrete(
       limits = custom_x_order,
-      labels = c("white_perc" = "White", "mixed_perc" = "Mixed", "asian_perc" = "Asian", "black_perc" = "Black", "other_perc" = "Other")
+      labels = c("White" = "White", "Mixed / Multiple ethnic groups" = "Mixed", "Asian / Asian British" = "Asian", "Black / African / Caribbean / Black British" = "Black", "Other ethnic group" = "Other")
       )
   
   return(p)

@@ -144,13 +144,13 @@ read_workforce_eth_data <- function(file = "data/csww_role_by_characteristics_in
   workforce_ethnicity_data$region_code[workforce_ethnicity_data$region_code == ""] <- NA
   workforce_ethnicity_data <- mutate(workforce_ethnicity_data, code = coalesce(new_la_code, region_code, country_code))
   
-  workforce_ethnicity_data <- workforce_ethnicity_data %>%
-  mutate(seniority = case_when(
-     role == "Case holder" ~ "Case holder",
-     role == "Qualified without cases" ~ "Qualified without cases",
-     role == "Senior practitioner" ~ "Senior practitioner",
-    role %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
-    ))
+  # workforce_ethnicity_data <- workforce_ethnicity_data %>%
+  # mutate(seniority = case_when(
+  #    role == "Case holder" ~ "Case holder",
+  #    role == "Qualified without cases" ~ "Qualified without cases",
+  #    role == "Senior practitioner" ~ "Senior practitioner",
+  #   role %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
+  #   ))
   
   workforce_ethnicity_data <- convert_perc_cols_to_numeric(workforce_ethnicity_data)
 
