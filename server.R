@@ -1351,7 +1351,7 @@ server <- function(input, output, session) {
     )
   })
   
-    # CIN rate headline
+    # CIN rate headline ----
   output$cin_rate_headline_txt <- renderText({
    stat <- format(cin_rates %>% filter(time_period == max(cin_rates$time_period) & geo_breakdown %in% input$geographic_breakdown_o1) 
                  %>% select(CIN_rate), nsmall = 1)

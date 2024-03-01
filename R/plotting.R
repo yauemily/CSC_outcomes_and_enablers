@@ -1059,15 +1059,15 @@ plot_cla_rate_reg <- function(){
 
 plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
   
-  GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
-    FACT_location <- read.csv(file)
-    FACT_location <- FACT_location%>%
-      select(region_name, la_name) %>%
-      filter((la_name != '')) %>%
-      unique()
-  }
-  
-  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+  # GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+  #   FACT_location <- read.csv(file)
+  #   FACT_location <- FACT_location%>%
+  #     select(region_name, la_name) %>%
+  #     filter((la_name != '')) %>%
+  #     unique()
+  # }
+  # 
+   location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
   
   if (selected_geo_lvl == "Local authority") {
     cla_data <- cla_rates %>%
@@ -1176,13 +1176,13 @@ plot_cin_rate_reg <- function(){
 #cin rate chart by la
 plot_cin_rates_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
   
-  GET_location <- function(file = "data/b1_children_in_need_2013_to_2023.csv"){
-    FACT_location <- read.csv(file)
-    FACT_location <- FACT_location%>%
-      select(region_name, la_name) %>%
-      filter((la_name != '')) %>%
-      unique()
-  }
+  # GET_location <- function(file = "data/b1_children_in_need_2013_to_2023.csv"){
+  #   FACT_location <- read.csv(file)
+  #   FACT_location <- FACT_location%>%
+  #     select(region_name, la_name) %>%
+  #     filter((la_name != '')) %>%
+  #     unique()
+  # }
   
   location_data <- GET_location("data/b1_children_in_need_2013_to_2023.csv")
   
@@ -1284,13 +1284,13 @@ plot_cin_referral_reg <- function(){
 #bar chart by LA
 plot_cin_referral_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
   
-  GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
-    FACT_location <- read.csv(file)
-    FACT_location <- FACT_location%>%
-      select(region_name, la_name) %>%
-      filter((la_name != '')) %>%
-      unique()
-  }
+  # GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+  #   FACT_location <- read.csv(file)
+  #   FACT_location <- FACT_location%>%
+  #     select(region_name, la_name) %>%
+  #     filter((la_name != '')) %>%
+  #     unique()
+  # }
   
   location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
   
