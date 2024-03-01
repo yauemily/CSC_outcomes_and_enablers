@@ -305,7 +305,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte_perc', 'Turnover rate (FTE) %')%>%
+      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte_perc', 'Turnover rate (FTE) %', 100)%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -464,7 +464,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %')%>%
+      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %',100)%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -638,7 +638,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'vacancy_rate_fte_perc', 'Vacancy rate (FTE) %')%>%
+      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'vacancy_rate_fte_perc', 'Vacancy rate (FTE) %',100)%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -1561,7 +1561,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'Re_referrals_percent', 'Re-referrals (%)')%>%
+      plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'Re_referrals_percent', 'Re-referrals (%)', 100)%>%
         config(displayModeBar = F),
       height = 420
     )

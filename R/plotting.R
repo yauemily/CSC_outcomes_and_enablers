@@ -62,33 +62,33 @@ plotAvgRevBenchmark <- function(dfRevenueBalance, inputArea) {
 # Time series repeat function ----
 #This is a repeat use function for all of the time series plots in this dashboard.
 
-plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
-  filtered_data <- dataset %>%
-    #filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
-    select(time_period, geo_breakdown, `yvalue`) %>%
-    mutate(`Time period` = as.character(`time_period`)) %>%
-   rename(`Breakdown` = `geo_breakdown`) %>%
-    rename_at(yvalue, ~ str_to_sentence(str_replace_all(.,  "_", " "))) 
-  
-    ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_sentence(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
-    geom_path(group = 1) +
-       ylab(yaxis_title)+
-    xlab("Time period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.title.x = element_text(margin = margin(t = 12)),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, 100))+
-    labs(color='Breakdown')+
-    scale_color_manual(
-      "Breakdown",
-      #breaks = unique(c("England", inputArea)),
-      values = gss_colour_pallette
-  )
-}
+# plotly_time_series <- function(dataset, level, breakdown, yvalue, yaxis_title){
+#   filtered_data <- dataset %>%
+#     #filter(geographic_level %in% level & geo_breakdown %in% breakdown) %>%
+#     select(time_period, geo_breakdown, `yvalue`) %>%
+#     mutate(`Time period` = as.character(`time_period`)) %>%
+#    rename(`Breakdown` = `geo_breakdown`) %>%
+#     rename_at(yvalue, ~ str_to_sentence(str_replace_all(.,  "_", " "))) 
+#   
+#     ggplot(filtered_data, aes(x = `Time period`, y=!!sym(str_to_sentence(str_replace_all(yvalue,"_"," "))), color = `Breakdown`))+
+#     geom_path(group = 1) +
+#        ylab(yaxis_title)+
+#     xlab("Time period") +
+#     theme_classic() +
+#     theme(
+#       text = element_text(size = 12),
+#       axis.title.x = element_text(margin = margin(t = 12)),
+#       axis.title.y = element_text(margin = margin(r = 12)),
+#       axis.line = element_line(size = 1.0)
+#     ) +
+#     scale_y_continuous(limits = c(0, 100))+
+#     labs(color='Breakdown')+
+#     scale_color_manual(
+#       "Breakdown",
+#       #breaks = unique(c("England", inputArea)),
+#       values = gss_colour_pallette
+#   )
+# }
 
 plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, yaxis_title , ylim_upper){
   filtered_data <- dataset %>%
@@ -167,7 +167,7 @@ by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_
   
   p <- ggplot(turnover_reg_data, aes(x = Breakdown, y = !!sym(str_to_title(str_replace_all(yvalue,"_"," "))), fill = `Selection`)) +
     geom_col(position = position_dodge()) +
-    ylab("Turnover Rate (FTE) %") +
+    ylab(yaxis_title) +
     xlab("") +
     theme_classic() +
     theme(
