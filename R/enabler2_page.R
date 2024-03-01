@@ -117,7 +117,6 @@ enabler2_tab <- function() {
                   value_box(
                     title = "Agency worker rate (FTE)",
                     value = htmlOutput("agency_rate_txt")
-                    #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(agency_worker_rate_fte_perc),"%")
                   )
                 ),
                 column(
@@ -125,7 +124,6 @@ enabler2_tab <- function() {
                   value_box(
                     title = "Vacancy rate (FTE)",
                     value = htmlOutput("vacancy_rate_txt")
-                    #value = paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(vacancy_rate_fte_perc),"%")
                   )
                 ),
                 br(),
@@ -347,7 +345,6 @@ enabler2_tab <- function() {
                   value_box(
                     title = "Average caseload (FTE)",
                     value = htmlOutput("caseload_txt")
-                      #paste0(workforce_data %>% filter(time_period == "2022" & geographic_level == "National") %>% select(caseload_fte))
                   ),
                 )
               ),
