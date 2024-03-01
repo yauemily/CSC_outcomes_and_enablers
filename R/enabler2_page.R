@@ -454,6 +454,10 @@ enabler2_tab <- function() {
                   gov_row(
                     h2("Ethnic diversity of workforce"),
                     p("A diverse workforce, across all levels, should enable practice which reflects the cultural, linguistic, and religious needs of the communities’ practitioners serve."),
+                    insert_text(inputId = "Ethnicity_definition", text = paste(
+                      "<b>","Ethnicity (headcount)", "</b><br>",
+                      "Percentage of headcount children and family social workers in post at 30 September by ethnicity group."
+                    )),
                   )
                 )
               ),
@@ -474,6 +478,7 @@ enabler2_tab <- function() {
                   help_text = (
                     tags$ul(
                      tags$li(tags$b("Ethnicity groups"), " are based on ethnic origin and are provided on a headcount basis."),
+                     tags$li(tags$b("Headcount"), "is a count of all individual children and family social workers, regardless of their working pattern."), 
                      tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
                       tags$li(tags$b("Ethnic minority backgrounds"), " exclude white British, white Irish, or any other white background."),
                      tags$br(),
