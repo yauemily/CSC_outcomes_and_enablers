@@ -78,6 +78,9 @@ enabler2_tab <- function() {
         conditionalPanel(
           condition = "(input.geographic_breakdown_e2 == 'North Northamptonshire / West Northamptonshire')",
           p("North Northamptonshire and West Northamptonshire submitted a joint workforce return in 2021 and onwards, and their data is reported together") ),
+      conditionalPanel(
+        condition = "(input.geographic_breakdown_e2 == 'Cumbria')",
+        p("To view 2023 and onwards data select ", strong("Cumberland"), "or", strong("Westmorland and Furness"), ". Cumbria local authority was replaced with two new unitary authorities, Cumberland and Westmorland and Furness, in April 2023.") ),
               conditionalPanel(
           condition = "(input.geographic_breakdown_e2 == 'Northamptonshire')",
           p("To view 2021 and onwards data select ", strong("North Northamptonshire / West Northamptonshire"), ". Northamptonshire local authority was replaced with two new unitary authorities, North Northamptonshire and West Northamptonshire, in April 2021.") ),
