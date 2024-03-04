@@ -632,12 +632,80 @@ outcome1_tab <- function(){
               "Child wellbeing and development",
               fluidRow(
                 p("testing")
+              ),
+              fluidRow(
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Testing 1",
+                    value = "Testing 1"
+                  )
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Testing 2",
+                    value = "Testing 2"
+                  )
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Testing 3",
+                    value = "Testing 3"
+                  )
+                ),
+                br(),
+              ),
+              accordion(
+                accordion_panel(
+                  "Accordion 1",
+                  
+                ),
+                accordion_panel(
+                  "Accordion 2"
+                ),
+                open = FALSE
               )
             ),
             tabPanel(
               "Educational attainment",
               fluidRow(
                 p("testing")
+              ),
+              fluidRow(
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Testing 1",
+                    value = "Testing 1"
+                  )
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Testing 2",
+                    value = "Testing 2"
+                  )
+                ),
+                column(
+                  width = 4,
+                  value_box(
+                    title = "Testing 3",
+                    value = "Testing 3"
+                  )
+                ),
+                br(),
+              ),
+              accordion(
+                accordion_panel(
+                  "Accordion 1",
+                  
+                ),
+                accordion_panel(
+                  "Accordion 2"
+                ),
+                open = FALSE
               )
             )
           )
