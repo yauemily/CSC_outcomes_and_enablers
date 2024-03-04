@@ -1116,26 +1116,26 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
 }
 
 plot_seniority_eth <- function(geo_breakdown, geographic_level){
-  ethnicity_data_sen <- workforce_eth_seniority[workforce_eth_seniority$geo_breakdown %in% geo_breakdown & workforce_eth_seniority$seniority != 'All children and family social workers', 
-                                  c("time_period", "geo_breakdown", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc", "known_headcount", "seniority")]
+  ethnicity_data_sen <- workforce_eth_seniority[workforce_eth_seniority$geo_breakdown %in% geo_breakdown & workforce_eth_seniority$seniority != 'Total', 
+                                  c("time_period", "geo_breakdown", "breakdown", "Percentage", "seniority")]
   
   # Reshape data using pivot_longer()
-  ethnicity_data_long <- ethnicity_data_sen %>%
-    pivot_longer(
-      cols = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
-      names_to = "ethnicity",
-      values_to = "percentage"
-    )
+  # ethnicity_data_long <- ethnicity_data_sen %>%
+  #   pivot_longer(
+  #     cols = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
+  #     names_to = "ethnicity",
+  #     values_to = "percentage"
+  #   )
 
   
   # Ensure 'percentage' is numeric
-  ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
+  # ethnicity_data_long$percentage <- as.numeric(ethnicity_data_long$percentage)
   
-  custom_x_order <- c("white_perc", "black_perc", "asian_perc", "mixed_perc", "other_perc")
+  custom_x_order <- c("White", "Mixed / Multiple ethnic groups", "Asian / Asian British", "Black / African / Caribbean / Black British", "Other ethnic group")
   custom_fill_order <- c("Manager",  "Senior practitioner", "Case holder","Qualified without cases")
   
   
-  p <- ggplot(ethnicity_data_long, aes(x = ethnicity, y = percentage, fill = factor(seniority,levels = custom_fill_order))) +
+  p <- ggplot( ethnicity_data_sen, aes(x = breakdown, y = Percentage, fill = factor(seniority,levels = custom_fill_order))) +
     geom_bar(stat = "identity", position = position_dodge()) +
     ylab("Percentage") +
     xlab("Ethnicity") +
@@ -1154,7 +1154,7 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
     ) +
     scale_x_discrete(
       limits = custom_x_order,
-      labels = c("white_perc" = "White", "mixed_perc" = "Mixed", "asian_perc" = "Asian", "black_perc" = "Black", "other_perc" = "Other")
+      labels = c("White" = "White", "Mixed / Multiple ethnic groups" = "Mixed", "Asian / Asian British" = "Asian", "Black / African / Caribbean / Black British" = "Black", "Other ethnic group" = "Other")
     )
   
   return(p)

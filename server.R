@@ -1053,14 +1053,14 @@ server <- function(input, output, session) {
     )
   })
   
-  cols <- c("time_period","geographic_level", "geo_breakdown", "seniority", "known_headcount", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc")
+  cols <- c("time_period", "geo_breakdown", "seniority", "breakdown", "inpost_headcount","Percentage")
   
   output$table_seniority_eth <- renderDataTable({
     datatable(
       workforce_eth_seniority[, cols] %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown_e2, seniority != 'All children and family social workers', time_period == max(workforce_eth_seniority$time_period)) %>% 
-        select(time_period,geographic_level, geo_breakdown, seniority, known_headcount, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
-      colnames = c("Time period","Geographic level", "Geographical breakdown", "Seniority level", "Headcount with known ethnicity", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
+        filter(geo_breakdown %in% input$geographic_breakdown_e2, seniority != 'Total', time_period == max(workforce_eth_seniority$time_period)) %>% 
+        select(time_period, geo_breakdown, seniority, breakdown ,inpost_headcount,Percentage),
+      colnames = c("Time period", "Geographical breakdown", "Seniority level", "Ethnicity", "Headcount", "Headcount (%)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE,
