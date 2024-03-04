@@ -13,33 +13,28 @@ outcome1_tab <- function(){
         div(
           class = "input_box",
           style = "min-height:100%; height = 100%; overflow-y: visible",
-          gov_row(
-            column(
-              width = 6,
-              selectizeInput(
-                inputId = "select_geography_o1",
-                label = "Select a geographical level:",
-                choices = unique(dropdown_choices %>% pull('geographic_level')),
-                selected = NULL,
-                multiple = FALSE,
-                options = NULL
-              )
+          layout_columns(
+            selectizeInput(
+              inputId = "select_geography_o1",
+              label = "Select a geographical level:",
+              choices = unique(dropdown_choices %>% pull('geographic_level')),
+              selected = NULL,
+              multiple = FALSE,
+              options = NULL
             ),
-            column(
-              width = 6,
-              conditionalPanel(condition = "input.select_geography_o1 != 'National'",selectizeInput(
-                inputId = "geographic_breakdown_o1",
-                label = "Select a breakdown: ",
-                choices = NULL,
-                selected = NULL,
-                multiple = FALSE,
-                options = NULL
-                #multiple = TRUE,
-                #options = list(maxItems = 3)
-              )),
-            )
+            conditionalPanel(condition = "input.select_geography_o1 != 'National'",selectizeInput(
+              inputId = "geographic_breakdown_o1",
+              label = "Select a breakdown: ",
+              choices = NULL,
+              selected = NULL,
+              multiple = FALSE,
+              options = NULL
+              #multiple = TRUE,
+              #options = list(maxItems = 3)
+            )),
+            col_widths = c(4,8)
           ),
-          gov_row(
+          layout_columns(
             conditionalPanel(condition = "input.select_geography_o1 != 'National'",
                              column(
                                width = 3,
@@ -65,10 +60,71 @@ outcome1_tab <- function(){
                   small = TRUE
                 )
               ),
-            )
-          )
+            ),
+            col_widths = c(4,8)
+          ),
         )
       ),
+      # gov_row(
+      #   div(
+      #     class = "input_box",
+      #     style = "min-height:100%; height = 100%; overflow-y: visible",
+      #     gov_row(
+      #       column(
+      #         width = 6,
+      #         selectizeInput(
+      #           inputId = "select_geography_o1",
+      #           label = "Select a geographical level:",
+      #           choices = unique(dropdown_choices %>% pull('geographic_level')),
+      #           selected = NULL,
+      #           multiple = FALSE,
+      #           options = NULL
+      #         )
+      #       ),
+      #       column(
+      #         width = 6,
+      #         conditionalPanel(condition = "input.select_geography_o1 != 'National'",selectizeInput(
+      #           inputId = "geographic_breakdown_o1",
+      #           label = "Select a breakdown: ",
+      #           choices = NULL,
+      #           selected = NULL,
+      #           multiple = FALSE,
+      #           options = NULL
+      #           #multiple = TRUE,
+      #           #options = list(maxItems = 3)
+      #         )),
+      #       )
+      #     ),
+      #     gov_row(
+      #       conditionalPanel(condition = "input.select_geography_o1 != 'National'",
+      #                        column(
+      #                          width = 3,
+      #                          checkbox_Input(
+      #                            inputId = "national_comparison_checkbox_o1",
+      #                            cb_labels = "Compare with National",
+      #                            checkboxIds = "Yes_national",
+      #                            label = "",
+      #                            hint_label = NULL,
+      #                            small = TRUE
+      #                          )
+      #                        )),
+      #       conditionalPanel(
+      #         condition = "(input.select_geography_o1 == 'Local authority')",
+      #         column(
+      #           width = 3,
+      #           checkbox_Input(
+      #             inputId = "region_comparison_checkbox_o1",
+      #             cb_labels = "Compare with Region",
+      #             checkboxIds = "Yes_region",
+      #             label = "",
+      #             hint_label = NULL,
+      #             small = TRUE
+      #           )
+      #         ),
+      #       )
+      #     )
+      #   )
+      # ),
       br(),
       gov_row(
         br(),
