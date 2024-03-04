@@ -1732,6 +1732,107 @@ server <- function(input, output, session) {
     )
   })
   
+  output$plot_uasc_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_uasc_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  # CLA Rate chart for March
+  output$plot_cla_rate_march <- plotly::renderPlotly({
+    validate(need(!is.null(input$select_geography_o1), 'Select a geography level.'),
+             need(!is.null(input$geographic_breakdown_o1),'Select a breakdown.'))
+    #not both
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cla_rates %>%
+        filter(geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cla_rates %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') 
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cla_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) 
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cla_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))
+    }
+    
+    filtered_data <- filtered_data %>%
+      filter(population_count == "Children looked after at 31 March each year")
+    
+    # Set the max y-axis scale
+    max_rate <- max(cla_rates$rate_per_10000[cla_rates$population_count == "Children looked after at 31 March each year"], na.rm = TRUE)
+    
+    # Round the max_rate to the nearest 50
+    max_rate <- ceiling(max_rate / 50) * 50
+    
+    p <- plotly_time_series_custom_scale(filtered_data, input$select_geography_o1, input$geographic_breakdown_o1,'rate_per_10000', 'Rate per 10,000 children', max_rate) %>%
+      config(displayModeBar = F)
+    
+    
+    ggplotly(p, height = 420) %>%
+      layout(yaxis = list(range = c(0, max_rate)))
+    
+  })
+  
+  # CLA rate march TABLE
+  output$table_cla_rate_march <- renderDataTable({
+    #neither checkboxes
+    if(is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data <- cla_rates %>% filter(geo_breakdown %in% input$geographic_breakdown_o1) %>%
+        select(time_period, geo_breakdown,rate_per_10000,population_count)
+      
+      #national only
+    }else if(!is.null(input$national_comparison_checkbox_o1) && is.null(input$region_comparison_checkbox_o1)){
+      filtered_data<-cla_rates %>%
+        filter((geographic_level %in% input$select_geography_o1 & geo_breakdown %in% input$geographic_breakdown_o1)|geographic_level == 'National') %>%
+        select(time_period, geo_breakdown,rate_per_10000,population_count)
+      
+      #regional only
+    }else if(is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<-cla_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name))) %>%
+        select(time_period, geo_breakdown,rate_per_10000,population_count)
+      
+      #both selected
+    }else if(!is.null(input$national_comparison_checkbox_o1) && !is.null(input$region_comparison_checkbox_o1)){
+      location <- location_data %>%
+        filter(la_name %in% input$geographic_breakdown_o1)
+      
+      filtered_data<- cla_rates %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o1, location$region_name)|geographic_level == 'National'))%>%
+        select(time_period, geo_breakdown,rate_per_10000,population_count)
+    }
+    
+    datatable(
+      filtered_data %>% 
+        filter(population_count == "Children looked after at 31 March each year") %>% 
+        select(time_period, geo_breakdown, rate_per_10000),
+      colnames = c("Time period", "Geographical breakdown", "Rate per 10,000 children"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
   # Don't touch the code below -----------------------
 
   observeEvent(input$go, {

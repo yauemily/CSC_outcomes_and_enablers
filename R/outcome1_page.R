@@ -205,6 +205,27 @@ outcome1_tab <- function(){
                   )
                 )
               ),
+              fluidRow(
+                h2("Rate of children starting in care by LA who were UASC"),
+                p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
+                br(),
+                plotlyOutput("plot_uasc_la"),
+              ),
+              fluidRow(
+                h2("Rate of children in care on 31 March"),
+                br(),
+                plotlyOutput("plot_cla_rate_march"),
+              ),
+              fluidRow(
+                details(
+                  inputId = "tbl_cla_rate_march",
+                  label = "View chart as a table",
+                  help_text = (
+                    dataTableOutput("table_cla_rate_march")
+                  )
+                )
+              ),
             ),
             tabPanel(
               "Access to support and getting help",
