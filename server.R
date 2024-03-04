@@ -1351,6 +1351,8 @@ server <- function(input, output, session) {
     )
   })
   
+  
+  
     # CIN rate headline ----
   output$cin_rate_headline_txt <- renderText({
    stat <- format(cin_rates %>% filter(time_period == max(cin_rates$time_period) & geo_breakdown %in% input$geographic_breakdown_o1) 
@@ -1863,6 +1865,78 @@ server <- function(input, output, session) {
       filtered_data %>% 
         filter(population_count == "Children looked after at 31 March each year") %>% 
         select(time_period, geo_breakdown, rate_per_10000),
+      colnames = c("Time period", "Geographical breakdown", "Rate per 10,000 children"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  # CLA rate March regional plot
+  output$plot_cla_march_reg <- plotly::renderPlotly({
+    ggplotly(
+      plot_cla_march_reg() %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  # CLA rate March regional table
+  output$table_cla_march_reg <- renderDataTable({
+    datatable(
+      cla_rates %>% filter(geographic_level == 'Regional', time_period == max(cla_rates$time_period), population_count == "Children looked after at 31 March each year") %>% select(
+        time_period, geo_breakdown,
+        rate_per_10000
+      ) %>%
+        arrange(desc(rate_per_10000)),
+      colnames = c("Time period", "Geographical breakdown", "Rate per 10,000 children"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
+    )
+  })
+  
+  # CLA rate March LA plot
+  output$plot_cla_march_la <- plotly::renderPlotly({
+    ggplotly(
+      plot_cla_march_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
+        config(displayModeBar = F),
+      height = 420
+    )
+  })
+  
+  # CLA rate March La table
+  output$table_cla_march_la <- renderDataTable({
+    if (input$select_geography_o1 == "Regional") {
+      if (input$geographic_breakdown_o1 == "London") {
+        # Include both Inner London and Outer London
+        location <- location_data %>%
+          filter(region_name %in% c("Inner London", "Outer London")) %>%
+          pull(la_name)
+      } else {
+        # Get the la_name values within the selected region_name
+        location <- location_data %>%
+          filter(region_name == input$geographic_breakdown_o1) %>%
+          pull(la_name)
+      }
+      
+      data <- cla_rates %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period), population_count == "Children looked after at 31 March each year") %>%
+        select(time_period, geo_breakdown, rate_per_10000)  %>%
+        arrange(desc(rate_per_10000))
+      
+    } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
+      data <- cla_rates %>% filter(geographic_level == 'Local authority', time_period == max(cla_rates$time_period), population_count == "Children looked after at 31 March each year") %>% select(
+        time_period, geo_breakdown,
+        rate_per_10000
+      ) %>%
+        arrange(desc(rate_per_10000))
+    }
+    
+    datatable(
+      data,
       colnames = c("Time period", "Geographical breakdown", "Rate per 10,000 children"),
       options = list(
         scrollx = FALSE,
