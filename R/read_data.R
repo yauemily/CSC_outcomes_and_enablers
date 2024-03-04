@@ -213,11 +213,19 @@ read_workforce_eth_seniority_data <- function(file = "data/csww_role_by_characte
   # #sum ethnicity counts to create grouped manager percents
    workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
      group_by(geographic_level, geo_breakdown, time_period, region_name, code, seniority,breakdown)   %>%
-     summarise_at(c("inpost_headcount"), sum)
+     summarise_at(c("inpost_headcount"), sum) %>%
+     filter(!(breakdown %in% c("Total","Not known","Known")))
 
-   workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
-   mutate(percentage = round(inpost_headcount/inpost_headcount[workforce_ethnicity_seniority_data$breakdown == "Total"] * 100, 1))
    
+    #sum ethnicity headcount to create total
+   workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
+     group_by(geographic_level, geo_breakdown, time_period, region_name, code, seniority)   %>%
+                 summarise(Observation = sum(inpost_headcount), .groups = "keep")
+
+   # workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
+   #   group_by(geographic_level, geo_breakdown, time_period, region_name, code, seniority,breakdown)   %>%
+   #   mutate(percentage = round(inpost_headcount/inpost_headcount[workforce_ethnicity_seniority_data$breakdown == "Total"] * 100, 1))
+
 
   # # Group by and calculate the percentages
   # workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
@@ -230,8 +238,8 @@ read_workforce_eth_seniority_data <- function(file = "data/csww_role_by_characte
   #   )
   
   # Filter to include only the latest year of data
-  latest_year <- max(workforce_ethnicity_seniority_data$time_period)
-  workforce_ethnicity_seniority_data <- subset(workforce_ethnicity_seniority_data, time_period == latest_year)
+  # latest_year <- max(workforce_ethnicity_seniority_data$time_period)
+  # workforce_ethnicity_seniority_data <- subset(workforce_ethnicity_seniority_data, time_period == latest_year)
   #workforce_ethnicity_seniority_data <- convert_perc_cols_to_numeric(workforce_ethnicity_seniority_data)
   
   return(workforce_ethnicity_seniority_data)
