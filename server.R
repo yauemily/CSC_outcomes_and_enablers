@@ -1721,8 +1721,8 @@ server <- function(input, output, session) {
   output$table_uasc_reg <- renderDataTable({
     datatable(
       combined_cla_data %>% filter(geographic_level == 'Regional', characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children"),
-                           population_count == "Children starting to be looked after each year",
-                           time_period == max(time_period)) %>% 
+                                   population_count == "Children starting to be looked after each year",
+                                   time_period == max(time_period)) %>% 
         select(time_period, geo_breakdown, placement_per_10000, characteristic),
       colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC status"),
       options = list(
@@ -1737,6 +1737,44 @@ server <- function(input, output, session) {
       plot_uasc_la(input$geographic_breakdown_o1, input$select_geography_o1) %>%
         config(displayModeBar = F),
       height = 420
+    )
+  })
+  
+  output$table_uasc_la <- renderDataTable({
+    if (input$select_geography_o1 == "Regional") {
+      if (input$geographic_breakdown_o1 == "London") {
+        # Include both Inner London and Outer London
+        location <- location_data %>%
+          filter(region_name %in% c("Inner London", "Outer London")) %>%
+          pull(la_name)
+      } else {
+        # Get the la_name values within the selected region_name
+        location <- location_data %>%
+          filter(region_name == input$geographic_breakdown_o1) %>%
+          pull(la_name)
+      }
+      
+      data <- combined_cla_data %>%
+        filter(geo_breakdown %in% location, time_period == max(combined_cla_data$time_period), characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children"),
+               population_count == "Children starting to be looked after each year",) %>%
+        select(time_period, geo_breakdown, placement_per_10000, characteristic)  %>%
+        arrange(desc(placement_per_10000))
+      
+    } else if (input$select_geography_o1 %in% c("Local authority", "National")) {
+      data <- combined_cla_data %>% 
+        filter(geographic_level == 'Local authority', time_period == max(combined_cla_data$time_period), characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children"),
+               population_count == "Children starting to be looked after each year",) %>%
+        select(time_period, geo_breakdown, placement_per_10000, characteristic)  %>%
+        arrange(desc(placement_per_10000))
+    }
+    
+    datatable(
+      data,
+      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC status"),
+      options = list(
+        scrollx = FALSE,
+        paging = TRUE
+      )
     )
   })
   
