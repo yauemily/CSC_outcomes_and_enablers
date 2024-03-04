@@ -234,9 +234,9 @@ server <- function(input, output, session) {
   )
   # Confirmation sentence -------
   
-  region <- reactive({
-    location_data %>%
-      filter(la_name == input$geographic_breakdown_e2) %>%
+  workforce_region <- reactive({
+    location_data_workforce %>%
+            filter(la_name == input$geographic_breakdown_e2) %>%
       pull(region_name)  %>%
       as.character()  # Convert to character
   })
@@ -247,7 +247,7 @@ server <- function(input, output, session) {
     } else if (input$select_geography_e2 == "Regional") {
       paste0("You have selected ", tags$b(input$select_geography_e2), " level statistics for ", tags$b(input$geographic_breakdown_e2), ".")
     } else if (input$select_geography_e2 == "Local authority") {
-      paste0("You have selected ", tags$b(input$select_geography_e2), " level statistics for ", tags$b(input$geographic_breakdown_e2), ", in ", region(), ".")
+      paste0("You have selected ", tags$b(input$select_geography_e2), " level statistics for ", tags$b(input$geographic_breakdown_e2), ", in ", workforce_region(), ".")
     }
   })
   
