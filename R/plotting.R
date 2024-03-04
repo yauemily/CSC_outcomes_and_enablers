@@ -947,7 +947,7 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
 }
 
 
-
+# Outcome 1 - Access to support getting help charts ----
 plot_uasc <- function(geo_break, geo_lvl){
   uasc_data <- combined_cla_data %>%
     filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break
@@ -1022,7 +1022,85 @@ plot_uasc_reg <- function(){
     )
 }
 
-# Outcome 1 - Access to support getting help charts ----
+plot_uasc_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL){
+  
+  location_data <- GET_location("data/csww_headline_measures_2017_to_2022.csv")
+  
+  if (selected_geo_lvl == "Local authority") {
+    cla_data <- combined_cla_data %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period), population_count == "Children starting to be looked after each year",
+             characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children")) %>%
+      select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -placement_per_10000), # Order by placement_per_10000
+             is_selected = ifelse(geo_breakdown == selected_geo_breakdown, "Selected", "Not Selected"))
+  } else if (selected_geo_lvl == "National") {
+    cla_data <- combined_cla_data %>%
+      filter(geographic_level == "Local authority", time_period == max(time_period), population_count == "Children starting to be looked after each year",
+             characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children")) %>%
+      select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -placement_per_10000), # Order by placement_per_10000
+             is_selected = "Not Selected")
+  } else if (selected_geo_lvl == "Regional") {
+    
+    # Check if the selected region is London
+    if (selected_geo_breakdown == "London") {
+      # Include both Inner London and Outer London
+      location <- location_data %>%
+        filter(region_name %in% c("Inner London", "Outer London")) %>%
+        pull(la_name)
+    } else {
+      # Get the la_name values within the selected region_name
+      location <- location_data %>%
+        filter(region_name == selected_geo_breakdown) %>%
+        pull(la_name)
+    }
+    
+    cla_data <- combined_cla_data %>%
+      filter(geo_breakdown %in% location, time_period == max(time_period), population_count == "Children starting to be looked after each year", rate_per_10000 != "NA",
+             characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children")) %>%
+      select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
+      mutate(geo_breakdown = reorder(geo_breakdown, -placement_per_10000), # Order by placement_per_10000
+             is_selected = "Selected")
+  }
+  
+  # Set the max y-axis scale
+  max_rate <- max(combined_cla_data$placement_per_10000[combined_cla_data$population_count == "Children starting to be looked after each year" &
+                                                          combined_cla_data$characteristic %in% c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")],
+                  na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  p <- ggplot(cla_data, aes(x = geo_breakdown, y = placement_per_10000, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children")))) +
+    geom_bar(stat = "identity", aes(alpha = is_selected)) +
+    ylab("Rate of children starting in care, per 10,000") +
+    xlab("") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, max_rate)) +
+    scale_fill_manual(
+      "UASC Status",
+      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D'),
+      labels = c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children")
+    ) +
+    scale_alpha_manual(values = c(0.5, 1)) +
+    guides(fill = guide_legend(override.aes = list(alpha = 1)), alpha = FALSE)
+  
+  # Conditionally set the x-axis labels and ticks
+  if (selected_geo_lvl == "Regional") {
+    p <- p + theme(axis.text.x = element_text(angle = 300, hjust = 1))
+  } else {
+    p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  }
+  
+  return(p)
+}
+
+
 #CLA Rates ----
 #bar chart by region
 plot_cla_rate_reg <- function(){
