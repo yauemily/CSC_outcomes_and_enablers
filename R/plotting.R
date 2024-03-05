@@ -1073,7 +1073,7 @@ plot_uasc_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = NULL)
   
   p <- ggplot(cla_data, aes(x = geo_breakdown, y = placement_per_10000, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children")))) +
     geom_bar(stat = "identity", aes(alpha = is_selected)) +
-    ylab("Rate of children starting in care, per 10,000") +
+    ylab("Rate per 10,000 children") +
     xlab("") +
     theme_classic() +
     theme(
