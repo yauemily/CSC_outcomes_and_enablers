@@ -132,69 +132,70 @@ enabler2_tab <- function() {
                     accordion_panel(
                       "Social Worker Turnover",
                       # Social Worker Turnover ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                  gov_row(
-                    h2("Social worker turnover"),
-                    
-                    p("Prioritising a stable workforce allows children, young people and families to maintain consistent relationships with practitioners."), 
-                     # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
-                    
-                    insert_text(inputId = "social_work_turnover_definition", text = paste(
-                      "<b>","Turnover rate", "</b><br>",
-                      "The turnover rate is calculated as the number of FTE (full-time equivalent) 
+                      gov_row(
+                        h2("Social worker turnover"),
+                        
+                        p("Prioritising a stable workforce allows children, young people and families to maintain consistent relationships with practitioners."), 
+                        # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
+                        
+                        insert_text(inputId = "social_work_turnover_definition", text = paste(
+                          "<b>","Turnover rate", "</b><br>",
+                          "The turnover rate is calculated as the number of FTE (full-time equivalent) 
                                   children and family social worker leavers in the year divided by the number of FTE children and 
                                   family social workers in post at the 30 September."
-                    )),
-                    # p("plots go here"),
-                    plotlyOutput("plot_s_w_turnover"),
-                    br(),
-                    # Expandable for the table alternative
-                    details(
-                      inputId = "table_s_w_turnover",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_s_w_turnover")
-                      )
-                    ),
-                                  #expandable for the additional info links
-                    details(
-                      inputId = "turnover_info",
-                      label = "Additional information:",
-                      help_text = (
-                        p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                          tags$br(),
-                          "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
-                      )
-                    ),
-                    fluidRow(
-                      h2("Turnover rates by region"),
-                      p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
-                      br(),
-                      plotlyOutput("plot_turnover_reg"),
-                    ),
-                    fluidRow(
-                      details(
-                        inputId = "tbl_turnover_reg",
-                        label = "View chart as a table",
-                        help_text = (
-                          dataTableOutput("table_turnover_reg")
+                        )),
+                        plotlyOutput("plot_s_w_turnover"),
+                        br(),
+                        br(),
+                        # Expandable for the table alternative
+                        details(
+                          inputId = "table_s_w_turnover",
+                          label = "View chart as a table",
+                          help_text = (
+                            dataTableOutput("table_s_w_turnover")
+                          )
+                        ),
+                        details(
+                          inputId = "turnover_info",
+                          label = "Additional information:",
+                          help_text = (
+                            p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                              tags$br(),
+                              "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                          )
+                        ),
+                      ),
+                      gov_row(
+                        h2("Turnover rates by region"),
+                        p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                        br(),
+                        plotlyOutput("plot_turnover_reg"),
+                        br(),
+                        br(),
+                        details(
+                          inputId = "tbl_turnover_reg",
+                          label = "View chart as a table",
+                          help_text = (
+                            dataTableOutput("table_turnover_reg")
+                          )
                         )
-                      )
-                    ),
-                    h2("Turnover rates by local authority"),
-                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
-                    p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
-                    br(),
-                    plotlyOutput("plot_turnover_la"),
-                    br(),
-                    br(),
-                    details(
-                      inputId = "tbl_turnover_la",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_turnover_la")
-                      )
-                    ),
-                  ),
+                      ),
+                      gov_row(
+                        h2("Turnover rates by local authority"),
+                        p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                        p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
+                        br(),
+                        plotlyOutput("plot_turnover_la"),
+                        br(),
+                        br(),
+                        details(
+                          inputId = "tbl_turnover_la",
+                          label = "View chart as a table",
+                          help_text = (
+                            dataTableOutput("table_turnover_la")
+                          )
+                        ),
+                      ),
                     ),
                   accordion_panel(
                     "Agency Rates",
@@ -338,9 +339,6 @@ enabler2_tab <- function() {
                   )
                   , open = FALSE
                   )
-                  
-              #  ),
-            #  ),
             ),
             # Second Domain - "quality of support for children and families" -------------
             tabPanel(
