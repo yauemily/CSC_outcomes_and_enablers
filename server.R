@@ -222,18 +222,18 @@ server <- function(input, output, session) {
   # Geographic breakdown e2 (list of either LA names or Region names)
   observeEvent(eventExpr={input$select_geography_e2},{
     choices = sort(unique(workforce_data[workforce_data$geographic_level == input$select_geography_e2, "geo_breakdown"]),decreasing = FALSE)
-    
+  
     updateSelectizeInput(
       session = session,
       inputId = "geographic_breakdown_e2",
       selected = choices[1],
       choices = choices
-      
     )
   }
   )
   # Confirmation sentence E2 -------
   #This function gets the selected region to put into the confirmation text below
+
   region <- reactive({
     location_data %>%
       filter(la_name == input$geographic_breakdown_e2) %>%
