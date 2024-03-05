@@ -948,79 +948,7 @@ plot_seniority_eth <- function(geo_breakdown, geographic_level){
 
 
 
-plot_uasc <- function(geo_break, geo_lvl){
-  uasc_data <- combined_cla_data %>%
-    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break
-           & characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children") &
-           population_count == "Children starting to be looked after each year") %>%
-    select(time_period, geo_breakdown, placement_per_10000, characteristic)
 
-  
-  # Set the max y-axis scale
-  max_rate <- max(combined_cla_data$placement_per_10000[combined_cla_data$population_count == "Children starting to be looked after each year" &
-                  combined_cla_data$characteristic %in% c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")],
-                  na.rm = TRUE)
-  
-  # Round the max_rate to the nearest 50
-  max_rate <- ceiling(max_rate / 50) * 50
-  
-  ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
-    geom_bar(stat = "identity") +
-    ylab("Rate of children starting in care, per 10,000") +
-    xlab("Time period") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.text.x = element_text(angle = 300),
-      axis.title.x = element_blank(),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_x_continuous(breaks = seq(min(uasc_data$time_period), max(uasc_data$time_period), by = 1)) +
-    scale_y_continuous(limits = c(0, max(max_rate)))+
-    scale_fill_manual(
-      "UASC status",
-      #breaks = unique(c("England", inputArea)),
-      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
-    )
-}
-
-#bar chart by region
-plot_uasc_reg <- function(){
-  uasc_data <- combined_cla_data %>%
-    filter(geographic_level == "Regional"
-           & characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children") &
-             population_count == "Children starting to be looked after each year" & time_period == max(time_period)) %>%
-    select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
-    mutate(geo_breakdown = reorder(geo_breakdown, -placement_per_10000))
-  
-  # Set the max y-axis scale
-  max_rate <- max(combined_cla_data$placement_per_10000[combined_cla_data$population_count == "Children starting to be looked after each year" &
-                                                          combined_cla_data$characteristic %in% c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")],
-                  na.rm = TRUE)
-  
-  # Round the max_rate to the nearest 50
-  max_rate <- ceiling(max_rate / 50) * 50
-  
-  ggplot(uasc_data , aes(`geo_breakdown`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
-    geom_bar(stat = "identity") +
-    ylab("Rate per 10,000 children") +
-    xlab("Region") +
-    theme_classic() +
-    theme(
-      text = element_text(size = 12),
-      axis.text.x = element_text(angle = 300),
-      axis.title.x = element_blank(),
-      axis.title.y = element_text(margin = margin(r = 12)),
-      axis.line = element_line(size = 1.0)
-    ) +
-    scale_y_continuous(limits = c(0, max_rate))+
-    scale_fill_manual(
-      "UASC Status",
-      #breaks = unique(c("England", inputArea)),
-      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
-    )
-}
 
 # Outcome 1 - Access to support getting help charts ----
 #CLA Rates ----
@@ -1133,6 +1061,81 @@ plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   }
   
   return(p)
+}
+
+# UASC ------------------
+plot_uasc <- function(geo_break, geo_lvl){
+  uasc_data <- combined_cla_data %>%
+    filter(geographic_level %in% geo_lvl & geo_breakdown %in% geo_break
+           & characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children") &
+             population_count == "Children starting to be looked after each year") %>%
+    select(time_period, geo_breakdown, placement_per_10000, characteristic)
+  
+  
+  # Set the max y-axis scale
+  max_rate <- max(combined_cla_data$placement_per_10000[combined_cla_data$population_count == "Children starting to be looked after each year" &
+                                                          combined_cla_data$characteristic %in% c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")],
+                  na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
+    geom_bar(stat = "identity") +
+    ylab("Rate of children starting in care, per 10,000") +
+    xlab("Time period") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_x_continuous(breaks = seq(min(uasc_data$time_period), max(uasc_data$time_period), by = 1)) +
+    scale_y_continuous(limits = c(0, max(max_rate)))+
+    scale_fill_manual(
+      "UASC status",
+      #breaks = unique(c("England", inputArea)),
+      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
+    )
+}
+
+#bar chart by region
+plot_uasc_reg <- function(){
+  uasc_data <- combined_cla_data %>%
+    filter(geographic_level == "Regional"
+           & characteristic %in% c("Unaccompanied asylum-seeking children", "Non-unaccompanied asylum-seeking children") &
+             population_count == "Children starting to be looked after each year" & time_period == max(time_period)) %>%
+    select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
+    mutate(geo_breakdown = reorder(geo_breakdown, -placement_per_10000))
+  
+  # Set the max y-axis scale
+  max_rate <- max(combined_cla_data$placement_per_10000[combined_cla_data$population_count == "Children starting to be looked after each year" &
+                                                          combined_cla_data$characteristic %in% c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")],
+                  na.rm = TRUE)
+  
+  # Round the max_rate to the nearest 50
+  max_rate <- ceiling(max_rate / 50) * 50
+  
+  ggplot(uasc_data , aes(`geo_breakdown`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
+    geom_bar(stat = "identity") +
+    ylab("Rate per 10,000 children") +
+    xlab("Region") +
+    theme_classic() +
+    theme(
+      text = element_text(size = 12),
+      axis.text.x = element_text(angle = 300),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(margin = margin(r = 12)),
+      axis.line = element_line(size = 1.0)
+    ) +
+    scale_y_continuous(limits = c(0, max_rate))+
+    scale_fill_manual(
+      "UASC Status",
+      #breaks = unique(c("England", inputArea)),
+      values = c("Unaccompanied asylum-seeking children" = '#28A197', "Non-unaccompanied asylum-seeking children" = '#12436D')
+    )
 }
 
 # CIN rates -------
