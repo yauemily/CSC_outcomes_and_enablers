@@ -57,7 +57,7 @@
 
 
 ui <- function(input, output, session) {
-  fluidPage(
+  bslib::page(
     # use_tota11y(),
     title = tags$head(
       tags$link(
