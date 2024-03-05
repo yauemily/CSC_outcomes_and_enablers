@@ -331,71 +331,6 @@ enabler2_tab <- function() {
                         )
                       ),
                     ),
-                    
-                  gov_row(
-                    # h2("Vacancy rates"),
-                    # p("A workforce strategy should develop and maintain an effective workforce. With a well-supported workforce vacancy rates should remain low."),
-                    # # insert_text(inputId = "vacancy_rates_rationale", text = paste(
-                    # #   "A workforce strategy should develop and maintain an effective workforce.
-                    # #        With a well-supported workforce vacancy rates should remain low."
-                    # # )),
-                    # #p("The vacancy rate is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
-                    # br(),
-                    # plotlyOutput("plot_vacancy_rate"),
-                    # #p("plots go here"),
-                    # br(),
-                    # br(),
-                    # details(
-                    #   inputId = "tbl_vacancy_rate",
-                    #   label = "View chart as a table",
-                    #   help_text = (
-                    #     dataTableOutput("table_vacancy_rate")
-                    #   )
-                    # ),
-                    # details(
-                    #   inputId = "vacancy_rate_info",
-                    #   label = "Additional information:",
-                    #   help_text = (
-                    #     tags$ul(
-                    #       tags$li(tags$b("Vacancies"), " are defined as any FTE (child and family social worker) vacancy within a local authority’s organisational structure, including vacancies that are not being actively recruited for, and those covered by agency workers."),
-                    #       tags$li("The ", tags$b("vacancy rate"), " is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of  FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
-                    #       tags$br(),
-                    #       p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                    #         tags$br(),
-                    #         "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
-                    #     )
-                    #   )
-                    # ),
-                    # fluidRow(
-                    #   h2("Vacancy rates by region"),
-                    #   p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
-                    #   br(),
-                    #   plotlyOutput("plot_vacancy_reg"),
-                    # ),
-                    # fluidRow(
-                    #   details(
-                    #     inputId = "tbl_vacancy_reg",
-                    #     label = "View chart as a table",
-                    #     help_text = (
-                    #       dataTableOutput("table_vacancy_reg")
-                    #     )
-                    #   )
-                    # ),
-                    # h2("Vacancy rates by local authority"),
-                    # p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
-                    # p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
-                    # br(),
-                    # plotlyOutput("plot_vacancy_rate_la"),
-                    # br(),
-                    # br(),
-                    # details(
-                    #   inputId = "tbl_vacancy_rate_la",
-                    #   label = "View chart as a table",
-                    #   help_text = (
-                    #     dataTableOutput("table_vacancy_rate_la")
-                    #   )
-                    # ),
-                  ) 
                   )
                   , open = FALSE
                   )
@@ -415,80 +350,75 @@ enabler2_tab <- function() {
                   ),
                 )
               ),
-              fluidRow(
-                column(
-                  width = 12,
-                   gov_row(
-                     h2("Social worker caseloads"),
-                  #   #br(),
-                    p("Ensuring that practitioners have an appropriate caseload supports recruitment and 
+              # fluidRow(
+              #   column(
+              #     width = 12,
+                  accordion(
+                    accordion_panel(
+                      "Social worker caseloads",
+                      gov_row(
+                        h2("Social worker caseloads"),
+                        p("Ensuring that practitioners have an appropriate caseload supports recruitment and 
                          retention and allows practitioners to deliver impactful services."),
-                   #),
-                  # gov_row(
-                  #   plotlyOutput("caseload_plot"),
-                  #   br(),
-                   ),
-                  fluidRow(
-                    plotlyOutput("caseload_plot"),
-                  ),
-                  fluidRow(
-                    details(
-                      inputId = "tbl_caseload",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_caseload")
-                      )
-                    ),
-                    details(
-                      inputId = "caseload_info",
-                      label = "Additional information:",
-                      help_text = (
-                        tags$ul(
-                          tags$li("A", tags$b("case"), " is defined as any person allocated to a named social worker, where the work involves child and family social work. Cases may be held by social workers regardless of their role in the organisation and not just those specifically in a ‘case holder’ role."),
-                          tags$li("The ", tags$b("average caseload"), " is calculated as the total number of cases held by FTE social workers (including agency workers) in post at 30 September divided by the number of FTE social workers (including agency workers) in post at 30 September that hold one or more cases."),
-                          tags$br(),
-                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                            tags$br(),
-                            "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                        br(),
+                        plotlyOutput("caseload_plot"),
+                        br(),
+                        br(),
+                        details(
+                          inputId = "tbl_caseload",
+                          label = "View chart as a table",
+                          help_text = (
+                            dataTableOutput("table_caseload")
+                          )
+                        ),
+                        details(
+                          inputId = "caseload_info",
+                          label = "Additional information:",
+                          help_text = (
+                            tags$ul(
+                              tags$li("A", tags$b("case"), " is defined as any person allocated to a named social worker, where the work involves child and family social work. Cases may be held by social workers regardless of their role in the organisation and not just those specifically in a ‘case holder’ role."),
+                              tags$li("The ", tags$b("average caseload"), " is calculated as the total number of cases held by FTE social workers (including agency workers) in post at 30 September divided by the number of FTE social workers (including agency workers) in post at 30 September that hold one or more cases."),
+                              tags$br(),
+                              p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                                tags$br(),
+                                "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                            )
+                          )
                         )
+                      ),
+                      gov_row(
+                          h2("Social worker caseloads by region"),
+                          p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                          br(),
+                          plotlyOutput("plot_caseload_reg"),
+                        br(),
+                        br(),
+                          details(
+                            inputId = "tbl_caseload_reg",
+                            label = "View chart as a table",
+                            help_text = (
+                              dataTableOutput("table_caseload_reg")
+                            )
+                        ),
+                      ),
+                      gov_row(
+                          h2("Social worker caseloads by local authority"),
+                          p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                          p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
+                          br(),
+                          plotlyOutput("plot_caseload_la"),
+                          br(),
+                          br(),
+                          details(
+                            inputId = "tbl_caseload_la",
+                            label = "View chart as a table",
+                            help_text = (
+                              dataTableOutput("table_caseload_la")
+                            )
+                          )
                       )
-                    )
+                    ), open = FALSE
                   ),
-                  fluidRow(
-                    h2("Social worker caseloads by region"),
-                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
-                    br(),
-                    plotlyOutput("plot_caseload_reg"),
-                  ),
-                  fluidRow(
-                    details(
-                      inputId = "tbl_caseload_reg",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_caseload_reg")
-                      )
-                    )
-                  ),
-                  fluidRow(
-                    h2("Social worker caseloads by local authority"),
-                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
-                    p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
-                    br(),
-                    plotlyOutput("plot_caseload_la"),
-                    br(),
-                    br(),
-                  ),
-                  fluidRow(
-                    details(
-                      inputId = "tbl_caseload_la",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_caseload_la")
-                      )
-                    )
-                  ),
-                )
-              )
             ),
             
             # Third tab panel -----
@@ -513,155 +443,228 @@ enabler2_tab <- function() {
                   )
                 )
               ),
-          
-              fluidRow(
-                column(
-                  width = 12,
+              accordion(
+                accordion_panel(
+                  "Ethnic diversity of workforce",
                   gov_row(
                     h2("Ethnic diversity of workforce"),
                     p("A diverse workforce, across all levels, should enable practice which reflects the cultural, linguistic, and religious needs of the communities’ practitioners serve."),
-                  )
-                )
-              ),
-              fluidRow(
-                plotlyOutput("plot_ethnicity_rate")
-              ),
-              fluidRow(
-                details(
-                  inputId = "tbl_ethnicity",
-                  label = "View Chart as a table",
-                  help_text = (
-                    dataTableOutput("table_ethnicity_rate")
-                  )
-                ),
-                details(
-                  inputId = "ethnicity_info",
-                  label = "Additional information:",
-                  help_text = (
-                    tags$ul(
-                     tags$li(tags$b("Ethnicity groups"), " are based on ethnic origin and are provided on a headcount basis."),
-                     tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
-                      tags$li(tags$b("Ethnic minority backgrounds"), " exclude white British, white Irish, or any other white background."),
-                     tags$br(),
-                         p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                        tags$br(),
-                        "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    br(),
+                    plotlyOutput("plot_ethnicity_rate"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_ethnicity",
+                      label = "View Chart as a table",
+                      help_text = (
+                        dataTableOutput("table_ethnicity_rate")
+                      )
+                    ),
+                    details(
+                      inputId = "ethnicity_info",
+                      label = "Additional information:",
+                      help_text = (
+                        tags$ul(
+                          tags$li(tags$b("Ethnicity groups"), " are based on ethnic origin and are provided on a headcount basis."),
+                          tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
+                          tags$li(tags$b("Ethnic minority backgrounds"), " exclude white British, white Irish, or any other white background."),
+                          tags$br(),
+                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                            tags$br(),
+                            "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                        )
+                      )
                     )
                   )
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 12,
+                  
+                ),
+                accordion_panel(
+                  "Ethnic diversity of workforce vs. general population",
                   gov_row(
                     h2("Ethnic diversity of workforce vs. general population"),
-                  )
-                )
-              ),
-              fluidRow(
-                plotlyOutput("plot_population_ethnicity_rate")
-              ),
-              fluidRow(
-                details(
-                  inputId = "tbl_population_ethnicity",
-                  label = "View Chart as a table",
-                  help_text = (
-                    dataTableOutput("table_population_ethnicity_rate")
-                  )
-                )
-              ),
-              fluidRow(
-                details(
-                  inputId = "population_ethnicity_info",
-                  label = "Additional information:",
-                  help_text = (
-                    tags$ul(
-                      tags$li("Population data is taken from the latest available", a(href = "https://www.ons.gov.uk/datasets/TS021/editions/2021/versions/3","ONS Census data (2021).")), 
-                      tags$li(sprintf("The Workforce data comparison uses the latest available collection year in the Workforce diversity dataset (%s).", max(workforce_eth$time_period))),
-                      tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
-                      tags$br(),
-                      p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                        tags$br(),
-                        "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    br(),
+                      plotlyOutput("plot_population_ethnicity_rate"),
+                    br(),
+                    br(),
+                      details(
+                        inputId = "tbl_population_ethnicity",
+                        label = "View Chart as a table",
+                        help_text = (
+                          dataTableOutput("table_population_ethnicity_rate")
+                        )
+                      ),
+                    details(
+                      inputId = "population_ethnicity_info",
+                      label = "Additional information:",
+                      help_text = (
+                        tags$ul(
+                          tags$li("Population data is taken from the latest available", a(href = "https://www.ons.gov.uk/datasets/TS021/editions/2021/versions/3","ONS Census data (2021).")), 
+                          tags$li(sprintf("The Workforce data comparison uses the latest available collection year in the Workforce diversity dataset (%s).", max(workforce_eth$time_period))),
+                          tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
+                          tags$br(),
+                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                            tags$br(),
+                            "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                        )
+                      )
                     )
                   )
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 12,
+                ),
+                accordion_panel(
+                  "Ethnic diversity of workforce by seniority level",
                   gov_row(
                     h2("Ethnic diversity of workforce by seniority level"),
-                  )
-                )
-              ),
-              fluidRow(
-                plotlyOutput("plot_seniority_eth")
-              ),
-              fluidRow(
-                details(
-                  inputId = "tbl_seniority_eth",
-                  label = "View Chart as a table",
-                  help_text = (
-                    dataTableOutput("table_seniority_eth")
-                  )
-                )
-              ),
-              fluidRow(
-                details(
-                  inputId = "seniority_ethnicity_info",
-                  label = "Additional information:",
-                  help_text = (
-                    tags$ul(
-                      tags$li(sprintf("The data used is from the latest available collection year in the Workforce diversity dataset (%s).", max(workforce_eth$time_period))),
-                      tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
-                      tags$li("Seniority level relates to social worker role. Manager roles have been grouped and include first line managers, middle managers and senior managers."),
-                      tags$li("A Senior Practitioner works in a local authority in a children’s services department as a team leader, supervising social worker or senior social worker."),
-                      tags$li("A case holder is a children and family social worker that manages cases, but is not in a manager or senior practitioner role (however, cases can be hold by those not in case holder roles)."),
-                      tags$li("Qualified without cases includes all other qualified and registered social workers, including those without cases (for example Independent Reviewing Officer (IRO), Chairs of Child Protection Conferences, Youth Custody worker, Family Support) and those not currently practicing (for example, those in learning and development or quality assurance roles)."),
-                      tags$br(),
-                      p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                        tags$br(),
-                        "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    br(),
+                    plotlyOutput("plot_seniority_eth"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_seniority_eth",
+                      label = "View Chart as a table",
+                      help_text = (
+                        dataTableOutput("table_seniority_eth")
+                      )
+                    ),
+                    details(
+                      inputId = "seniority_ethnicity_info",
+                      label = "Additional information:",
+                      help_text = (
+                        tags$ul(
+                          tags$li(sprintf("The data used is from the latest available collection year in the Workforce diversity dataset (%s).", max(workforce_eth$time_period))),
+                          tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
+                          tags$li("Seniority level relates to social worker role. Manager roles have been grouped and include first line managers, middle managers and senior managers."),
+                          tags$li("A Senior Practitioner works in a local authority in a children’s services department as a team leader, supervising social worker or senior social worker."),
+                          tags$li("A case holder is a children and family social worker that manages cases, but is not in a manager or senior practitioner role (however, cases can be hold by those not in case holder roles)."),
+                          tags$li("Qualified without cases includes all other qualified and registered social workers, including those without cases (for example Independent Reviewing Officer (IRO), Chairs of Child Protection Conferences, Youth Custody worker, Family Support) and those not currently practicing (for example, those in learning and development or quality assurance roles)."),
+                          tags$br(),
+                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                            tags$br(),
+                            "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                        )
+                      )
                     )
+                    
                   )
-                )
-            )),
-            # tabPanel(
-            #   "Benchmarking",
+                ), open = FALSE
+              ),
+          
+              # fluidRow(
+              #   column(
+              #     width = 12,
+              #     gov_row(
+              #       h2("Ethnic diversity of workforce"),
+              #       p("A diverse workforce, across all levels, should enable practice which reflects the cultural, linguistic, and religious needs of the communities’ practitioners serve."),
+              #     )
+              #   )
+              # ),
+              # fluidRow(
+              #   plotlyOutput("plot_ethnicity_rate")
+              # ),
+              # fluidRow(
+              #   details(
+              #     inputId = "tbl_ethnicity",
+              #     label = "View Chart as a table",
+              #     help_text = (
+              #       dataTableOutput("table_ethnicity_rate")
+              #     )
+              #   ),
+              #   details(
+              #     inputId = "ethnicity_info",
+              #     label = "Additional information:",
+              #     help_text = (
+              #       tags$ul(
+              #        tags$li(tags$b("Ethnicity groups"), " are based on ethnic origin and are provided on a headcount basis."),
+              #        tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
+              #         tags$li(tags$b("Ethnic minority backgrounds"), " exclude white British, white Irish, or any other white background."),
+              #        tags$br(),
+              #            p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+              #           tags$br(),
+              #           "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+              #       )
+              #     )
+              #   )
+              # ),
+              # fluidRow(
+              #   column(
+              #     width = 12,
+              #     gov_row(
+              #       h2("Ethnic diversity of workforce vs. general population"),
+              #     )
+              #   )
+              # ),
+              # fluidRow(
+              #   plotlyOutput("plot_population_ethnicity_rate")
+              # ),
+              # fluidRow(
+              #   details(
+              #     inputId = "tbl_population_ethnicity",
+              #     label = "View Chart as a table",
+              #     help_text = (
+              #       dataTableOutput("table_population_ethnicity_rate")
+              #     )
+              #   )
+              # ),
+              # fluidRow(
+              #   details(
+              #     inputId = "population_ethnicity_info",
+              #     label = "Additional information:",
+              #     help_text = (
+              #       tags$ul(
+              #         tags$li("Population data is taken from the latest available", a(href = "https://www.ons.gov.uk/datasets/TS021/editions/2021/versions/3","ONS Census data (2021).")), 
+              #         tags$li(sprintf("The Workforce data comparison uses the latest available collection year in the Workforce diversity dataset (%s).", max(workforce_eth$time_period))),
+              #         tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
+              #         tags$br(),
+              #         p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+              #           tags$br(),
+              #           "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+              #       )
+              #     )
+              #   )
+              # ),
             #   fluidRow(
-            #     h1("Testing Benchmarking"),
-            #     p("This is a test page for benchmarking")
+            #     column(
+            #       width = 12,
+            #       gov_row(
+            #         h2("Ethnic diversity of workforce by seniority level"),
+            #       )
+            #     )
             #   ),
             #   fluidRow(
-            #     column(
-            #       width = 6,
-            #       box(
-            #         width = 12,
-            #         p("plot goes here")
-            #         #plotlyOutput(" ")
+            #     plotlyOutput("plot_seniority_eth")
+            #   ),
+            #   fluidRow(
+            #     details(
+            #       inputId = "tbl_seniority_eth",
+            #       label = "View Chart as a table",
+            #       help_text = (
+            #         dataTableOutput("table_seniority_eth")
             #       )
-            #     ),
-            #     column(
-            #       width = 6,
-            #       div(
-            #         class = "well",
-            #         style = "min-height: 100%; height: 100%; overflow-y: visible",
-            #         fluidRow(
-            #           column(
-            #             width = 12,
-            #             p("filters here"),
-            #             #selectizeInput("selectBenchLAs",
-            #             #               "Select benchmark LAs",
-            #             #               choices = choicesLAs$area_name,
-            #             #               multiple = TRUE,
-            #             #               options = list(maxItems = 3)
-            #             )
-            #           )
+            #     )
+            #   ),
+            #   fluidRow(
+            #     details(
+            #       inputId = "seniority_ethnicity_info",
+            #       label = "Additional information:",
+            #       help_text = (
+            #         tags$ul(
+            #           tags$li(sprintf("The data used is from the latest available collection year in the Workforce diversity dataset (%s).", max(workforce_eth$time_period))),
+            #           tags$li(tags$b("Ethnicity"), sprintf(" was known for 81%% of child and family social workers nationally in %s.", max(workforce_eth$time_period))),
+            #           tags$li("Seniority level relates to social worker role. Manager roles have been grouped and include first line managers, middle managers and senior managers."),
+            #           tags$li("A Senior Practitioner works in a local authority in a children’s services department as a team leader, supervising social worker or senior social worker."),
+            #           tags$li("A case holder is a children and family social worker that manages cases, but is not in a manager or senior practitioner role (however, cases can be hold by those not in case holder roles)."),
+            #           tags$li("Qualified without cases includes all other qualified and registered social workers, including those without cases (for example Independent Reviewing Officer (IRO), Chairs of Child Protection Conferences, Youth Custody worker, Family Support) and those not currently practicing (for example, those in learning and development or quality assurance roles)."),
+            #           tags$br(),
+            #           p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+            #             tags$br(),
+            #             "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
             #         )
             #       )
             #     )
             # )
+            
+            
+            
+            ),
 
               )
             )
