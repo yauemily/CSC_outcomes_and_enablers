@@ -120,7 +120,7 @@ plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, y
 
 # By LA bar chart repeat function ----
 
-by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_lvl = NULL, yvalue, yaxis_title){
+by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_lvl = NULL, yvalue, yaxis_title, ylim_upper){
   
   if (selected_geo_lvl == "Local authority") {
     turnover_reg_data <- dataset %>%
@@ -175,7 +175,7 @@ by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 100))+
+    scale_y_continuous(limits = c(0, ylim_upper))+
     scale_fill_manual(
       "LA Selection",
       values = c("Selected" = '#12436D', "Not Selected" = '#88A1B5')
@@ -194,7 +194,7 @@ by_la_bar_plot <- function(dataset, selected_geo_breakdown = NULL, selected_geo_
 
 # By Region bar chart repeat function -----
 
-by_region_bar_plot <- function(dataset, yvalue, yaxis_title){
+by_region_bar_plot <- function(dataset, yvalue, yaxis_title, ylim_upper){
   turnover_reg_data <- dataset %>%
     filter(geographic_level == "Regional", time_period == max(time_period)) %>%
     select(time_period, geo_breakdown, `yvalue`) %>%
@@ -215,7 +215,7 @@ by_region_bar_plot <- function(dataset, yvalue, yaxis_title){
       axis.title.y = element_text(margin = margin(r = 12)),
       axis.line = element_line(size = 1.0)
     ) +
-    scale_y_continuous(limits = c(0, 100))+
+    scale_y_continuous(limits = c(0, ylim_upper))+
     scale_fill_manual(
       "Time Period",
       #breaks = unique(c("England", inputArea)),

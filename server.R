@@ -356,7 +356,7 @@ server <- function(input, output, session) {
   output$plot_turnover_reg <- plotly::renderPlotly({
     ggplotly(
       #plot_turnover_reg() %>%
-      by_region_bar_plot(workforce_data, 'turnover_rate_fte_perc','Turnover Rate (FTE) %')%>%
+      by_region_bar_plot(workforce_data, 'turnover_rate_fte_perc','Turnover Rate (FTE) %',100)%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -381,7 +381,7 @@ server <- function(input, output, session) {
   # Turnover Rate by LA plot ----
   output$plot_turnover_la <- plotly::renderPlotly({
     ggplotly(
-      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %') %>%
+      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %',100) %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -528,7 +528,7 @@ server <- function(input, output, session) {
   #agency rate plot by region ----
   output$plot_agency_reg <- plotly::renderPlotly({
     ggplotly(
-      by_region_bar_plot(workforce_data, 'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %') %>%
+      by_region_bar_plot(workforce_data, 'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %', 100) %>%
       #plot_agency_reg() %>%
         config(displayModeBar = F),
       height = 420
@@ -554,7 +554,7 @@ server <- function(input, output, session) {
   #agency rate by la plot -----
   output$plot_agency_rate_la <- plotly::renderPlotly({
     ggplotly(
-      by_la_bar_plot(workforce_data,input$geographic_breakdown_e2, input$select_geography_e2, 'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %')%>%
+      by_la_bar_plot(workforce_data,input$geographic_breakdown_e2, input$select_geography_e2, 'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %',100)%>%
       #plot_agency_rate_la(input$geographic_breakdown_e2, input$select_geography_e2) %>%
         config(displayModeBar = F),
       height = 420
@@ -689,7 +689,7 @@ server <- function(input, output, session) {
   #vacancy rate by la plot ----
   output$plot_vacancy_rate_la <- plotly::renderPlotly({
     ggplotly(
-      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2, 'vacancy_rate_fte_perc', "Vacancy rate (FTE) %")%>%
+      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2, 'vacancy_rate_fte_perc', "Vacancy rate (FTE) %",100)%>%
      # plot_vacancy_rate_la(input$geographic_breakdown_e2, input$select_geography_e2) %>%
         config(displayModeBar = F),
       height = 420
@@ -738,7 +738,7 @@ server <- function(input, output, session) {
   #vacancy rate plot by region ----
   output$plot_vacancy_reg <- plotly::renderPlotly({
     ggplotly(
-      by_region_bar_plot(workforce_data, 'vacancy_rate_fte_perc', 'Vacancy rate (FTE) %') %>%
+      by_region_bar_plot(workforce_data, 'vacancy_rate_fte_perc', 'Vacancy rate (FTE) %',100) %>%
       #plot_vacancy_reg() %>%
         config(displayModeBar = F),
       height = 420
@@ -870,8 +870,13 @@ server <- function(input, output, session) {
   
   # Caseload by region ----
   output$plot_caseload_reg <- plotly::renderPlotly({
+    # Set the max y-axis scale
+    max_rate <- max(workforce_data$caseload_fte, na.rm = TRUE)
+    
+    # Round the max_rate to the nearest 50
+    max_rate <- ceiling(max_rate / 50) * 50
     ggplotly(
-      by_region_bar_plot(workforce_data, 'caseload_fte', "Average Caseload (FTE)") %>%
+      by_region_bar_plot(workforce_data, 'caseload_fte', "Average Caseload (FTE)", max_rate) %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -895,8 +900,14 @@ server <- function(input, output, session) {
   
   #caseload by la -----
   output$plot_caseload_la <- plotly::renderPlotly({
+    # Set the max y-axis scale
+    max_rate <- max(workforce_data$caseload_fte, na.rm = TRUE)
+    
+    # Round the max_rate to the nearest 50
+    max_rate <- ceiling(max_rate / 50) * 50
+    
     ggplotly(
-      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2, 'caseload_fte', "Average Caseload (FTE)")%>%
+      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2, 'caseload_fte', "Average Caseload (FTE)", max_rate)%>%
       #plot_caseload_la(input$geographic_breakdown_e2, input$select_geography_e2) %>%
         config(displayModeBar = F),
       height = 420
