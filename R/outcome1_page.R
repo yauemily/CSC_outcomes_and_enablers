@@ -177,6 +177,38 @@ outcome1_tab <- function(){
                       help_text = (
                         dataTableOutput("table_uasc")
                       )
+                    ),
+                  ),
+                  gov_row(
+                    h2("Rate of children starting in care by region who were UASC"),
+                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                    p(sprintf("The graph represents data from %s.", max(combined_cla_data$time_period))),
+                    br(),
+                    plotlyOutput("plot_uasc_reg"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_uasc_reg",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_uasc_reg")
+                      )
+                    )
+                  ),
+                  gov_row(
+                    h2("Rate of children starting in care by LA who were UASC"),
+                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                    p(sprintf("The graph represents data from %s.", max(combined_cla_data$time_period))),
+                    br(),
+                    plotlyOutput("plot_uasc_la"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_uasc_la",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_uasc_la")
+                      )
                     )
                   )
                 ),
