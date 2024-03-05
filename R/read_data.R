@@ -396,6 +396,19 @@ merge_eth_dataframes <- function() {
                        #   Workforce_MixedPercentage = mixed_perc,
                        #   Workforce_AsianPercentage = asian_perc,
                         #  Workforce_OtherPercentage = other_perc)
+  # 
+  workforce_eth <-  workforce_eth %>%
+   filter(breakdown_topic == "Ethnicity major", role == 'Total') %>%
+    filter(!(breakdown %in% c("Total","Not known","Known")))
+  
+  
+  workforce_eth <-  workforce_eth %>%
+    mutate(breakdown = case_when(
+      breakdown  == "Mixed / Multiple ethnic groups" ~ "Mixed",
+      breakdown  ==  "Asian / Asian British"   ~ "Asian",
+      breakdown  ==  "Black / African / Caribbean / Black British"   ~ "Black",
+      breakdown  ==  "Other ethnic group"   ~ "Other",
+    TRUE ~ breakdown)) 
   
   # population_eth <- rename(population_eth, 
   #                          Population_WhitePercentage = White,
@@ -405,7 +418,7 @@ merge_eth_dataframes <- function() {
   #                          Population_OtherPercentage = Other)
   
   # Merge the two data frames
-  merged_data <- left_join(workforce_eth, population_eth, by = c("code" = "Code"))
+  merged_data <- left_join(workforce_eth, population_eth, by = c("code" = "Code", "breakdown" ="EthnicGroupShort"))
   
   return(merged_data)
 }
