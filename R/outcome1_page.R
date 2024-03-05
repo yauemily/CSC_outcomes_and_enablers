@@ -244,58 +244,55 @@ outcome1_tab <- function(){
                 ),
                 accordion_panel(
                   "Rate of children in care",
-                  
+                  gov_row(
+                    h2("Rate of children in care on 31 March"),
+                    br(),
+                    plotlyOutput("plot_cla_rate_march"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_cla_rate_march",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_cla_rate_march")
+                      )
+                  ),
+                  gov_row(
+                    h2("Rate of children in care on 31 March by region"),
+                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                    br(),
+                    plotlyOutput("plot_cla_march_reg"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_cla_march_reg",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_cla_march_reg")
+                      )
+                    )
+                  ),
+                  gov_row(
+                    h2("Rate of children in care on 31 March by local authority"),
+                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                    p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
+                    br(),
+                    plotlyOutput("plot_cla_march_la"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_cla_march_la",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_cla_march_la")
+                      )
+                      
+                  )
+                )
+              ),
                 ),
                 open = FALSE,
               ),
-              
-              
-              
-              
-             # fluidRow(
-             #   column(
-              #    width = 12,
-                  # CLA Rates per 10000 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                  # gov_row(
-                  #   h2("Rate of new entrants to care, with a breakdown by whether new entrants to care are Unaccompanied Asylum Seeking Children (UASC)"),
-                  #   
-                  #   p("This measures the flow of those children moving into care. Where UASC are placed within an authority, 
-                  #     this will represent an unavoidable increase in numbers of children entering the system. This breakdown is provided for context."), 
-                  #   # style ="font-family: GDS Transport, arial, sans-serif; font-size :19px; padding-left: 4px;"),
-                  #   
-                  #   insert_text(inputId = "social_work_turnover_definition", text = paste(
-                  #     "<b>","Rate of children who started to be looked after", "</b><br>",
-                  #     "The children in care rate is calculated as the number of children in care per 10,000 children in the general population."
-                  #   )),
-                  #   # p("plots go here"),
-                  #   plotlyOutput("plot_cla_rate"),
-                  #   br(),
-                  #   # Expandable for the table alternative
-                  #   details(
-                  #     inputId = "table_cla_rate",
-                  #     label = "View chart as a table",
-                  #     help_text = (
-                  #       dataTableOutput("table_cla_rate")
-                  #     )
-                  #   ),
-                  # )
-             #   )
-            #  ),
-              # fluidRow(
-              #   h2("Rate of children starting in care during the year by region"),
-              #   p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
-              #   br(),
-              #   plotlyOutput("plot_cla_rate_reg"),
-              # ),
-              # fluidRow(
-              #   details(
-              #     inputId = "tbl_cla_rate_reg",
-              #     label = "View chart as a table",
-              #     help_text = (
-              #       dataTableOutput("table_cla_rate_reg")
-              #     )
-              #   )
-              # ),
               # h2("Rate of children starting in care by local authority"),
               # p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
               # p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
@@ -328,7 +325,7 @@ outcome1_tab <- function(){
               # fluidRow(
               #   h2("Rate of children starting in care by region who were UASC"),
               #   p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
-              #   p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
+              #   p(sprintf("The graph represents data from %s.", max(combined_cla_data$time_period))),
               #   br(),
               #   plotlyOutput("plot_uasc_reg"),
               # ),
@@ -339,6 +336,67 @@ outcome1_tab <- function(){
               #     help_text = (
               #       dataTableOutput("table_uasc_reg")
               #     )
+              #   )
+              # ),
+              # fluidRow(
+              #   h2("Rate of children starting in care by LA who were UASC"),
+              #   p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+              #   p(sprintf("The graph represents data from %s.", max(combined_cla_data$time_period))),
+              #   br(),
+              #   plotlyOutput("plot_uasc_la"),
+              #   br()
+              # ),
+              # fluidRow(
+              #   details(
+              #     inputId = "tbl_uasc_la",
+              #     label = "View chart as a table",
+              #     help_text = (
+              #       dataTableOutput("table_uasc_la")
+              #     )
+              #   )
+              # ),
+              # fluidRow(
+              #   h2("Rate of children in care on 31 March"),
+              #   br(),
+              #   plotlyOutput("plot_cla_rate_march"),
+              #   br()
+              # ),
+              # fluidRow(
+              #   details(
+              #     inputId = "tbl_cla_rate_march",
+              #     label = "View chart as a table",
+              #     help_text = (
+              #       dataTableOutput("table_cla_rate_march")
+              #     )
+              #   )
+              # ),
+              # fluidRow(
+              #   h2("Rate of children in care on 31 March by region"),
+              #   p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+              #   br(),
+              #   plotlyOutput("plot_cla_march_reg"),
+              # ),
+              # fluidRow(
+              #   details(
+              #     inputId = "tbl_cla_march_reg",
+              #     label = "View chart as a table",
+              #     help_text = (
+              #       dataTableOutput("table_cla_march_reg")
+              #     )
+              #   )
+              # ),
+              # h2("Rate of children in care on 31 March by local authority"),
+              # p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+              # p(sprintf("The graph represents data from %s.", max(cla_rates$time_period))),
+              # br(),
+              # plotlyOutput("plot_cla_march_la"),
+              # br(),
+              # br(),
+              # details(
+              #   inputId = "tbl_cla_march_la",
+              #   label = "View chart as a table",
+              #   help_text = (
+              #     dataTableOutput("table_cla_march_la")
               #   )
               # ),
             ),
