@@ -200,119 +200,113 @@ enabler2_tab <- function() {
                   accordion_panel(
                     "Agency Rates",
                     # Agency Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                  gov_row(
-                    h2("Agency rates"),
-                    p("Prioritising a stable and permanent workforce allows children, young people and families to maintain consistent relationships with practitioners.
+                    gov_row(
+                      h2("Agency rates"),
+                      p("Prioritising a stable and permanent workforce allows children, young people and families to maintain consistent relationships with practitioners.
                            Agency workers should only be used as per the national agency rules from Autumn 2024."),
-                    
-                    # insert_text(inputId = "agency_rate_definition", text = paste(
-                    #   "<b>Agency Workers</b> are child and family social workers not directly paid by the local authority. These may be social workers who are paid by an agency rather than the local authority or who are self-employed.",
-                    #   "<br>","<br>",
-                    #   "The <b>FTE agency worker rate</b> is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."
-                    # )),
-                    
-                    br(),
-                    plotlyOutput("plot_agency_worker"),
-                    br(),
-                    #p("plots go here"),
-                    br(),
-                    details(
-                      inputId = "table_agency_worker",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_agency_worker")
-                      )
-                    ),
-                    
-                    details(
-                      inputId = "agency_worker_info",
-                      label = "Additional information:",
-                      help_text = (
-                        tags$ul(
-                          tags$li(tags$b("Agency workers"), " are child and family social workers not directly paid by the local authority. These may be social workers who are paid by an agency rather than the local authority or who are self-employed."),
-                          tags$li("The ", tags$b("FTE agency worker rate"), " is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."),
-                          tags$br(),
-                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                      br(),
+                      plotlyOutput("plot_agency_worker"),
+                      br(),
+                      br(),
+                      details(
+                        inputId = "table_agency_worker",
+                        label = "View chart as a table",
+                        help_text = (
+                          dataTableOutput("table_agency_worker")
+                        )
+                      ),
+                      details(
+                        inputId = "agency_worker_info",
+                        label = "Additional information:",
+                        help_text = (
+                          tags$ul(
+                            tags$li(tags$b("Agency workers"), " are child and family social workers not directly paid by the local authority. These may be social workers who are paid by an agency rather than the local authority or who are self-employed."),
+                            tags$li("The ", tags$b("FTE agency worker rate"), " is calculated as the number of FTE agency staff working as (children and family) social workers at 30 September divided by the sum of the number of FTE agency staff working as social workers at 30 September and the number of FTE social workers."),
                             tags$br(),
-                            "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                            p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                              tags$br(),
+                              "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                          )
                         )
                       )
-                    ), 
-                    fluidRow(
+                    ),
+                    gov_row(
                       h2("Agency rates by region"),
                       p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                       br(),
                       plotlyOutput("plot_agency_reg"),
-                    ),
-                    fluidRow(
+                      br(),
+                      br(),
                       details(
                         inputId = "tbl_agency_reg",
                         label = "View chart as a table",
                         help_text = (
                           dataTableOutput("table_agency_reg")
                         )
-                    ),
-                    ),
-                    h2("Agency rates by local authority"),
-                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
-                    p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
-                    br(),
-                    plotlyOutput("plot_agency_rate_la"),
-                    br(),
-                    br(),
-                    details(
-                      inputId = "tbl_agency_rate_la",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_agency_rate_la")
                       )
                     ),
-                  ),
+                    gov_row(
+                      h2("Agency rates by local authority"),
+                      p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                      p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
+                      br(),
+                      plotlyOutput("plot_agency_rate_la"),
+                      br(),
+                      br(),
+                      details(
+                        inputId = "tbl_agency_rate_la",
+                        label = "View chart as a table",
+                        help_text = (
+                          dataTableOutput("table_agency_rate_la")
+                        )
+                      ),
+                    ),
                   ),
                   accordion_panel(
                     "Vacancy Rates",
                     # Vacancy Rates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                  gov_row(
-                    h2("Vacancy rates"),
-                    p("A workforce strategy should develop and maintain an effective workforce. With a well-supported workforce vacancy rates should remain low."),
-                    # insert_text(inputId = "vacancy_rates_rationale", text = paste(
-                    #   "A workforce strategy should develop and maintain an effective workforce.
-                    #        With a well-supported workforce vacancy rates should remain low."
-                    # )),
-                    #p("The vacancy rate is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
-                    br(),
-                    plotlyOutput("plot_vacancy_rate"),
-                    #p("plots go here"),
-                    br(),
-                    br(),
-                    details(
-                      inputId = "tbl_vacancy_rate",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_vacancy_rate")
-                      )
-                    ),
-                    details(
-                      inputId = "vacancy_rate_info",
-                      label = "Additional information:",
-                      help_text = (
-                        tags$ul(
-                          tags$li(tags$b("Vacancies"), " are defined as any FTE (child and family social worker) vacancy within a local authority’s organisational structure, including vacancies that are not being actively recruited for, and those covered by agency workers."),
-                          tags$li("The ", tags$b("vacancy rate"), " is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of  FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
-                          tags$br(),
-                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
-                            tags$br(),
-                            "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    gov_row(
+                      h2("Vacancy rates"),
+                      p("A workforce strategy should develop and maintain an effective workforce. With a well-supported workforce vacancy rates should remain low."),
+                      # insert_text(inputId = "vacancy_rates_rationale", text = paste(
+                      #   "A workforce strategy should develop and maintain an effective workforce.
+                      #        With a well-supported workforce vacancy rates should remain low."
+                      # )),
+                      #p("The vacancy rate is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
+                      br(),
+                      plotlyOutput("plot_vacancy_rate"),
+                      #p("plots go here"),
+                      br(),
+                      br(),
+                      details(
+                        inputId = "tbl_vacancy_rate",
+                        label = "View chart as a table",
+                        help_text = (
+                          dataTableOutput("table_vacancy_rate")
                         )
-                      )
+                      ),
+                      details(
+                        inputId = "vacancy_rate_info",
+                        label = "Additional information:",
+                        help_text = (
+                          tags$ul(
+                            tags$li(tags$b("Vacancies"), " are defined as any FTE (child and family social worker) vacancy within a local authority’s organisational structure, including vacancies that are not being actively recruited for, and those covered by agency workers."),
+                            tags$li("The ", tags$b("vacancy rate"), " is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of  FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
+                            tags$br(),
+                            p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                              tags$br(),
+                              "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                          )
+                        )
+                      ),
                     ),
-                    fluidRow(
+                    gov_row(
                       h2("Vacancy rates by region"),
                       p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
                       br(),
                       plotlyOutput("plot_vacancy_reg"),
-                    ),
-                    fluidRow(
+                      br(),
+                      br(),
                       details(
                         inputId = "tbl_vacancy_reg",
                         label = "View chart as a table",
@@ -321,20 +315,86 @@ enabler2_tab <- function() {
                         )
                       )
                     ),
-                    h2("Vacancy rates by local authority"),
-                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
-                    p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
-                    br(),
-                    plotlyOutput("plot_vacancy_rate_la"),
-                    br(),
-                    br(),
-                    details(
-                      inputId = "tbl_vacancy_rate_la",
-                      label = "View chart as a table",
-                      help_text = (
-                        dataTableOutput("table_vacancy_rate_la")
-                      )
+                    gov_row(
+                      h2("Vacancy rates by local authority"),
+                      p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                      p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
+                      br(),
+                      plotlyOutput("plot_vacancy_rate_la"),
+                      br(),
+                      br(),
+                      details(
+                        inputId = "tbl_vacancy_rate_la",
+                        label = "View chart as a table",
+                        help_text = (
+                          dataTableOutput("table_vacancy_rate_la")
+                        )
+                      ),
                     ),
+                    
+                  gov_row(
+                    # h2("Vacancy rates"),
+                    # p("A workforce strategy should develop and maintain an effective workforce. With a well-supported workforce vacancy rates should remain low."),
+                    # # insert_text(inputId = "vacancy_rates_rationale", text = paste(
+                    # #   "A workforce strategy should develop and maintain an effective workforce.
+                    # #        With a well-supported workforce vacancy rates should remain low."
+                    # # )),
+                    # #p("The vacancy rate is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
+                    # br(),
+                    # plotlyOutput("plot_vacancy_rate"),
+                    # #p("plots go here"),
+                    # br(),
+                    # br(),
+                    # details(
+                    #   inputId = "tbl_vacancy_rate",
+                    #   label = "View chart as a table",
+                    #   help_text = (
+                    #     dataTableOutput("table_vacancy_rate")
+                    #   )
+                    # ),
+                    # details(
+                    #   inputId = "vacancy_rate_info",
+                    #   label = "Additional information:",
+                    #   help_text = (
+                    #     tags$ul(
+                    #       tags$li(tags$b("Vacancies"), " are defined as any FTE (child and family social worker) vacancy within a local authority’s organisational structure, including vacancies that are not being actively recruited for, and those covered by agency workers."),
+                    #       tags$li("The ", tags$b("vacancy rate"), " is calculated as the number of FTE vacancies at 30 September divided by the sum of the number of  FTE vacancies at 30 September and the number of FTE social workers at 30 September."),
+                    #       tags$br(),
+                    #       p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-s-social-work-workforce/data-guidance", "Children's social work workforce data guidance."),
+                    #         tags$br(),
+                    #         "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-s-social-work-workforce-methodology", "Children's social work workforce methodology."))
+                    #     )
+                    #   )
+                    # ),
+                    # fluidRow(
+                    #   h2("Vacancy rates by region"),
+                    #   p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                    #   br(),
+                    #   plotlyOutput("plot_vacancy_reg"),
+                    # ),
+                    # fluidRow(
+                    #   details(
+                    #     inputId = "tbl_vacancy_reg",
+                    #     label = "View chart as a table",
+                    #     help_text = (
+                    #       dataTableOutput("table_vacancy_reg")
+                    #     )
+                    #   )
+                    # ),
+                    # h2("Vacancy rates by local authority"),
+                    # p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                    # p(sprintf("The graph represents data from %s.", max(workforce_eth$time_period))),
+                    # br(),
+                    # plotlyOutput("plot_vacancy_rate_la"),
+                    # br(),
+                    # br(),
+                    # details(
+                    #   inputId = "tbl_vacancy_rate_la",
+                    #   label = "View chart as a table",
+                    #   help_text = (
+                    #     dataTableOutput("table_vacancy_rate_la")
+                    #   )
+                    # ),
                   ) 
                   )
                   , open = FALSE

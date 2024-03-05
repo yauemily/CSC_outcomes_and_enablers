@@ -213,7 +213,7 @@ outcome1_tab <- function(){
                   )
                 ),
                 accordion_panel(
-                  "Rate of children in care",
+                  "Rate of children in care on 31 March",
                   gov_row(
                     h2("Rate of children in care on 31 March"),
                     br(),
