@@ -112,6 +112,15 @@ outcome2_tab <- function(){
               "Families engaging and receiving support from their family network",
               fluidRow(
                 p("testing")
+              ),
+              accordion(
+                accordion_panel(
+                  "Percentage of Child Protection Plans (CPP) longer than 2 years, and repeat CPP (within 12 months)",
+                ),
+                accordion_panel(
+                  "Percentage of repeat CPP (within 12 months)",
+                )
+                , open = FALSE
               )
             )
           )
