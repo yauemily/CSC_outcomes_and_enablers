@@ -315,14 +315,15 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
 "E09000031"), ]
     
   
-    #create Kingston upon Thames data (they submit a joint workforce return with Richmond)
+    #create Kingston upon Thames/Richmond data (they submit a joint workforce return)
     df_Kingston_upon_Thames <- df_Kingston_upon_Thames %>%
-      mutate(Name = "Kingston upon Thames",Code = "E09000021") %>%
+      mutate(Name = "Kingston upon Thames / Richmond upon Thames",Code = "E09000021 / E09000027") %>%
       group_by(Code,Name,EthnicGroupCode,EthnicGroup, geographic_level)   %>%
       summarise(Observation = sum(Observation), .groups = "drop")
     
+    #create N/W Northamptonshire data (they submit a joint workforce return)
     df_North_Northamptonshire <- df_North_Northamptonshire %>%
-      mutate(Name = "North Northamptonshire",Code = "E06000061") %>%
+      mutate(Name = "North Northamptonshire / West Northamptonshire",Code = "E06000061 / E06000062") %>%
       group_by(Code,Name,EthnicGroupCode,EthnicGroup, geographic_level)   %>%
       summarise(Observation = sum(Observation), .groups = "drop")
     
@@ -366,12 +367,12 @@ total_observation <- ethnic_population_data %>%
     summarise(Percentage = round(sum(Observation) / TotalObservation * 100, 1), .groups = "drop")
 
   # Pivot the dataframe
-  ethnic_population_data <- ethnic_population_data %>%
-    pivot_wider(names_from = EthnicGroupShort, values_from = Percentage)
+  # ethnic_population_data <- ethnic_population_data %>%
+  #   pivot_wider(names_from = EthnicGroupShort, values_from = Percentage)
 
   # Select the first element of each list
-  ethnic_population_data <- ethnic_population_data %>%
-    mutate(across(c(Asian, Black, Mixed, Other, White), ~ purrr::map_dbl(., ~ .x[1])))
+  # ethnic_population_data <- ethnic_population_data %>%
+  #   mutate(across(c(Asian, Black, Mixed, Other, White), ~ purrr::map_dbl(., ~ .x[1])))
 
   return(ethnic_population_data)
 }
@@ -396,12 +397,12 @@ merge_eth_dataframes <- function() {
                        #   Workforce_AsianPercentage = asian_perc,
                         #  Workforce_OtherPercentage = other_perc)
   
-  population_eth <- rename(population_eth, 
-                           Population_WhitePercentage = White,
-                           Population_BlackPercentage = Black,
-                           Population_MixedPercentage = Mixed,
-                           Population_AsianPercentage = Asian,
-                           Population_OtherPercentage = Other)
+  # population_eth <- rename(population_eth, 
+  #                          Population_WhitePercentage = White,
+  #                          Population_BlackPercentage = Black,
+  #                          Population_MixedPercentage = Mixed,
+  #                          Population_AsianPercentage = Asian,
+  #                          Population_OtherPercentage = Other)
   
   # Merge the two data frames
   merged_data <- left_join(workforce_eth, population_eth, by = c("code" = "Code"))
