@@ -115,10 +115,7 @@ outcome2_tab <- function(){
               ),
               accordion(
                 accordion_panel(
-                  "Percentage of Child Protection Plans (CPP) longer than 2 years, and repeat CPP (within 12 months)",
-                ),
-                accordion_panel(
-                  "Percentage of repeat CPP (within 12 months)",
+                  "Percentage of children who cease being looked after due to moving into Special Guardianship Order (SGO), or Care Arrangement Order (CAO)",
                 )
                 , open = FALSE
               )
