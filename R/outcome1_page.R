@@ -398,6 +398,37 @@ outcome1_tab <- function(){
                        )
                      )
                    ),
+                  ),
+                  gov_row(
+                    h2("Re-referrals by region"),
+                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top."),
+                    br(),
+                    plotlyOutput("plot_cin_referral_reg"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_cin_referral_reg",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_cin_referral_reg")
+                      )
+                    )
+                  ),
+                  gov_row(
+                    h2("Re-referrals by local authority"),
+                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region."),
+                    p(sprintf("The graph represents data from %s.", max(cin_referrals$time_period))),
+                    br(),
+                    plotlyOutput("plot_cin_referral_la"),
+                    br(),
+                    br(),
+                    details(
+                      inputId = "tbl_cin_referral_la",
+                      label = "View chart as a table",
+                      help_text = (
+                        dataTableOutput("table_cin_referral_la")
+                      )
+                    )
                   )
                 ), open = FALSE
               ),
