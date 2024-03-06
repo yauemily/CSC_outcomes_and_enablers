@@ -149,14 +149,16 @@ outcome1_tab <- function(){
                         tags$ul(
                           tags$li("Rates are calculated using published number of children starting in care figures which have been rounded to the nearest 10 at national and regional level (unrounded for local authority figures)."),
                           tags$li("Rates are calculated based on ONS published mid-2022 population estimates and  rebased population estimates for mid-2012 to mid-2021for children aged 0 to 17 years."),
+                          tags$li("Historical data may differ from older publications which is mainly due to amendments made by local authorities after the previous publication. However, users looking for a longer time series may wish to view the equivalent data in earlier releases of the publication."),
                           tags$br(),
                           p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-looked-after-in-england-including-adoptions/data-guidance", "Children in care data guidance."),
                             tags$br(),
                             "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-looked-after-in-england-including-adoptions", "Children in care methodology."))
                       )
-                    ),
+                    )
                   )
                 )
+              ),
               ),
               fluidRow(
                 h2("Rate of children starting in care during the year by region"),
