@@ -1025,9 +1025,9 @@ server <- function(input, output, session) {
     datatable(
       combined_ethnicity_data %>% 
       filter(geo_breakdown %in% input$geographic_breakdown_e2) %>% 
-      select(geo_breakdown, breakdown, inpost_FTE_percentage, Percentage),
+      select(geo_breakdown, breakdown, inpost_headcount_percentage, Percentage),
      colnames = c("Geographical breakdown", 
-                 "Ethnicity group", "Population percentage (%)", "Workforce percentage (%)"),
+                 "Ethnicity group", "Workforce percentage (%)", "Population percentage (%)"),
     options = list(
       scrollx = FALSE,
       paging = TRUE

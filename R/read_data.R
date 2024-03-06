@@ -361,10 +361,11 @@ total_observation <- ethnic_population_data %>%
    # Join the total observation back to the original dataframe
   ethnic_population_data <- left_join(ethnic_population_data, total_observation, by = c("Name", "geographic_level"))
 
-  # Group by 'Name', 'geographic_level' and 'EthnicGroupShort', and calculate the percentage
+  # Group by 'Name', 'geographic_level' and 'EthnicGroupShort', and calculate the percentage, select unique values
   ethnic_population_data <- ethnic_population_data %>%
     group_by(Code, Name, geographic_level, EthnicGroupShort) %>%
-    summarise(Percentage = round(sum(Observation) / TotalObservation * 100, 1), .groups = "drop")
+    summarise(Percentage = round(sum(Observation) / TotalObservation * 100, 1), .groups = "drop") %>%
+    unique()
 
   # Pivot the dataframe
   # ethnic_population_data <- ethnic_population_data %>%
@@ -373,6 +374,9 @@ total_observation <- ethnic_population_data %>%
   # Select the first element of each list
   # ethnic_population_data <- ethnic_population_data %>%
   #   mutate(across(c(Asian, Black, Mixed, Other, White), ~ purrr::map_dbl(., ~ .x[1])))
+  
+  # Select the first element of each list
+
 
   return(ethnic_population_data)
 }
