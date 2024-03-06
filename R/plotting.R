@@ -1080,6 +1080,9 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
   #                                                value.name = "Percentage")
   
   
+  # Ensure 'percentage' is numeric
+  combined_ethnicity_data$inpost_headcount_percentage <- as.numeric(combined_ethnicity_data$inpost_headcount_percentage)
+  
   # Reshape the dataframe to a long format
   combined_ethnicity_data_long <- melt(combined_ethnicity_data,
                                                  id.vars = c("geo_breakdown", "geographic_level.x", "time_period","breakdown"),
@@ -1089,18 +1092,15 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
   
   
 
-  # Ensure 'percentage' is numeric
-  combined_ethnicity_data_long$Percentage <- as.numeric(combined_ethnicity_data_long$inpost_FTE_percentage)
-  
   # combined_ethnicity_data$DataSource <- ifelse(grepl("Workforce", combined_ethnicity_data_long$EthnicGroup), sprintf("Workforce (%s)", max(workforce_eth$time_period)), "Population (2021)")
   
   # Create a new column 'Ethnicity' that contains only the ethnic group name
   # combined_ethnicity_data_long$Ethnicity <- gsub("Workforce_|Population_", "", combined_ethnicity_data_long$EthnicGroup)
-  print(combined_ethnicity_data_long)
+  
   
   custom_x_order <- c("White", "Black", "Asian", "Mixed", "Other")
   
-  p <- ggplot(combined_ethnicity_data_long, aes(x = breakdown, y = Percentage, fill = variable)) +
+  p <- ggplot(combined_ethnicity_data_long, aes(x = breakdown, y = Percentage, fill = Ethnicity)) +
     geom_bar(stat = "identity", position = "dodge") +
     ylab("Percentage") +
     xlab("Ethnicity") +
