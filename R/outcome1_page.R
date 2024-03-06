@@ -142,6 +142,19 @@ outcome1_tab <- function(){
                         dataTableOutput("table_cla_rate")
                       )
                     ),
+                    details(
+                      inputId = "cla_rate_info",
+                      label = "Additional information:",
+                      help_text = (
+                        tags$ul(
+                          tags$li("Rates are calculated using published number of children starting in care figures which have been rounded to the nearest 10 at national and regional level (unrounded for local authority figures)."),
+                          tags$li("Rates are calculated based on ONS published mid-2022 population estimates and  rebased population estimates for mid-2012 to mid-2021for children aged 0 to 17 years."),
+                          tags$br(),
+                          p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-looked-after-in-england-including-adoptions/data-guidance", "Children in care data guidance."),
+                            tags$br(),
+                            "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-looked-after-in-england-including-adoptions", "Children in care methodology."))
+                      )
+                    ),
                   )
                 )
               ),
