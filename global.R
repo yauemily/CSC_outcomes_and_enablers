@@ -30,6 +30,7 @@ shhh(library(rstudioapi))
 shhh(library(bslib))
 shhh(library(reshape2))
 shhh(library(tidyverse))
+shhh(library(ggiraph))
 
 # shhh(library(shinya11y))
 
