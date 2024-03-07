@@ -129,9 +129,13 @@ combined_cla_data <- merge_cla_dataframes()
 cin_rates <- read_cin_rate_data()
 cin_referrals <- read_cin_referral_data()
 
+
+#Read in outcome 2 data
+ceased_cla_data <- read_outcome2()
+
 #Dropdowns
-choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National")%>% distinct()
-choices_LA <- workforce_data %>% filter(geographic_level == "Local authority") %>% select()
+#choice_breakdown_level <- workforce_data %>% select(geographic_level) %>% filter(geographic_level != "National")%>% distinct()
+#choices_LA <- workforce_data %>% filter(geographic_level == "Local authority") %>% select()
 
 #choices_geographic_level <- dropdown_choices %>% select(geographic_level) %>% distinct()
 
