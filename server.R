@@ -1991,39 +1991,67 @@ server <- function(input, output, session) {
   })
   
   #Headline stat1 -----
+  # output$SGO_headline_txt <- renderText({
+  #   numerator <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
+  #                                           & geo_breakdown %in% input$geographic_breakdown_o2 
+  #                                           & cla_group == "Reason episode ceased"
+  #                                           & characteristic == "Special guardianship orders") %>% select(number)
+  #   
+  #   denominator <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
+  #                                             & geo_breakdown %in% input$geographic_breakdown_o2 
+  #                                             & cla_group == "Reason episode ceased"
+  #                                             & characteristic == "Total") %>% select(number)
+  #   percent <- (numerator/denominator)*100
+  #   
+  #   stat <- round(percent, digits = 1)
+  #   paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(ceased_cla_data$time_period),")", "</p>")
+  # })
+  # 
   output$SGO_headline_txt <- renderText({
-    numerator <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
-                                            & geo_breakdown %in% input$geographic_breakdown_o2 
-                                            & cla_group == "Reason episode ceased"
-                                            & characteristic == "Special guardianship orders") %>% select(number)
+    stat <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
+                                 & geo_breakdown %in% input$geographic_breakdown_o2 
+                                 & cla_group == "Reason episode ceased"
+                                 & characteristic == "Special guardianship orders") %>% select(perc_num)
     
-    denominator <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
-                                              & geo_breakdown %in% input$geographic_breakdown_o2 
-                                              & cla_group == "Reason episode ceased"
-                                              & characteristic == "Total") %>% select(number)
-    percent <- (numerator/denominator)*100
-    
-    stat <- round(percent, digits = 1)
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(ceased_cla_data$time_period),")", "</p>")
   })
   
   
-  #Headline stat2 -----
+  #Headline stat2 
   output$CAO_headline_txt <- renderText({
-    numerator <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
+    stat <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
                                             & geo_breakdown %in% input$geographic_breakdown_o2 
                                             & cla_group == "Reason episode ceased"
-                                            & characteristic == "Residence order or child arrangement order granted") %>% select(number)
+                                            & characteristic == "Residence order or child arrangement order granted") %>% select(perc_num)
     
-    denominator <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
-                                              & geo_breakdown %in% input$geographic_breakdown_o2 
-                                              & cla_group == "Reason episode ceased"
-                                              & characteristic == "Total") %>% select(number)
-    percent <- (numerator/denominator)*100
-    
-    stat <- round(percent, digits = 1)
+    # denominator <- ceased_cla_data %>% filter(time_period == max(ceased_cla_data$time_period) 
+    #                                           & geo_breakdown %in% input$geographic_breakdown_o2 
+    #                                           & cla_group == "Reason episode ceased"
+    #                                           & characteristic == "Total") %>% select(number)
+    # percent <- (numerator/denominator)*100
+    # 
+    # stat <- round(percent, digits = 1)
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(ceased_cla_data$time_period),")", "</p>")
   })
+  
+  # SGO ---- 
+  #time series and table
+  
+  
+  #by region
+  
+  
+  #by la
+  
+  
+  # CAO ----
+  #time series and table 
+  
+  
+  #by region
+  
+  
+  #by la
   
   
   # Don't touch the code below -----------------------
