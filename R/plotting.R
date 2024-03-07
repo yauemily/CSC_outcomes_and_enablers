@@ -1025,14 +1025,6 @@ plot_ethnicity_rate <- function(geo_breakdown, geographic_level){
                                 	"inpost_headcount_percentage")
                                   ]
   
-  # ethnicity_data_long <- reshape(ethnicity_data,
-  #                                direction = "long",
-  #                                varying = list(names(ethnicity_data)[3:7]),
-  #                                v.names = "percentage",
-  #                                timevar = "ethnicity",
-  #                                times = c("white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc"),
-  #                                new.row.names = 1:1E6)
-  
   # Ensure 'percentage' is numeric
   ethnicity_data$percentage <- as.numeric(ethnicity_data$inpost_headcount_percentage)
   
@@ -1082,13 +1074,6 @@ plot_population_ethnicity_rate <- function(geo_breakdown, geographic_level.x) {
                                                  measure.vars = c("Workforce", "Population"),
                                                  variable.name = "Data",
                                                  value.name = "Percentage")
-  
-  
-  # combined_ethnicity_data$DataSource <- ifelse(grepl("Workforce", combined_ethnicity_data_long$EthnicGroup), sprintf("Workforce (%s)", max(workforce_eth$time_period)), "Population (2021)")
-  
-  # Create a new column 'Ethnicity' that contains only the ethnic group name
-  # combined_ethnicity_data_long$Ethnicity <- gsub("Workforce_|Population_", "", combined_ethnicity_data_long$EthnicGroup)
-  
   
   custom_x_order <- c("White", "Black", "Asian", "Mixed", "Other")
   

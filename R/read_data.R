@@ -367,17 +367,6 @@ total_observation <- ethnic_population_data %>%
     summarise(Percentage = round(sum(Observation) / TotalObservation * 100, 1), .groups = "drop") %>%
     unique()
 
-  # Pivot the dataframe
-  # ethnic_population_data <- ethnic_population_data %>%
-  #   pivot_wider(names_from = EthnicGroupShort, values_from = Percentage)
-
-  # Select the first element of each list
-  # ethnic_population_data <- ethnic_population_data %>%
-  #   mutate(across(c(Asian, Black, Mixed, Other, White), ~ purrr::map_dbl(., ~ .x[1])))
-  
-  # Select the first element of each list
-
-
   return(ethnic_population_data)
 }
 
@@ -393,19 +382,12 @@ merge_eth_dataframes <- function() {
   latest_year <- max(workforce_eth$time_period)
   workforce_eth <- subset(workforce_eth, time_period == latest_year)
   
-  # Rename the columns to make it clear which dataset they come from
-#  workforce_eth <- rename(workforce_eth, 
-                      #    Workforce_WhitePercentage = white_perc,
-                       #   Workforce_BlackPercentage = black_perc,
-                       #   Workforce_MixedPercentage = mixed_perc,
-                       #   Workforce_AsianPercentage = asian_perc,
-                        #  Workforce_OtherPercentage = other_perc)
-  # 
+  #Filter to only include the ethnicity groups for all social workers
   workforce_eth <-  workforce_eth %>%
    filter(breakdown_topic == "Ethnicity major", role == 'Total') %>%
     filter(!(breakdown %in% c("Total","Not known","Known")))
   
-  
+  #Amend names of ethnic groups to match ONS data
   workforce_eth <-  workforce_eth %>%
     mutate(breakdown = case_when(
       breakdown  == "Mixed / Multiple ethnic groups" ~ "Mixed",
@@ -413,13 +395,6 @@ merge_eth_dataframes <- function() {
       breakdown  ==  "Black / African / Caribbean / Black British"   ~ "Black",
       breakdown  ==  "Other ethnic group"   ~ "Other",
     TRUE ~ breakdown)) 
-  
-  # population_eth <- rename(population_eth, 
-  #                          Population_WhitePercentage = White,
-  #                          Population_BlackPercentage = Black,
-  #                          Population_MixedPercentage = Mixed,
-  #                          Population_AsianPercentage = Asian,
-  #                          Population_OtherPercentage = Other)
   
   # Merge the two data frames
   merged_data <- left_join(workforce_eth, population_eth, by = c("code" = "Code", "breakdown" ="EthnicGroupShort"))
