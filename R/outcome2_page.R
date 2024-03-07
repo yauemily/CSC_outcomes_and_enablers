@@ -13,33 +13,27 @@ outcome2_tab <- function(){
         div(
           class = "input_box",
           style = "min-height:100%; height = 100%; overflow-y: visible",
-          gov_row(
-            column(
-              width = 6,
-              selectizeInput(
-                inputId = "select_geography_o2",
-                label = "Select a geographical level:",
-                choices = unique(workforce_data %>% pull('geographic_level')),
-                selected = NULL,
-                multiple = FALSE,
-                options = NULL
-              )
+          layout_columns(
+            selectizeInput(
+              inputId = "select_geography_o2",
+              label = "Select a geographical level:",
+              choices = unique(workforce_data %>% pull('geographic_level')),
+              selected = NULL,
+              multiple = FALSE,
+              options = NULL
             ),
-            column(
-              width = 6,
-              conditionalPanel(condition = "input.select_geography_o2 != 'National'",selectizeInput(
-                inputId = "geographic_breakdown_o2",
-                label = "Select a breakdown: ",
-                choices = NULL,
-                selected = NULL,
-                multiple = FALSE,
-                options = NULL
-                #multiple = TRUE,
-                #options = list(maxItems = 3)
-              )),
-            )
+            conditionalPanel(condition = "input.select_geography_o2 != 'National'",
+                             selectizeInput(
+                               inputId = "geographic_breakdown_o2",
+                               label = "Select a breakdown: ",
+                               choices = NULL,
+                               selected = NULL,
+                               multiple = FALSE,
+                               options = NULL
+                             )),
+            col_widths = c(4,8)
           ),
-          gov_row(
+          layout_columns(
             conditionalPanel(condition = "input.select_geography_o2 != 'National'",
                              column(
                                width = 3,
@@ -64,9 +58,9 @@ outcome2_tab <- function(){
                   hint_label = NULL,
                   small = TRUE
                 )
-              ),
-            )
-          ))
+              )), col_widths = c(4,8)
+          )
+        )
       ),
       # gov_row(
       #   div(
@@ -98,12 +92,8 @@ outcome2_tab <- function(){
           condition = "(input.geographic_breakdown_o2 == 'Bournemouth')",
           p("To view 2020 and onwards data select ", strong("Bournemouth, Christchurch and Poole"),". Bournemouth, Christchurch and Poole local authority was formed in April 2019.") ),
       ),
-      
       gov_row(
         br(),
-        h2("Confirmation Sentence"),
-        br(),
-        
         div(
           tabsetPanel(
             id = "outcome2_panels",
@@ -111,11 +101,40 @@ outcome2_tab <- function(){
             tabPanel(
               "Families engaging and receiving support from their family network",
               fluidRow(
-                p("testing")
+                br()
               ),
+              fluidRow(
+                column(
+                  width = 6,
+                  value_box(
+                    title = "Percentage of children who cease being looked after due to moving into Special Guardianship Order (SGO)",
+                    value = htmlOutput("SGO_headline_txt")
+                  )
+                ),
+                column(
+                  width = 6,
+                  value_box(
+                    title = "Percentage of children who cease being looked after due to moving into Residence order or Child Arrangement Order (CAO)",
+                    value = htmlOutput("CAO_headline_txt")
+                  )
+                ),
+                br(),
+                p("Unlocking family networks and kinship carers can be a key source of support where families are experiencing challenges. 
+                  Moving children from care arrangements to a SGO or CAO shows that kinship care is being prioritised where children cannot safely live with their parents.")
+              ),
+              
               accordion(
                 accordion_panel(
-                  "Percentage of children who cease being looked after due to moving into Special Guardianship Order (SGO), or Care Arrangement Order (CAO)",
+                  "Percentage of children who cease being looked after due to moving into Special Guardianship Order (SGO)",
+                  gov_row(
+                    
+                  )
+                ),
+                accordion_panel(
+                  "Percentage of children who cease being looked after due to moving into Care Arrangement Order (CAO)",
+                  gov_row(
+                    
+                  )
                 )
                 , open = FALSE
               )
