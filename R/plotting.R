@@ -109,9 +109,9 @@ plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, y
       axis.line = element_line(size = 1.0)
     )+
     scale_y_continuous(limits = c(0,ylim_upper)) +
-    labs(color = 'Breakdown')+
+    labs(color = 'Location')+
     scale_color_manual(
-      "Breakdown",
+      "Location",
       values = gss_colour_pallette
     )
 }
