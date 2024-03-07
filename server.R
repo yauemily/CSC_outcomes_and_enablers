@@ -231,12 +231,13 @@ server <- function(input, output, session) {
     )
   }
   )
-  # Confirmation sentence E2 -------
-  #This function gets the selected region to put into the confirmation text below
 
-  region <- reactive({
-    location_data %>%
-      filter(la_name == input$geographic_breakdown_e2) %>%
+  # Confirmation sentence E2 -------
+    #This function gets the selected region to put into the confirmation text below
+  
+  workforce_region <- reactive({
+    location_data_workforce %>%
+            filter(la_name == input$geographic_breakdown_e2) %>%
       pull(region_name)  %>%
       as.character()  # Convert to character
   })
@@ -248,7 +249,7 @@ server <- function(input, output, session) {
     } else if (input$select_geography_e2 == "Regional") {
       paste0("You have selected ", tags$b(input$select_geography_e2), " level statistics for ", tags$b(input$geographic_breakdown_e2), ".")
     } else if (input$select_geography_e2 == "Local authority") {
-      paste0("You have selected ", tags$b(input$select_geography_e2), " level statistics for ", tags$b(input$geographic_breakdown_e2), ", in ", region(), ".")
+      paste0("You have selected ", tags$b(input$select_geography_e2), " level statistics for ", tags$b(input$geographic_breakdown_e2), ", in ", workforce_region(), ".")
     }
   })
   
@@ -269,7 +270,7 @@ server <- function(input, output, session) {
   # Social worker turnover rate headline box
   #Turnover rate plot and table -----
   output$s_w_headline_txt <- renderText({
-    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(turnover_rate_fte_perc), nsmall = 1)
+    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(turnover_rate_fte), nsmall = 1)
     paste0(stat,"%","<br>","<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
   })
   
@@ -305,7 +306,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte_perc', 'Turnover rate (FTE) %', 100)%>%
+      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'turnover_rate_fte', 'Turnover rate (FTE) %', 100)%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -316,13 +317,13 @@ server <- function(input, output, session) {
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
     filtered_data <- workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown_e2) %>%
-      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+      select(time_period, geo_breakdown,turnover_rate_fte)
 
     #national only
   }else if(!is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
     filtered_data<-workforce_data %>%
       filter((geographic_level %in% input$select_geography_e2 & geo_breakdown %in% input$geographic_breakdown_e2)|geographic_level == 'National') %>%
-      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+      select(time_period, geo_breakdown,turnover_rate_fte)
 
     #regional only
   }else if(is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -331,7 +332,7 @@ server <- function(input, output, session) {
 
     filtered_data<-workforce_data %>%
       filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name))) %>%
-      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+      select(time_period, geo_breakdown,turnover_rate_fte)
 
     #both selected
   }else if(!is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -340,7 +341,7 @@ server <- function(input, output, session) {
 
     filtered_data<- workforce_data %>%
       filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name)|geographic_level == 'National'))%>%
-      select(time_period, geo_breakdown,turnover_rate_fte_perc)
+      select(time_period, geo_breakdown,turnover_rate_fte)
   }
     datatable(
       filtered_data,
@@ -367,9 +368,9 @@ server <- function(input, output, session) {
     datatable(
       workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        turnover_rate_fte_perc
+        turnover_rate_fte
       ) %>%
-        arrange(desc(turnover_rate_fte_perc)),
+        arrange(desc(turnover_rate_fte)),
       colnames = c("Time period", "Geographical breakdown", "Turnover rate (FTE) %"),
       options = list(
         scrollx = FALSE,
@@ -404,15 +405,15 @@ server <- function(input, output, session) {
       
       data <- workforce_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-        select(time_period, geo_breakdown, turnover_rate_fte_perc)  %>%
-        arrange(desc(turnover_rate_fte_perc))
+        select(time_period, geo_breakdown, turnover_rate_fte)  %>%
+        arrange(desc(turnover_rate_fte))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
       data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        turnover_rate_fte_perc
+        turnover_rate_fte
       ) %>%
-        arrange(desc(turnover_rate_fte_perc))
+        arrange(desc(turnover_rate_fte))
     }
     
     datatable(
@@ -428,7 +429,7 @@ server <- function(input, output, session) {
   
   #Agency Rate ----
   output$agency_rate_txt <- renderText({
-    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(agency_worker_rate_fte_perc), nsmall = 1)
+    stat <- format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(agency_rate_fte), nsmall = 1)
     paste0(stat,"%","<br>", "<p style='font-size:16px; font-weight:500;'>","(",max(workforce_data$time_period),")", "</p>")
     })
   
@@ -464,7 +465,7 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %',100)%>%
+      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'agency_rate_fte', 'Agency worker rate (FTE) %',100)%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -474,7 +475,7 @@ server <- function(input, output, session) {
   #   datatable(
   #     workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown) %>% select(
   #       time_period, geo_breakdown,
-  #       agency_worker_rate_fte_perc
+  #       agency_rate_fte
   #     ),
   #     colnames = c("Time Period", "Geographical Breakdown", "Agency Worker Rate (FTE) %"),
   #     options = list(
@@ -489,13 +490,13 @@ server <- function(input, output, session) {
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
       filtered_data <- workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown_e2) %>%
-        select(time_period, geo_breakdown,agency_worker_rate_fte_perc)
+        select(time_period, geo_breakdown,agency_rate_fte)
       
       #national only
     }else if(!is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
       filtered_data<-workforce_data %>%
         filter((geographic_level %in% input$select_geography_e2 & geo_breakdown %in% input$geographic_breakdown_e2)|geographic_level == 'National') %>%
-        select(time_period, geo_breakdown,agency_worker_rate_fte_perc)
+        select(time_period, geo_breakdown,agency_rate_fte)
       
       #regional only
     }else if(is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -504,7 +505,7 @@ server <- function(input, output, session) {
       
       filtered_data<-workforce_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name))) %>%
-        select(time_period, geo_breakdown,agency_worker_rate_fte_perc)
+        select(time_period, geo_breakdown,agency_rate_fte)
       
       #both selected
     }else if(!is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -513,7 +514,7 @@ server <- function(input, output, session) {
       
       filtered_data<- workforce_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name)|geographic_level == 'National'))%>%
-        select(time_period, geo_breakdown,agency_worker_rate_fte_perc)
+        select(time_period, geo_breakdown,agency_rate_fte)
     }
     datatable(
       filtered_data,
@@ -540,9 +541,9 @@ server <- function(input, output, session) {
     datatable(
       workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        agency_worker_rate_fte_perc
+        agency_rate_fte
       ) %>%
-        arrange(desc(agency_worker_rate_fte_perc)),
+        arrange(desc(agency_rate_fte)),
       colnames = c("Time period", "Geographical breakdown", "Agency worker rate (FTE) %"),
       options = list(
         scrollx = FALSE,
@@ -578,15 +579,15 @@ server <- function(input, output, session) {
       
       data <- workforce_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-        select(time_period, geo_breakdown, agency_worker_rate_fte_perc)  %>%
-        arrange(desc(agency_worker_rate_fte_perc))
+        select(time_period, geo_breakdown, agency_rate_fte)  %>%
+        arrange(desc(agency_rate_fte))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
       data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        agency_worker_rate_fte_perc
+        agency_rate_fte
       ) %>%
-        arrange(desc(agency_worker_rate_fte_perc))
+        arrange(desc(agency_rate_fte))
     }
     
     datatable(
@@ -602,7 +603,7 @@ server <- function(input, output, session) {
   # Vacancy Rate -----
   # Vacancy rate headline box
   output$vacancy_rate_txt <- renderText({
-    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(vacancy_rate_fte_perc), nsmall = 1), "%",
+    paste0(format(workforce_data %>% filter(time_period == max(workforce_data$time_period) & geo_breakdown %in% input$geographic_breakdown_e2) %>% select(vacancy_rate_fte), nsmall = 1), "%",
            "<br>","<p style='font-size:16px; font-weight:500;'>", "(",max(workforce_data$time_period),")", "</p>")
   })
   
@@ -638,25 +639,26 @@ server <- function(input, output, session) {
     }
     
     ggplotly(
-      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'vacancy_rate_fte_perc', 'Vacancy rate (FTE) %',100)%>%
+      plotly_time_series_custom_scale(filtered_data, input$select_geography_e2, input$geographic_breakdown_e2,'vacancy_rate_fte', 'Vacancy rate (FTE) %',100)%>%
         config(displayModeBar = F),
       height = 420
     )
   })
-  
+
+ 
   
   #Vacancy Rate benchmarking table alternative 
   output$table_vacancy_rate <- renderDataTable({
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
       filtered_data <- workforce_data %>% filter(geo_breakdown %in% input$geographic_breakdown_e2) %>%
-        select(time_period, geo_breakdown,vacancy_rate_fte_perc)
+        select(time_period, geo_breakdown,vacancy_rate_fte)
       
       #national only
     }else if(!is.null(input$national_comparison_checkbox_e2) && is.null(input$region_comparison_checkbox_e2)){
       filtered_data<-workforce_data %>%
         filter((geographic_level %in% input$select_geography_e2 & geo_breakdown %in% input$geographic_breakdown_e2)|geographic_level == 'National') %>%
-        select(time_period, geo_breakdown,vacancy_rate_fte_perc)
+        select(time_period, geo_breakdown,vacancy_rate_fte)
       
       #regional only
     }else if(is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -665,7 +667,7 @@ server <- function(input, output, session) {
       
       filtered_data<-workforce_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name))) %>%
-        select(time_period, geo_breakdown,vacancy_rate_fte_perc)
+        select(time_period, geo_breakdown,vacancy_rate_fte)
       
       #both selected
     }else if(!is.null(input$national_comparison_checkbox_e2) && !is.null(input$region_comparison_checkbox_e2)){
@@ -674,7 +676,7 @@ server <- function(input, output, session) {
       
       filtered_data<- workforce_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_e2, location$region_name)|geographic_level == 'National'))%>%
-        select(time_period, geo_breakdown,vacancy_rate_fte_perc)
+        select(time_period, geo_breakdown,vacancy_rate_fte)
     }
     datatable(
       filtered_data,
@@ -713,15 +715,15 @@ server <- function(input, output, session) {
       
       data <- workforce_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
-        select(time_period, geo_breakdown, vacancy_rate_fte_perc)  %>%
-        arrange(desc(vacancy_rate_fte_perc))
+        select(time_period, geo_breakdown, vacancy_rate_fte)  %>%
+        arrange(desc(vacancy_rate_fte))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
       data <- workforce_data %>% filter(geographic_level == 'Local authority', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        vacancy_rate_fte_perc
+        vacancy_rate_fte
       ) %>%
-        arrange(desc(vacancy_rate_fte_perc))
+        arrange(desc(vacancy_rate_fte))
     }
     
     datatable(
@@ -750,9 +752,9 @@ server <- function(input, output, session) {
     datatable(
       workforce_data %>% filter(geographic_level == 'Regional', time_period == max(workforce_data$time_period)) %>% select(
         time_period, geo_breakdown,
-        vacancy_rate_fte_perc
+        vacancy_rate_fte
       ) %>%
-        arrange(desc(vacancy_rate_fte_perc)),
+        arrange(desc(vacancy_rate_fte)),
       colnames = c("Time period", "Geographical breakdown", "Vacancy rate (FTE) %"),
       options = list(
         scrollx = FALSE,
@@ -943,59 +945,24 @@ server <- function(input, output, session) {
   
 
   # Ethnicity and Diversity Domain-----
-  output$white_ethnicity_txt <- renderText({
-    paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-                                           & geo_breakdown %in% input$geographic_breakdown_e2 
-                                           & OrgRole == "All children and family social workers") %>% 
-                    select(white_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  })
+  # output$white_ethnicity_txt <- renderText({
+  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
+  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
+  #                                          & role == "Total" & breakdown == "White") %>% 
+  #                   select(inpost_headcount_percentage), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
+  # })
   
   output$non_white_txt <- renderText({
     white_stat = workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
                                           & geo_breakdown %in% input$geographic_breakdown_e2 
-                                          & OrgRole == "All children and family social workers") %>% 
-      select(white_perc)
+                                          & role == "Total"
+                                          & breakdown == "White") %>% 
+      select(inpost_headcount_percentage)
     non_white_stat = 100 - as.numeric(white_stat)
     paste0(format(non_white_stat, nsmall = 1), "%", "<br>","<p style='font-size:16px; font-weight:500;'>", "(", max(workforce_eth$time_period) ,")", "</p>")
   })
   
-  
-  # output$asian_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(asian_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  # 
-  # output$black_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(black_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  # 
-  # output$mixed_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(mixed_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  # 
-  # output$other_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(other_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  # 
-  # output$white_ethnicity_txt <- renderText({
-  #   paste0(format(workforce_eth %>% filter(time_period == max(workforce_eth$time_period) 
-  #                                          & geo_breakdown %in% input$geographic_breakdown_e2 
-  #                                          & OrgRole == "All children and family social workers") %>% 
-  #                   select(white_perc), nsmall = 1), "%","<br>", "(",max(workforce_eth$time_period),")")
-  # })
-  
-  
+
   output$plot_ethnicity_rate <- plotly::renderPlotly({
     ggplotly(
       plot_ethnicity_rate(input$geographic_breakdown_e2, input$geographic_level) %>%
@@ -1015,9 +982,10 @@ server <- function(input, output, session) {
   output$table_ethnicity_rate <- renderDataTable({
     datatable(
       workforce_eth %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown_e2, OrgRole == 'All children and family social workers') %>% 
-        select(time_period, geo_breakdown, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
-      colnames = c("Time period", "Geographical breakdown", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
+        filter(geo_breakdown %in% input$geographic_breakdown_e2, 
+               role == 'Total', breakdown_topic == 'Ethnicity major' ) %>% 
+        select(time_period, geo_breakdown, breakdown, inpost_headcount,	inpost_headcount_percentage),
+      colnames = c("Time period", "Geographical breakdown", "Ethnicity", "Headcount",	"Headcount (%)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1025,47 +993,15 @@ server <- function(input, output, session) {
     )
   })
   
-  # output$table_population_ethnicity_rate <- renderDataTable({
-  #   datatable(
-  #     combined_ethnicity_data %>% 
-  #       filter(geo_breakdown %in% input$geographic_breakdown, OrgRole == 'All children and family social workers') %>% 
-  #       select(geographic_level.x, geo_breakdown,
-  #              Population_WhitePercentage, Workforce_WhitePercentage,
-  #              Population_BlackPercentage, Workforce_BlackPercentage,
-  #              Population_AsianPercentage, Workforce_AsianPercentage,
-  #              Population_MixedPercentage, Workforce_MixedPercentage,
-  #              Population_OtherPercentage, Workforce_OtherPercentage),
-  #     colnames = c("Geographic Level", "Geographical Breakdown", 
-  #                  "White % (Population)", "White % (Workforce)",
-  #                  "Black % (Population)", "Black % (Workforce)",
-  #                  "Asian % (Population)", "Asian % (Workforce)",
-  #                  "Mixed % (Population)", "Mixed % (Workforce)",
-  #                  "Other % (Population)", "Other % (Workforce)"),
-  #     options = list(
-  #       scrollx = FALSE,
-  #       paging = TRUE
-  #     )
-  #   )
-  # })
-  
+
   
   output$table_population_ethnicity_rate <- renderDataTable({
     datatable(
       combined_ethnicity_data %>% 
-      filter(geo_breakdown %in% input$geographic_breakdown_e2, OrgRole == 'All children and family social workers') %>% 
-      select(geographic_level.x, geo_breakdown,
-             Population_WhitePercentage, Workforce_WhitePercentage,
-             Population_BlackPercentage, Workforce_BlackPercentage,
-             Population_AsianPercentage, Workforce_AsianPercentage,
-             Population_MixedPercentage, Workforce_MixedPercentage,
-             Population_OtherPercentage, Workforce_OtherPercentage) %>%
-      pivot_longer(
-        cols = c(Population_WhitePercentage:Workforce_OtherPercentage), # Specify columns to reshape
-        names_to = c(".value", "Ethnicity"), # Assign names to new columns
-        names_pattern = "(.*)_(.*)Percentage" # Specify pattern to extract values from column names
-      ),
-    colnames = c("Geographic level", "Geographical breakdown", 
-                 "Ethnicity group", "Population percentage (%)", "Workforce percentage (%)"),
+      filter(geo_breakdown %in% input$geographic_breakdown_e2) %>% 
+      select(geo_breakdown, breakdown, inpost_headcount_percentage, Percentage),
+     colnames = c("Geographical breakdown", 
+                 "Ethnicity group", "Workforce (%)", "Population (%)"),
     options = list(
       scrollx = FALSE,
       paging = TRUE
@@ -1081,14 +1017,14 @@ server <- function(input, output, session) {
     )
   })
   
-  cols <- c("time_period","geographic_level", "geo_breakdown", "seniority", "known_headcount", "white_perc", "mixed_perc", "asian_perc", "black_perc", "other_perc")
+  cols <- c("time_period", "geo_breakdown", "seniority", "breakdown", "inpost_headcount","Percentage")
   
   output$table_seniority_eth <- renderDataTable({
     datatable(
       workforce_eth_seniority[, cols] %>% 
-        filter(geo_breakdown %in% input$geographic_breakdown_e2, seniority != 'All children and family social workers', time_period == max(workforce_eth_seniority$time_period)) %>% 
-        select(time_period,geographic_level, geo_breakdown, seniority, known_headcount, white_perc, mixed_perc, asian_perc, black_perc, other_perc),
-      colnames = c("Time period","Geographic level", "Geographical breakdown", "Seniority level", "Headcount with known ethnicity", "White %", "Mixed %", "Asian %", "Black %", "Other %"),
+        filter(geo_breakdown %in% input$geographic_breakdown_e2, seniority != 'Total', time_period == max(workforce_eth_seniority$time_period)) %>% 
+        select(time_period, geo_breakdown, seniority, breakdown ,inpost_headcount,Percentage),
+      colnames = c("Time period", "Geographical breakdown", "Seniority level", "Ethnicity", "Headcount", "Headcount (%)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE,
