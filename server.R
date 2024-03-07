@@ -1027,7 +1027,7 @@ server <- function(input, output, session) {
       filter(geo_breakdown %in% input$geographic_breakdown_e2) %>% 
       select(geo_breakdown, breakdown, inpost_headcount_percentage, Percentage),
      colnames = c("Geographical breakdown", 
-                 "Ethnicity group", "Workforce percentage (%)", "Population percentage (%)"),
+                 "Ethnicity group", "Workforce (%)", "Population (%)"),
     options = list(
       scrollx = FALSE,
       paging = TRUE
