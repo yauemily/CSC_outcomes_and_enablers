@@ -109,9 +109,9 @@ plotly_time_series_custom_scale <- function(dataset, level, breakdown, yvalue, y
       axis.line = element_line(size = 1.0)
     )+
     scale_y_continuous(limits = c(0,ylim_upper)) +
-    labs(color = 'Breakdown')+
+    labs(color = 'Location')+
     scale_color_manual(
-      "Breakdown",
+      "Location",
       values = gss_colour_pallette
     )
 }
@@ -966,7 +966,7 @@ plot_uasc <- function(geo_break, geo_lvl){
   
   ggplot(uasc_data , aes(`time_period`, `placement_per_10000`, fill = factor(characteristic, levels = c("Unaccompanied asylum-seeking children","Non-unaccompanied asylum-seeking children")))) +
     geom_bar(stat = "identity") +
-    ylab("Rate of children starting in care, per 10,000") +
+    ylab("Rate per 10,000 children") +
     xlab("Time period") +
     theme_classic() +
     theme(
@@ -1189,7 +1189,7 @@ plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
   
   p <- ggplot(cla_data, aes(`geo_breakdown`, `rate_per_10000`, fill = `is_selected`)) +
     geom_col(position = position_dodge()) +
-    ylab("Rate of children starting in care, per 10,000") +
+    ylab("Rate per 10,000 children") +
     xlab("") +
     theme_classic() +
     theme(

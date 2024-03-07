@@ -1714,7 +1714,7 @@ server <- function(input, output, session) {
                population_count == "Children starting to be looked after each year") %>% 
         select(time_period, geo_breakdown, placement_per_10000, characteristic) %>%
         arrange(desc(time_period)),
-      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC status"),
+      colnames = c("Time period", "Geographical breakdown", "Rate per 10,000 children", "UASC status"),
       options = list(
         scrollx = FALSE,
         paging = TRUE,
@@ -1737,7 +1737,7 @@ server <- function(input, output, session) {
                                    population_count == "Children starting to be looked after each year",
                                    time_period == max(time_period)) %>% 
         select(time_period, geo_breakdown, placement_per_10000, characteristic),
-      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC status"),
+      colnames = c("Time period", "Geographical breakdown", "Rate per 10,000 children", "UASC status"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -1783,7 +1783,7 @@ server <- function(input, output, session) {
     
     datatable(
       data,
-      colnames = c("Time period", "Geographical breakdown", "Rate of children starting in care who were UASC, per 10,000", "UASC status"),
+      colnames = c("Time period", "Geographical breakdown", "Rate per 10,000 children", "UASC status"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
