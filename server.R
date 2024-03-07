@@ -357,7 +357,7 @@ server <- function(input, output, session) {
   output$plot_turnover_reg <- plotly::renderPlotly({
     ggplotly(
       #plot_turnover_reg() %>%
-      by_region_bar_plot(workforce_data, 'turnover_rate_fte_perc','Turnover Rate (FTE) %')%>%
+      by_region_bar_plot(workforce_data, 'turnover_rate_fte','Turnover Rate (FTE) %')%>%
         config(displayModeBar = F),
       height = 420
     )
@@ -382,7 +382,7 @@ server <- function(input, output, session) {
   # Turnover Rate by LA plot ----
   output$plot_turnover_la <- plotly::renderPlotly({
     ggplotly(
-      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2,'turnover_rate_fte_perc', 'Turnover Rate (FTE) %') %>%
+      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2,'turnover_rate_fte', 'Turnover Rate (FTE) %') %>%
         config(displayModeBar = F),
       height = 420
     )
@@ -529,7 +529,7 @@ server <- function(input, output, session) {
   #agency rate plot by region ----
   output$plot_agency_reg <- plotly::renderPlotly({
     ggplotly(
-      by_region_bar_plot(workforce_data, 'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %') %>%
+      by_region_bar_plot(workforce_data, 'agency_rate_fte', 'Agency worker rate (FTE) %') %>%
       #plot_agency_reg() %>%
         config(displayModeBar = F),
       height = 420
@@ -555,7 +555,7 @@ server <- function(input, output, session) {
   #agency rate by la plot -----
   output$plot_agency_rate_la <- plotly::renderPlotly({
     ggplotly(
-      by_la_bar_plot(workforce_data,input$geographic_breakdown_e2, input$select_geography_e2, 'agency_worker_rate_fte_perc', 'Agency worker rate (FTE) %')%>%
+      by_la_bar_plot(workforce_data,input$geographic_breakdown_e2, input$select_geography_e2, 'agency_rate_fte', 'Agency worker rate (FTE) %')%>%
       #plot_agency_rate_la(input$geographic_breakdown_e2, input$select_geography_e2) %>%
         config(displayModeBar = F),
       height = 420
@@ -691,7 +691,7 @@ server <- function(input, output, session) {
   #vacancy rate by la plot ----
   output$plot_vacancy_rate_la <- plotly::renderPlotly({
     ggplotly(
-      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2, 'vacancy_rate_fte_perc', "Vacancy rate (FTE) %")%>%
+      by_la_bar_plot(workforce_data, input$geographic_breakdown_e2, input$select_geography_e2, 'vacancy_rate_fte', "Vacancy rate (FTE) %")%>%
      # plot_vacancy_rate_la(input$geographic_breakdown_e2, input$select_geography_e2) %>%
         config(displayModeBar = F),
       height = 420
@@ -740,7 +740,7 @@ server <- function(input, output, session) {
   #vacancy rate plot by region ----
   output$plot_vacancy_reg <- plotly::renderPlotly({
     ggplotly(
-      by_region_bar_plot(workforce_data, 'vacancy_rate_fte_perc', 'Vacancy rate (FTE) %') %>%
+      by_region_bar_plot(workforce_data, 'vacancy_rate_fte', 'Vacancy rate (FTE) %') %>%
       #plot_vacancy_reg() %>%
         config(displayModeBar = F),
       height = 420
