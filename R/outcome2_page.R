@@ -127,13 +127,98 @@ outcome2_tab <- function(){
                 accordion_panel(
                   "Percentage of children who cease being looked after due to moving into Special Guardianship Order (SGO)",
                   gov_row(
-                    
+                    h2("Special Guardianship Order (SGO)"),
+                    p("Unlocking family networks and kinship carers can be a key source of support where families are experiencing challenges. 
+                  Moving children from care arrangements to a SGO or CAO shows that kinship care is being prioritised where children cannot safely live with their parents."),
+                  br(),
+                  plotlyOutput("SGO_time_series"),
+                  br(),
+                  details(
+                    inputId = "tbl_sgo_ceased_cla",
+                    label = "View chart as table",
+                    help_text = (
+                      dataTableOutput("table_sgo_ceased")
+                    )
+                  ),
+                  details(
+                    inputId = "sgo_info",
+                    label = "Additional information:",
+                    help_text = (p("insert text"))
+                  )
+                  ),
+                  gov_row(
+                    h2("Special Guardianship Order (SGO) by region"),
+                    p("text"),
+                    br(),
+                    plotlyOutput("plot_sgo_ceased_reg"),
+                    br(),
+                    details(
+                      inputId = "tbl_sgo_ceased_cla_reg",
+                      label = "View chart as table",
+                      help_text = (
+                        dataTableOutput("table_sgo_ceased_reg")
+                      )
+                    )
+                  ),
+                  gov_row(
+                    h2("Special Guardianship Order (SGO) by local authority"),
+                    p("text"),
+                    br(),
+                    plotlyOutput("plot_SGO_la"),
+                    br(),
+                    details(
+                      inputId = "tbl_sgo_ceased_la",
+                      label = "View chart as table",
+                      help_text = (
+                        dataTableOutput("table_sgo_la")
+                      )
+                    )
                   )
                 ),
                 accordion_panel(
                   "Percentage of children who cease being looked after due to moving into Care Arrangement Order (CAO)",
                   gov_row(
-                    
+                    h2("Residence order or Child Arrangement Order (CAO)"),
+                    p("Unlocking family networks and kinship carers can be a key source of support where families are experiencing challenges. 
+                  Moving children from care arrangements to a SGO or CAO shows that kinship care is being prioritised where children cannot safely live with their parents."),
+                  br(),
+                  plotlyOutput("CAO_time_series"),
+                  br(),
+                  details(
+                    inputId = "tbl_cao_ceased_cla",
+                    label = "View chart as table",
+                    help_text = (
+                      dataTableOutput("table_cao_ceased")
+                    )
+                  ),
+                  ),
+                  gov_row(
+                    h2("Residence order or Child Arrangement Order (CAO) by region"),
+                    p("text"),
+                    br(),
+                    plotlyOutput("plot_cao_ceased_reg"),
+                    br(),
+                    details(
+                      inputId = "table_cao_ceased_reg",
+                      label = "View chart as table",
+                      help_text = (
+                        dataTableOutput("table_cao_ceased_reg")
+                      )
+                    ),
+                  ),
+                  gov_row(
+                    h2("Residence order or Child Arrangement Order (CAO) by local authority"),
+                    p("text"),
+                    br(),
+                    plotlyOutput("plot_cao_la"),
+                    br(),
+                    details(
+                      inputId = "table_cao_la",
+                      label = "View chart as table",
+                      help_text = (
+                        dataTableOutput("table_cao_la")
+                      )
+                    ),
                   )
                 )
                 , open = FALSE
