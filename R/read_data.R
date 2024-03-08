@@ -599,7 +599,7 @@ read_outcome2 <- function(file = "data/la_children_who_ceased_during_the_year.cs
     percentage == "c" ~ "c",
     percentage == "k" ~ "k",
     percentage == "x" ~ "x",
-    TRUE ~ as.character(perc))) %>% mutate(perc_num = case_when(
+    TRUE ~ as.character(perc))) %>% mutate(`Percentage ceased %` = case_when(
       percentage == "z" ~ NA,
       percentage == "c" ~ NA,
       percentage == "k" ~ NA,
