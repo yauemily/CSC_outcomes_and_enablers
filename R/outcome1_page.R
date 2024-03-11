@@ -137,7 +137,7 @@ outcome1_tab <- function(){
                       help_text = (
                         tags$ul(
                           tags$li("Rates are calculated using published number of children starting in care figures which have been rounded to the nearest 10 at national and regional level (unrounded for local authority figures)."),
-                          tags$li("Rates are calculated based on ONS published mid-2022 population estimates and rebased population estimates for mid-2012 to mid-2021 for children aged 0 to 17 years."),
+                          tags$li("Rates are calculated based on ", a(href = "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/populationestimatesforenglandandwales/mid2022#:~:text=We%20estimate%20the%20population%20of,mid%2D1962%20(1.0%25)", "ONS published mid-2022 population estimates"), "and rebased population estimates for mid-2012 to mid-2021 for children aged 0 to 17 years."),
                           tags$li("Figures exclude children looked after under a series of short-term placements. Only the first occasion on which a child started to be looked after in the year has been counted."),
                           tags$li("Historical data may differ from older publications which is mainly due to amendments made by local authorities after the previous publication. However, users looking for a longer time series may wish to view the equivalent data in earlier releases of the publication."),
                           tags$br(),
@@ -248,8 +248,7 @@ outcome1_tab <- function(){
                       label = "Additional information:",
                       help_text = (
                         tags$ul(
-                          tags$li("Rates are calculated based on ONS published mid-2022 population estimates and rebased population estimates for mid-2012 to mid-2021 for children aged 0 to 17 years."),
-                          tags$li("Figures exclude children looked after under a series of short-term placements. Only the first occasion on which a child started to be looked after in the year has been counted."),
+                          tags$li("Rates are calculated based on ", a(href = "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/populationestimatesforenglandandwales/mid2022#:~:text=We%20estimate%20the%20population%20of,mid%2D1962%20(1.0%25)", "ONS published mid-2022 population estimates"), "and rebased population estimates for mid-2012 to mid-2021 for children aged 0 to 17 years."),
                           tags$li("Historical data may differ from older publications which is mainly due to amendments made by local authorities after the previous publication. However, users looking for a longer time series may wish to view the equivalent data in earlier releases of the publication."),
                           tags$br(),
                           p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-looked-after-in-england-including-adoptions/data-guidance", "Children in care data guidance."),

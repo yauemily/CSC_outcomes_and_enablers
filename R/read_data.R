@@ -69,10 +69,22 @@ read_definitions <- function(file = "data/definitions.csv") {
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 # Need a fact table for the LA's and their Regions
-GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+GET_location <- function(file = "data/la_children_who_started_to_be_looked_after_during_the_year.csv"){
   FACT_location <- read.csv(file)
   FACT_location <- FACT_location%>%
+    select(region_name, la_name) %>%
+    filter((la_name != '')) %>%
+    unique()
+}
+
+
+# Need a fact table for the LA's and their Regions for workforce data as they have LAs combined
+GET_location_workforce <- function(file = "data/csww_indicators_2017_to_2023.csv"){
+  workforce_location <- read.csv(file)
+  workforce_location <- read.csv(file)
+  workforce_location <- workforce_location%>%
     select(region_name, la_name) %>%
     filter((la_name != '')) %>%
     unique()
@@ -84,7 +96,7 @@ GET_location <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
 #For filters to work nicely, we want to have two levels of grouping: geographic level (national, regional, LA) 
 #and level breakdown (region names and la names)
 
-read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022.csv"){
+read_workforce_data <- function(file = "data/csww_indicators_2017_to_2023.csv"){
   workforce_data <- read.csv(file)
   workforce_data <- colClean(workforce_data)%>%
     mutate(geo_breakdown = case_when(
@@ -92,9 +104,9 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
       geographic_level == "Regional" ~ region_name,
       geographic_level == "Local authority" ~ la_name
     )) %>%
-    select(geographic_level, geo_breakdown,turnover_rate_fte_perc,time_period,"time_period","turnover_rate_fte_perc", "absence_rate_fte_perc",
-           "agency_worker_rate_fte_perc", "agency_cover_rate_fte_perc", "vacancy_rate_fte_perc", "vacancy_agency_cover_rate_fte_perc",
-           "turnover_rate_headcount_perc", "agency_worker_rate_headcount_perc", "caseload_fte") %>% distinct()
+    select(geographic_level, geo_breakdown,turnover_rate_fte,time_period,"time_period","turnover_rate_fte", "absence_rate_fte",
+           "agency_rate_fte", "agency_cover_rate_fte", "vacancy_rate_fte", "vacancy_agency_cover_rate_fte",
+           "turnover_rate_headcount", "agency_rate_headcount", "caseload_fte") %>% distinct()
   
   workforce_data <- convert_perc_cols_to_numeric(workforce_data)
   
@@ -110,20 +122,20 @@ read_workforce_data <- function(file = "data/csww_headline_measures_2017_to_2022
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce characteristics data
-read_workforce_char_data <- function(file = "data/csww_workforce_characteristics_2017_to_2022.csv") {
-  workforce_characteristics <- read.csv(file)
-  # Select only the columns we want
-  workforce_char_data <- colClean(workforce_characteristics) 
-  workforce_char_data <- workforce_char_data %>% filter(characteristic_type != "Total") %>% select(
-    "time_period", "geographic_level", "region_name", "characteristic", "characteristic_type", "percentage"
-  )
-  workforce_char_data <- convert_perc_cols_to_numeric(workforce_char_data)
-  return(workforce_char_data)
-}
+# read_workforce_char_data <- function(file = "data/csww_workforce_characteristics_2017_to_2022.csv") {
+#   workforce_characteristics <- read.csv(file)
+#   # Select only the columns we want
+#   workforce_char_data <- colClean(workforce_characteristics) 
+#   workforce_char_data <- workforce_char_data %>% filter(characteristic_type != "Total") %>% select(
+#     "time_period", "geographic_level", "region_name", "characteristic", "characteristic_type", "percentage"
+#   )
+#   workforce_char_data <- convert_perc_cols_to_numeric(workforce_char_data)
+#   return(workforce_char_data)
+# }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce ethnicity data
-read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicity_2019_to_2022.csv") {
+read_workforce_eth_data <- function(file = "data/csww_role_by_characteristics_inpost_2019_to_2023.csv") {
   workforce_ethnicity_data <- read.csv(file)
   # Select only columns we want
   #workforce_eth_data <- colCleanPerc(workforce_ethnicity_data)
@@ -134,32 +146,24 @@ read_workforce_eth_data <- function(file = "data/csww_workforce_role_by_ethnicit
       geographic_level == "Local authority" ~ la_name
   )) %>%
   select(
-    geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, "time_period", "geographic_level", "region_name", "OrgRole", "white_perc", "mixed_perc", "asian_perc", 
-    "black_perc", "other_perc", known_headcount, white, mixed, asian, black, other
-  )
+    geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, 
+    "time_period", "geographic_level", "region_name", "role", breakdown_topic,	breakdown,
+    inpost_FTE,	inpost_FTE_percentage,	inpost_headcount,	inpost_headcount_percentage
+      )
   
   workforce_ethnicity_data$new_la_code[workforce_ethnicity_data$new_la_code == ""] <- NA
   workforce_ethnicity_data$region_code[workforce_ethnicity_data$region_code == ""] <- NA
   workforce_ethnicity_data <- mutate(workforce_ethnicity_data, code = coalesce(new_la_code, region_code, country_code))
-  
-  workforce_ethnicity_data <- workforce_ethnicity_data %>%
-  mutate(seniority = case_when(
-     OrgRole == "Case holder" ~ "Case holder",
-     OrgRole == "Qualified without cases" ~ "Qualified without cases",
-     OrgRole == "Senior practitioner" ~ "Senior practitioner",
-    OrgRole %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
-    ))
   
   workforce_ethnicity_data <- convert_perc_cols_to_numeric(workforce_ethnicity_data)
 
   return(workforce_ethnicity_data)
 }
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Workforce ethnicity by seniority data
-read_workforce_eth_seniority_data <- function(file = "data/csww_workforce_role_by_ethnicity_2019_to_2022.csv") {
+read_workforce_eth_seniority_data <- function(file = "data/csww_role_by_characteristics_inpost_2019_to_2023.csv") {
   workforce_ethnicity_seniority_data <- read.csv(file)
   # Select only columns we want
   #workforce_eth_data <- colCleanPerc(workforce_ethnicity_data)
@@ -170,8 +174,11 @@ read_workforce_eth_seniority_data <- function(file = "data/csww_workforce_role_b
       geographic_level == "Local authority" ~ la_name
     )) %>%
     select(
-      geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period, "time_period", "geographic_level", "region_name", "OrgRole", known_headcount, white, mixed, asian, black, other
-    )
+      geographic_level, geo_breakdown, country_code, region_code, new_la_code, time_period,  
+      "time_period", "geographic_level", "region_name", "role", breakdown_topic,	breakdown,
+      inpost_FTE,	inpost_FTE_percentage,	inpost_headcount,	inpost_headcount_percentage
+    ) %>%
+  filter(breakdown_topic == 'Ethnicity major')
   
   workforce_ethnicity_seniority_data$new_la_code[workforce_ethnicity_seniority_data$new_la_code == ""] <- NA
   workforce_ethnicity_seniority_data$region_code[workforce_ethnicity_seniority_data$region_code == ""] <- NA
@@ -179,58 +186,42 @@ read_workforce_eth_seniority_data <- function(file = "data/csww_workforce_role_b
   
   workforce_ethnicity_seniority_data <- workforce_ethnicity_seniority_data %>%
     mutate(seniority = case_when(
-      OrgRole == "All children and family social workers" ~ "All children and family social workers",
-     OrgRole == "Case holder" ~ "Case holder",
-      OrgRole == "Qualified without cases" ~ "Qualified without cases",
-     OrgRole == "Senior practitioner" ~ "Senior practitioner",
-      OrgRole %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
-    ))
+      role ==  "Total" ~ "Total",
+         role == "Case holder" ~ "Case holder",
+         role == "Qualified without cases" ~ "Qualified without cases",
+         role == "Senior practitioner" ~ "Senior practitioner",
+        role %in% c("First line manager", "Senior manager", "Middle manager") ~ "Manager"
+        ))
 
   workforce_ethnicity_seniority_data <- workforce_ethnicity_seniority_data %>%
-    mutate(known_headcount = case_when(
-      known_headcount == "Z" ~ NA,
-      known_headcount == "x"  ~ NA,
-      TRUE ~ as.numeric(known_headcount))) %>%
-    mutate(white = case_when(
-      white == "Z" ~ NA,
-      white == "x"  ~ NA,
-      TRUE ~ as.numeric(white))) %>%
-    mutate(mixed = case_when(
-      mixed == "Z" ~ NA,
-      mixed == "x"  ~ NA,
-      TRUE ~ as.numeric(mixed))) %>%
-    mutate(asian = case_when(
-      asian == "Z" ~ NA,
-      asian == "x"  ~ NA,
-      TRUE ~ as.numeric(asian))) %>%
-    mutate(black = case_when(
-      black == "Z" ~ NA,
-      black == "x"  ~ NA,
-      TRUE ~ as.numeric(black))) %>%
-    mutate(other = case_when(
-      other == "Z" ~ NA,
-      other == "x"  ~ NA,
-      TRUE ~ as.numeric(other)))
+    mutate(inpost_headcount = case_when(
+      inpost_headcount == "Z" ~ NA,
+      inpost_headcount == "x"  ~ NA,
+      TRUE ~ as.numeric(inpost_headcount))) 
   
   
   # #sum ethnicity counts to create grouped manager percents
    workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
-     group_by(geographic_level, geo_breakdown, time_period, region_name, code, seniority)   %>%
-     summarise_at(c("known_headcount","white","mixed","asian","black","other"), sum)
-  
+     group_by(geographic_level, geo_breakdown, time_period, region_name, code, seniority,breakdown)   %>%
+     summarise_at(c("inpost_headcount"), sum) %>%
+     filter(!(breakdown %in% c("Total","Not known","Known")))
 
-  # # Group by and calculate the percentages
-  workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
-    group_by(geographic_level, geo_breakdown, time_period, region_name, code,seniority, known_headcount) %>%
-    summarise("white_perc" = round(white/ known_headcount * 100,1),
-             "mixed_perc" = round(mixed/ known_headcount * 100,1),
-              "asian_perc" = round(asian/ known_headcount * 100,1),
-              "black_perc" = round(black/ known_headcount * 100,1),
-              "other_perc" = round(other/ known_headcount * 100,1),
-    )
-  
+   
+    #sum ethnicity headcount to create total
+   total_observation  <- workforce_ethnicity_seniority_data  %>%
+     group_by(geographic_level, geo_breakdown, time_period, region_name, code, seniority)   %>%
+                 summarise(Observation = sum(inpost_headcount), .groups = "keep")
+
+   # Join the total observation back to the original dataframe
+   workforce_ethnicity_seniority_data <- left_join(workforce_ethnicity_seniority_data, total_observation,
+                                                   by = c("geographic_level", "geo_breakdown", "time_period", "region_name", "code", "seniority"))
+   
+   # Create ethnicity percentages
+      workforce_ethnicity_seniority_data  <- workforce_ethnicity_seniority_data  %>%
+      mutate(Percentage = round(inpost_headcount/Observation * 100, 1))
+
   # Filter to include only the latest year of data
-  latest_year <- max(workforce_ethnicity_seniority_data$time_period)
+   latest_year <- max(workforce_ethnicity_seniority_data$time_period)
   workforce_ethnicity_seniority_data <- subset(workforce_ethnicity_seniority_data, time_period == latest_year)
   #workforce_ethnicity_seniority_data <- convert_perc_cols_to_numeric(workforce_ethnicity_seniority_data)
   
@@ -323,14 +314,15 @@ read_ethnic_population_data <- function(file1 = "data/ons-ethnic-population-reg.
 "E09000031"), ]
     
   
-    #create Kingston upon Thames data (they submit a joint workforce return with Richmond)
+    #create Kingston upon Thames/Richmond data (they submit a joint workforce return)
     df_Kingston_upon_Thames <- df_Kingston_upon_Thames %>%
-      mutate(Name = "Kingston upon Thames",Code = "E09000021") %>%
+      mutate(Name = "Kingston upon Thames / Richmond upon Thames",Code = "E09000021 / E09000027") %>%
       group_by(Code,Name,EthnicGroupCode,EthnicGroup, geographic_level)   %>%
       summarise(Observation = sum(Observation), .groups = "drop")
     
+    #create N/W Northamptonshire data (they submit a joint workforce return)
     df_North_Northamptonshire <- df_North_Northamptonshire %>%
-      mutate(Name = "North Northamptonshire",Code = "E06000061") %>%
+      mutate(Name = "North Northamptonshire / West Northamptonshire",Code = "E06000061 / E06000062") %>%
       group_by(Code,Name,EthnicGroupCode,EthnicGroup, geographic_level)   %>%
       summarise(Observation = sum(Observation), .groups = "drop")
     
@@ -368,18 +360,11 @@ total_observation <- ethnic_population_data %>%
    # Join the total observation back to the original dataframe
   ethnic_population_data <- left_join(ethnic_population_data, total_observation, by = c("Name", "geographic_level"))
 
-  # Group by 'Name', 'geographic_level' and 'EthnicGroupShort', and calculate the percentage
+  # Group by 'Name', 'geographic_level' and 'EthnicGroupShort', and calculate the percentage, select unique values
   ethnic_population_data <- ethnic_population_data %>%
     group_by(Code, Name, geographic_level, EthnicGroupShort) %>%
-    summarise(Percentage = round(sum(Observation) / TotalObservation * 100, 1), .groups = "drop")
-
-  # Pivot the dataframe
-  ethnic_population_data <- ethnic_population_data %>%
-    pivot_wider(names_from = EthnicGroupShort, values_from = Percentage)
-
-  # Select the first element of each list
-  ethnic_population_data <- ethnic_population_data %>%
-    mutate(across(c(Asian, Black, Mixed, Other, White), ~ purrr::map_dbl(., ~ .x[1])))
+    summarise(Percentage = round(sum(Observation) / TotalObservation * 100, 1), .groups = "drop") %>%
+    unique()
 
   return(ethnic_population_data)
 }
@@ -396,23 +381,22 @@ merge_eth_dataframes <- function() {
   latest_year <- max(workforce_eth$time_period)
   workforce_eth <- subset(workforce_eth, time_period == latest_year)
   
-  # Rename the columns to make it clear which dataset they come from
-  workforce_eth <- rename(workforce_eth, 
-                          Workforce_WhitePercentage = white_perc,
-                          Workforce_BlackPercentage = black_perc,
-                          Workforce_MixedPercentage = mixed_perc,
-                          Workforce_AsianPercentage = asian_perc,
-                          Workforce_OtherPercentage = other_perc)
+  #Filter to only include the ethnicity groups for all social workers
+  workforce_eth <-  workforce_eth %>%
+   filter(breakdown_topic == "Ethnicity major", role == 'Total') %>%
+    filter(!(breakdown %in% c("Total","Not known","Known")))
   
-  population_eth <- rename(population_eth, 
-                           Population_WhitePercentage = White,
-                           Population_BlackPercentage = Black,
-                           Population_MixedPercentage = Mixed,
-                           Population_AsianPercentage = Asian,
-                           Population_OtherPercentage = Other)
+  #Amend names of ethnic groups to match ONS data
+  workforce_eth <-  workforce_eth %>%
+    mutate(breakdown = case_when(
+      breakdown  == "Mixed / Multiple ethnic groups" ~ "Mixed",
+      breakdown  ==  "Asian / Asian British"   ~ "Asian",
+      breakdown  ==  "Black / African / Caribbean / Black British"   ~ "Black",
+      breakdown  ==  "Other ethnic group"   ~ "Other",
+    TRUE ~ breakdown)) 
   
   # Merge the two data frames
-  merged_data <- left_join(workforce_eth, population_eth, by = c("code" = "Code"))
+  merged_data <- left_join(workforce_eth, population_eth, by = c("code" = "Code", "breakdown" ="EthnicGroupShort"))
   
   return(merged_data)
 }

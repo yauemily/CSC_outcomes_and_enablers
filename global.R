@@ -113,9 +113,10 @@ definitions <- definitions[,1:4]
 #Read in the workforce data
 workforce_data <- read_workforce_data()
 location_data <- GET_location() # fact table linking LA to its region
+location_data_workforce <- GET_location_workforce() # fact table linking LA to its region
 
 #Read in the workforce characteristics data
-workforce_char <- read_workforce_char_data()
+# workforce_char <- read_workforce_char_data()
 workforce_eth <- read_workforce_eth_data()
 workforce_eth_seniority <- read_workforce_eth_seniority_data()
 population_eth <- read_ethnic_population_data()
@@ -139,7 +140,7 @@ ceased_cla_data <- read_outcome2()
 
 #choices_geographic_level <- dropdown_choices %>% select(geographic_level) %>% distinct()
 
-dropdown_choices <- workforce_data #%>%
+dropdown_choices <- cla_rates #%>%
 #   mutate(geo_breakdown = case_when(
 #     geographic_level == "National" ~ "National",#NA_character_,
 #     geographic_level == "Regional" ~ region_name,
