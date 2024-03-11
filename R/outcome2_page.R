@@ -146,7 +146,7 @@ outcome2_tab <- function(){
                     help_text = (
                     p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-looked-after-in-england-including-adoptions/data-guidance", "Children looked after in England including adoptions guidance."),
                       tags$br(),
-                      "For more informayion on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-looked-after-in-england-including-adoptions", "Children looked after in Englad including adoptions methodology.")))
+                      "For more information on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-looked-after-in-england-including-adoptions", "Children looked after in England including adoptions methodology.")))
                   )
                   ),
                   gov_row(
