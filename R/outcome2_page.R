@@ -128,8 +128,8 @@ outcome2_tab <- function(){
                   "Percentage of children who cease being looked after due to moving into Special Guardianship Order (SGO)",
                   gov_row(
                     h2("Special Guardianship Order (SGO)"),
-                    p("Unlocking family networks and kinship carers can be a key source of support where families are experiencing challenges. 
-                  Moving children from care arrangements to a SGO or CAO shows that kinship care is being prioritised where children cannot safely live with their parents."),
+                    #p("Unlocking family networks and kinship carers can be a key source of support where families are experiencing challenges. 
+                  #Moving children from care arrangements to a SGO or CAO shows that kinship care is being prioritised where children cannot safely live with their parents."),
                   br(),
                   plotlyOutput("SGO_time_series"),
                   br(),
@@ -201,7 +201,9 @@ The graph represents data from 2023."),
                   ),
                   gov_row(
                     h2("Residence order or Child Arrangement Order (CAO) by region"),
-                    p("text"),
+                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top.
+                      
+                      The graph represents data from 2023."),
                     br(),
                     plotlyOutput("plot_cao_ceased_reg"),
                     br(),
@@ -215,7 +217,9 @@ The graph represents data from 2023."),
                   ),
                   gov_row(
                     h2("Residence order or Child Arrangement Order (CAO) by local authority"),
-                    p("text"),
+                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region.
+
+The graph represents data from 2023."),
                     br(),
                     plotlyOutput("plot_cao_la"),
                     br(),
