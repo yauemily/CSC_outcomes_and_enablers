@@ -615,7 +615,7 @@ read_outcome2 <- function(file = "data/la_children_who_ceased_during_the_year.cs
   old_dorset <- ceased_cla_data %>% filter(time_period == 2019, new_la_code == "E10000009")
   data_without_old_dorset <- ceased_cla_data %>% filter(time_period > 2019, new_la_code == "E10000009")
   
-  final_filtered_data <- bind_rows(t3, t2)
+  final_filtered_data <- bind_rows(data_without_old_dorset, old_dorset)
   
   ceased_cla_data <- final_filtered_data %>% mutate(geo_breakdown = case_when(
     geographic_level == "National" ~ "National",#NA_character_,
