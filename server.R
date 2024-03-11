@@ -2242,14 +2242,14 @@ server <- function(input, output, session) {
     if(is.null(input$national_comparison_checkbox_o2) && is.null(input$region_comparison_checkbox_o2)){
       filtered_data <- ceased_cla_data %>% filter((geo_breakdown %in% input$geographic_breakdown_o2)) %>%
         filter(characteristic == "Residence order or child arrangement order granted") %>%
-        select(time_period, geo_breakdown, characteristic, perc)
+        select(time_period, geo_breakdown, characteristic, number, Total, perc)
       
       #national only
     }else if(!is.null(input$national_comparison_checkbox_o2) && is.null(input$region_comparison_checkbox_o2)){
       filtered_data<-ceased_cla_data %>%
         filter((geographic_level %in% input$select_geography_o2 & geo_breakdown %in% input$geographic_breakdown_o2) |geographic_level == 'National') %>%
         filter(characteristic == "Residence order or child arrangement order granted")%>%
-        select(time_period, geo_breakdown, characteristic, perc)
+        select(time_period, geo_breakdown, characteristic, number, Total, perc)
       
       #regional only
     }else if(is.null(input$national_comparison_checkbox_o2) && !is.null(input$region_comparison_checkbox_o2)){
@@ -2259,7 +2259,7 @@ server <- function(input, output, session) {
       filtered_data<-ceased_cla_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name))) %>%
         filter(characteristic == "Residence order or child arrangement order granted") %>%
-        select(time_period, geo_breakdown,characteristic,perc)
+        select(time_period, geo_breakdown,characteristic,number, Total, perc)
       
       #both selected
     }else if(!is.null(input$national_comparison_checkbox_o2) && !is.null(input$region_comparison_checkbox_o2)){
@@ -2269,11 +2269,11 @@ server <- function(input, output, session) {
       filtered_data<- ceased_cla_data %>%
         filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name)|geographic_level == 'National')) %>%
                  filter(characteristic == "Residence order or child arrangement order granted")  %>%
-        select(time_period, geo_breakdown,characteristic,perc)
+        select(time_period, geo_breakdown,characteristic,number, Total, perc)
     }
     datatable(
       filtered_data,
-      colnames = c("Time period", "Geographical breakdown","Characteristic", "Ceased (%)"),
+      colnames = c("Time period", "Geographical breakdown","Characteristic","Number", "Total", "Ceased (%)"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
