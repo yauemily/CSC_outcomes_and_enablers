@@ -2074,13 +2074,15 @@ server <- function(input, output, session) {
   output$table_sgo_ceased <- renderDataTable({
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_o2) && is.null(input$region_comparison_checkbox_o2)){
-      filtered_data <- ceased_cla_data %>% filter((geo_breakdown %in% input$geographic_breakdown_o2) & characteristic == "Special guardianship orders") %>%
+      filtered_data <- ceased_cla_data %>% filter((geo_breakdown %in% input$geographic_breakdown_o2)) %>%
+        filter(characteristic == "Special guardianship orders") %>%
         select(time_period, geo_breakdown, characteristic, perc)
       
       #national only
     }else if(!is.null(input$national_comparison_checkbox_o2) && is.null(input$region_comparison_checkbox_o2)){
       filtered_data<-ceased_cla_data %>%
-        filter((geographic_level %in% input$select_geography_o2 & geo_breakdown %in% input$geographic_breakdown_o2) |geographic_level == 'National' & characteristic == "Special guardianship orders")%>%
+        filter((geographic_level %in% input$select_geography_o2 & geo_breakdown %in% input$geographic_breakdown_o2) |geographic_level == 'National')%>%
+        filter(characteristic == "Special guardianship orders")%>%
         select(time_period, geo_breakdown, characteristic, perc)
       
       #regional only
@@ -2089,7 +2091,8 @@ server <- function(input, output, session) {
         filter(la_name %in% input$geographic_breakdown_o2)
       
       filtered_data<-ceased_cla_data %>%
-        filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name)) & characteristic == "Special guardianship orders") %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name))) %>%
+        filter(characteristic == "Special guardianship orders") %>%
         select(time_period, geo_breakdown,characteristic,perc)
       
       #both selected
@@ -2098,7 +2101,8 @@ server <- function(input, output, session) {
         filter(la_name %in% input$geographic_breakdown_o2)
       
       filtered_data<- ceased_cla_data %>%
-        filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name)|geographic_level == 'National'& characteristic == "Special guardianship orders"))  %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name)|geographic_level == 'National')) %>%
+                 filter(characteristic == "Special guardianship orders")  %>%
         select(time_period, geo_breakdown,characteristic,perc)
     }
     datatable(
@@ -2126,7 +2130,8 @@ server <- function(input, output, session) {
   #turnover rate by region table
   output$table_sgo_ceased_reg <- renderDataTable({
     datatable(
-      ceased_cla_data %>% filter(geographic_level == 'Regional', time_period == max(ceased_cla_data$time_period), characteristic == "Special guardianship orders") %>%
+      ceased_cla_data %>% filter(geographic_level == 'Regional', time_period == max(ceased_cla_data$time_period)) %>%
+        filter(characteristic == "Special guardianship orders") %>%
         select(time_period, geo_breakdown,characteristic, perc) %>%
         arrange(desc(perc)),
       colnames = c("Time period", "Geographical breakdown", "Characteristic", "Percentage ceased %"),
@@ -2164,14 +2169,15 @@ server <- function(input, output, session) {
       }
       
       data <- ceased_cla_data %>%
-        filter(geo_breakdown %in% location, time_period == max(time_period), characteristic == "Special guardianship orders") %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+        filter(characteristic == "Special guardianship orders") %>%
         select(time_period, geo_breakdown, characteristic, perc)  %>%
         arrange(desc(perc))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
-      data <- ceased_cla_data %>% filter(geographic_level == 'Local authority', time_period == max(ceased_cla_data$time_period), characteristic == "Special guardianship orders") %>% select(
-        time_period, geo_breakdown, characteristic, perc
-      ) %>%
+      data <- ceased_cla_data %>% filter(geographic_level == 'Local authority', time_period == max(ceased_cla_data$time_period)) %>%
+        filter(characteristic == "Special guardianship orders") %>% 
+        select(time_period, geo_breakdown, characteristic, perc) %>%
         arrange(desc(perc))
     }
     
@@ -2234,13 +2240,15 @@ server <- function(input, output, session) {
   output$table_cao_ceased <- renderDataTable({
     #neither checkboxes
     if(is.null(input$national_comparison_checkbox_o2) && is.null(input$region_comparison_checkbox_o2)){
-      filtered_data <- ceased_cla_data %>% filter((geo_breakdown %in% input$geographic_breakdown_o2) & characteristic == "Residence order or child arrangement order granted") %>%
+      filtered_data <- ceased_cla_data %>% filter((geo_breakdown %in% input$geographic_breakdown_o2)) %>%
+        filter(characteristic == "Residence order or child arrangement order granted") %>%
         select(time_period, geo_breakdown, characteristic, perc)
       
       #national only
     }else if(!is.null(input$national_comparison_checkbox_o2) && is.null(input$region_comparison_checkbox_o2)){
       filtered_data<-ceased_cla_data %>%
-        filter((geographic_level %in% input$select_geography_o2 & geo_breakdown %in% input$geographic_breakdown_o2) |geographic_level == 'National' & characteristic == "Residence order or child arrangement order granted")%>%
+        filter((geographic_level %in% input$select_geography_o2 & geo_breakdown %in% input$geographic_breakdown_o2) |geographic_level == 'National') %>%
+        filter(characteristic == "Residence order or child arrangement order granted")%>%
         select(time_period, geo_breakdown, characteristic, perc)
       
       #regional only
@@ -2249,7 +2257,8 @@ server <- function(input, output, session) {
         filter(la_name %in% input$geographic_breakdown_o2)
       
       filtered_data<-ceased_cla_data %>%
-        filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name)) & characteristic == "Residence order or child arrangement order granted") %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name))) %>%
+        filter(characteristic == "Residence order or child arrangement order granted") %>%
         select(time_period, geo_breakdown,characteristic,perc)
       
       #both selected
@@ -2258,7 +2267,8 @@ server <- function(input, output, session) {
         filter(la_name %in% input$geographic_breakdown_o2)
       
       filtered_data<- ceased_cla_data %>%
-        filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name)|geographic_level == 'National'& characteristic == "Residence order or child arrangement order granted"))  %>%
+        filter((geo_breakdown %in% c(input$geographic_breakdown_o2, location$region_name)|geographic_level == 'National')) %>%
+                 filter(characteristic == "Residence order or child arrangement order granted")  %>%
         select(time_period, geo_breakdown,characteristic,perc)
     }
     datatable(
@@ -2285,7 +2295,8 @@ server <- function(input, output, session) {
   #turnover rate by region table
   output$table_cao_ceased_reg <- renderDataTable({
     datatable(
-      ceased_cla_data %>% filter(geographic_level == 'Regional', time_period == max(ceased_cla_data$time_period), characteristic == "Residence order or child arrangement order granted") %>%
+      ceased_cla_data %>% filter(geographic_level == 'Regional', time_period == max(ceased_cla_data$time_period)) %>%
+        filter(characteristic == "Residence order or child arrangement order granted") %>%
         select(time_period, geo_breakdown, characteristic, perc) %>%
         arrange(desc(perc)),
       colnames = c("Time period", "Geographical breakdown", "Characteristic", "Percentage ceased %"),
@@ -2322,14 +2333,15 @@ server <- function(input, output, session) {
       }
       
       data <- ceased_cla_data %>%
-        filter(geo_breakdown %in% location, time_period == max(time_period), characteristic == "Residence order or child arrangement order granted") %>%
+        filter(geo_breakdown %in% location, time_period == max(time_period)) %>%
+        filter(characteristic == "Residence order or child arrangement order granted") %>%
         select(time_period, geo_breakdown, characteristic, perc)  %>%
         arrange(desc(perc))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
-      data <- ceased_cla_data %>% filter(geographic_level == 'Local authority', time_period == max(ceased_cla_data$time_period), characteristic == "Residence order or child arrangement order granted") %>% select(
-        time_period, geo_breakdown, characteristic, perc
-      ) %>%
+      data <- ceased_cla_data %>% filter(geographic_level == 'Local authority', time_period == max(ceased_cla_data$time_period)) %>%
+        filter(characteristic == "Residence order or child arrangement order granted") %>% 
+        select(time_period, geo_breakdown, characteristic, perc) %>%
         arrange(desc(perc))
     }
     
