@@ -2127,9 +2127,9 @@ server <- function(input, output, session) {
   output$table_sgo_ceased_reg <- renderDataTable({
     datatable(
       ceased_cla_data %>% filter(geographic_level == 'Regional', time_period == max(ceased_cla_data$time_period), characteristic == "Special guardianship orders") %>%
-        select(time_period, geo_breakdown, perc) %>%
+        select(time_period, geo_breakdown,characteristic, perc) %>%
         arrange(desc(perc)),
-      colnames = c("Time period", "Geographical breakdown", "Percentage ceased %"),
+      colnames = c("Time period", "Geographical breakdown", "Characteristic", "Percentage ceased %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
@@ -2286,9 +2286,9 @@ server <- function(input, output, session) {
   output$table_cao_ceased_reg <- renderDataTable({
     datatable(
       ceased_cla_data %>% filter(geographic_level == 'Regional', time_period == max(ceased_cla_data$time_period), characteristic == "Residence order or child arrangement order granted") %>%
-        select(time_period, geo_breakdown, perc) %>%
+        select(time_period, geo_breakdown, characteristic, perc) %>%
         arrange(desc(perc)),
-      colnames = c("Time period", "Geographical breakdown", "Percentage ceased %"),
+      colnames = c("Time period", "Geographical breakdown", "Characteristic", "Percentage ceased %"),
       options = list(
         scrollx = FALSE,
         paging = TRUE
