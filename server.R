@@ -2166,7 +2166,7 @@ server <- function(input, output, session) {
       data <- ceased_cla_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period), characteristic == "Special guardianship orders") %>%
         select(time_period, geo_breakdown, characteristic, perc)  %>%
-        arrange(desc(turnover_rate_fte_perc))
+        arrange(desc(perc))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
       data <- ceased_cla_data %>% filter(geographic_level == 'Local authority', time_period == max(ceased_cla_data$time_period), characteristic == "Special guardianship orders") %>% select(
@@ -2324,7 +2324,7 @@ server <- function(input, output, session) {
       data <- ceased_cla_data %>%
         filter(geo_breakdown %in% location, time_period == max(time_period), characteristic == "Residence order or child arrangement order granted") %>%
         select(time_period, geo_breakdown, characteristic, perc)  %>%
-        arrange(desc(turnover_rate_fte_perc))
+        arrange(desc(perc))
       
     } else if (input$select_geography_e2 %in% c("Local authority", "National")) {
       data <- ceased_cla_data %>% filter(geographic_level == 'Local authority', time_period == max(ceased_cla_data$time_period), characteristic == "Residence order or child arrangement order granted") %>% select(
