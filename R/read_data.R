@@ -570,9 +570,54 @@ read_cin_referral_data <- function(file = "data/c1_children_in_need_referrals_an
 #     )) %>%
 #     select("time_period", "geographic_level","geo_breakdown", "cla_group","characteristic", "number", "percentage")
 # }
+# read_outcome2 <- function(file = "data/la_children_who_ceased_during_the_year.csv"){
+#   ceased_cla_data <- read.csv(file)
+#   ceased_cla_data <- ceased_cla_data %>% mutate(geo_breakdown = case_when(
+#     geographic_level == "National" ~ "National",#NA_character_,
+#     geographic_level == "Regional" ~ region_name,
+#     geographic_level == "Local authority" ~ la_name
+#   )) %>%
+#     mutate(number = case_when(
+#       number == "z" ~ NA,
+#       number == "x"  ~ NA,
+#       number == "c"  ~ NA,
+#       TRUE ~ as.numeric(number)
+#     )) %>%
+#     select("time_period", "geographic_level","geo_breakdown", "cla_group","characteristic", "number", "percentage")
+#   
+#   totals <- ceased_cla_data %>% filter(characteristic == "Total" & cla_group == "Reason episode ceased") %>%
+#     rename("Total" = "number") %>%
+#     select(time_period, geographic_level, geo_breakdown, cla_group, Total)
+#   
+#   
+#   test<- ceased_cla_data %>% filter(cla_group == "Reason episode ceased" & characteristic != "Total")
+#   
+#   joined <- left_join(test, totals, by = c("time_period", "geographic_level","geo_breakdown", "cla_group"))
+#   joined$perc <- round((joined$number/joined$Total)*100, digits = 1)
+#   joined <- joined %>% mutate(perc = case_when(
+#     percentage == "z" ~ "z",
+#     percentage == "c" ~ "c",
+#     percentage == "k" ~ "k",
+#     percentage == "x" ~ "x",
+#     TRUE ~ as.character(perc))) %>% mutate(`Percentage ceased %` = case_when(
+#       percentage == "z" ~ NA,
+#       percentage == "c" ~ NA,
+#       percentage == "k" ~ NA,
+#       percentage == "x" ~ NA,
+#       TRUE ~ as.numeric(perc)
+#     ))
+#   
+#   return(joined)
+# }
+
 read_outcome2 <- function(file = "data/la_children_who_ceased_during_the_year.csv"){
   ceased_cla_data <- read.csv(file)
-  ceased_cla_data <- ceased_cla_data %>% mutate(geo_breakdown = case_when(
+  old_dorset <- ceased_cla_data %>% filter(time_period == 2019, new_la_code == "E10000009")
+  data_without_old_dorset <- ceased_cla_data %>% filter(time_period > 2019, new_la_code == "E10000009")
+  
+  final_filtered_data <- bind_rows(t3, t2)
+  
+  ceased_cla_data <- final_filtered_data %>% mutate(geo_breakdown = case_when(
     geographic_level == "National" ~ "National",#NA_character_,
     geographic_level == "Regional" ~ region_name,
     geographic_level == "Local authority" ~ la_name
@@ -583,6 +628,7 @@ read_outcome2 <- function(file = "data/la_children_who_ceased_during_the_year.cs
       number == "c"  ~ NA,
       TRUE ~ as.numeric(number)
     )) %>%
+    filter("new_la_code" != "E10000009") %>%
     select("time_period", "geographic_level","geo_breakdown", "cla_group","characteristic", "number", "percentage")
   
   totals <- ceased_cla_data %>% filter(characteristic == "Total" & cla_group == "Reason episode ceased") %>%

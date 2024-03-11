@@ -143,12 +143,17 @@ outcome2_tab <- function(){
                   details(
                     inputId = "sgo_info",
                     label = "Additional information:",
-                    help_text = (p("insert text"))
+                    help_text = (
+                    p("For more information on the data and definitions, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/find-statistics/children-looked-after-in-england-including-adoptions/data-guidance", "Children looked after in England including adoptions guidance."),
+                      tags$br(),
+                      "For more informayion on the methodology, please refer to the", a(href = "https://explore-education-statistics.service.gov.uk/methodology/children-looked-after-in-england-including-adoptions", "Children looked after in Englad including adoptions methodology.")))
                   )
                   ),
                   gov_row(
                     h2("Special Guardianship Order (SGO) by region"),
-                    p("text"),
+                    p("This is a static chart and will not react to geographical level and breakdown selected in the filters at the top.
+                      
+                      The graph represents data from 2023."),
                     br(),
                     plotlyOutput("plot_sgo_ceased_reg"),
                     br(),
@@ -162,7 +167,9 @@ outcome2_tab <- function(){
                   ),
                   gov_row(
                     h2("Special Guardianship Order (SGO) by local authority"),
-                    p("text"),
+                    p("This chart is reactive to the Local Authority and Regional filters at the top and will not react to the National filter. The chart will display all Local Authorities overall or every Local Authority in the selected Region.
+
+The graph represents data from 2023."),
                     br(),
                     plotlyOutput("plot_SGO_la"),
                     br(),

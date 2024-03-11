@@ -2142,7 +2142,7 @@ server <- function(input, output, session) {
   output$plot_SGO_la <- plotly::renderPlotly({
     data <- ceased_cla_data %>% filter(characteristic == "Special guardianship orders") 
     ggplotly(
-      by_la_bar_plot(ceased_cla_data, input$geographic_breakdown_o2, input$select_geography_o2, 'Percentage ceased %', 'Percentage ceased %') %>%
+      by_la_bar_plot(data, input$geographic_breakdown_o2, input$select_geography_o2, 'Percentage ceased %', 'Percentage ceased %') %>%
         config(displayModeBar = F),
       height = 420
     )
