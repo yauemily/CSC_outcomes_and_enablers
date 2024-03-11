@@ -1155,12 +1155,12 @@ plot_cla_rate_la <- function(selected_geo_breakdown = NULL, selected_geo_lvl = N
 #bar chart by region
 plot_cla_march_reg <- function(){
   cla_reg_data <- cla_rates %>%
-    filter(geographic_level == "Regional", time_period == max(time_period), population_count == "Children starting to be looked after each year") %>%
+    filter(geographic_level == "Regional", time_period == max(time_period), population_count == "Children looked after at 31 March each year") %>%
     select(time_period, geo_breakdown, rate_per_10000) %>%
     mutate(geo_breakdown = reorder(geo_breakdown, -rate_per_10000)) # Order by cla rate
   
   # Set the max y-axis scale
-  max_rate <- max(cla_rates$rate_per_10000[cla_rates$population_count == "Children starting to be looked after each year"], na.rm = TRUE)
+  max_rate <- max(cla_rates$rate_per_10000[cla_rates$population_count == "Children looked after at 31 March each year"], na.rm = TRUE)
   
   # Round the max_rate to the nearest 50
   max_rate <- ceiling(max_rate / 50) * 50
