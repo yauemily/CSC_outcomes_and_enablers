@@ -612,10 +612,12 @@ read_cin_referral_data <- function(file = "data/c1_children_in_need_referrals_an
 
 read_outcome2 <- function(file = "data/la_children_who_ceased_during_the_year.csv"){
   ceased_cla_data <- read.csv(file)
-  old_dorset <- ceased_cla_data %>% filter(time_period == 2019, new_la_code == "E10000009")
-  data_without_old_dorset <- ceased_cla_data %>% filter(time_period > 2019, new_la_code == "E10000009")
+  old_dorset <- ceased_cla_data %>% filter(time_period <= 2019, new_la_code == "E10000009")
+  new_dorset <- ceased_cla_data %>% filter(time_period > 2019, new_la_code == "E06000059")
+  data_without_dorset <- ceased_cla_data %>% filter(la_name != "Dorset")
   
-  final_filtered_data <- bind_rows(data_without_old_dorset, old_dorset)
+  dorset_data <- bind_rows(new_dorset, old_dorset)
+  final_filtered_data <- bind_rows(data_without_dorset, dorset_data)
   
   ceased_cla_data <- final_filtered_data %>% mutate(geo_breakdown = case_when(
     geographic_level == "National" ~ "National",#NA_character_,
